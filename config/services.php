@@ -31,4 +31,9 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'google' => [
+        'client_id' => '786826389567-ma4tbjh8iugcn55agj3ioavabsk3gm3l.apps.googleusercontent.com',
+        'client_secret' => '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',
+        'redirect' => 'http://127.0.0.1:8000/auth/checkpoint',
+    ],
 ];

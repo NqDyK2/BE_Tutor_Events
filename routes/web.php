@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('', [AuthController::class, 'index'])->name('login');
+
+Route::name('auth.')->prefix('auth')->group(function () {
+    Route::get('redirect', [AuthController::class, 'redirect'])->name('redirect');
+    Route::get('checkpoint', [AuthController::class, 'checkpoint'])->name('checkpoint');
 });

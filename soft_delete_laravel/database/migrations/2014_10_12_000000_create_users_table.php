@@ -15,18 +15,12 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('google_id')->unique();
             $table->string('name');
             $table->string('email')->unique();
-            $table->string('avatar')->nullable();
-            $table->integer('gender')->nullable();
-            $table->string('address')->nullable();
-            $table->integer('phone_number')->nullable();
-            $table->dateTime('dob')->nullable();
-            $table->unsignedBigInteger('role_id')->default(3);
-            $table->unsignedBigInteger('major_id')->nullable();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
+            $table->rememberToken();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

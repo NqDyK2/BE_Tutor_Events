@@ -13,9 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('roles', function (Blueprint $table) {
+        Schema::create('classrooms', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('subject_id');
+            $table->unsignedBigInteger('semester_id');
+            $table->string('default_offline_class_location')->nullable();
+            $table->string('default_online_class_location')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -28,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('roles');
+        Schema::dropIfExists('classrooms');
     }
 };

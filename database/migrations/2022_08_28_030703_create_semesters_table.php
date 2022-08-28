@@ -13,9 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('roles', function (Blueprint $table) {
+        Schema::create('semesters', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->dateTime('start_time')->default(now());
+            $table->dateTime('end_time')->default(now());
             $table->timestamps();
             $table->softDeletes();
         });
@@ -28,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('roles');
+        Schema::dropIfExists('semesters');
     }
 };

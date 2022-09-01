@@ -32,8 +32,8 @@ return [
     ],
 
     'google' => [
-        'client_id' => '786826389567-ma4tbjh8iugcn55agj3ioavabsk3gm3l.apps.googleusercontent.com',
-        'client_secret' => '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',
+        'client_id' => '943292523374-huj7s153t116tar9lhs5phakkeo7dcnq.apps.googleusercontent.com',
+        'client_secret' => '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',
         'redirect' => 'http://127.0.0.1:8000/auth/checkpoint',
     ],
 ];

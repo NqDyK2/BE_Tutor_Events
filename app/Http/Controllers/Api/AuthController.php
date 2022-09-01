@@ -24,16 +24,18 @@ class AuthController extends Controller
     {
         try {
             $googleUser = Socialite::driver('google')->user();
-            if ($googleUser->user['hd'] != 'fpt.edu.vn') {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Email not accepted',
-                ], 401);
-            }
+            $userCode = explode("@", Socialite::driver('google')->user()->email)[0];
+            // if ($googleUser->user['hd'] != 'fpt.edu.vn') {
+            //     return response()->json([
+            //         'status' => false,
+            //         'message' => 'Email not accepted',
+            //     ], 401);
+            // }
             
             $user = User::updateOrCreate([
                 'google_id' => $googleUser->id,
             ], [
+                'user_code' => $userCode,
                 'google_id' => $googleUser->id,
                 'name' => $googleUser->name,
                 'email' => $googleUser->email,

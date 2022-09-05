@@ -10,13 +10,17 @@ class Subject extends Model
 {
     use HasFactory, SoftDeletes;
 
+    const DEFAULT_PAGINATE = 20;
+    
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
+
     protected $fillable = [
         'name',
+        'subject_code',
         'major_id',
     ];
 }

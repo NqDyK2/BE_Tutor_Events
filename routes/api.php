@@ -19,3 +19,4 @@ Route::middleware('auth:sanctum')->get('ping', function () {
         'message' => 'pong'
     ], 200); ;
 });
+// 123

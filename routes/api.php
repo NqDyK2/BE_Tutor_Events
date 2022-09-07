@@ -14,8 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('ping', function () {
-    return response()->json([
-        'message' => 'pong'
-    ], 200); ;
-});
+// Route::prefix('user')->group(function () {
+//     Route::get('get', 'UserController@get');
+//     Route::get('get-one/{user}', 'UserController@show');
+//     Route::post('store', 'UserController@store');
+//     Route::put('update/{user}', 'UserController@update');
+//     Route::delete('delete/{id}', 'UserController@delete');
+// });

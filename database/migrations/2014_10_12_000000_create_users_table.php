@@ -26,7 +26,6 @@ return new class extends Migration
             $table->unsignedBigInteger('role_id')->default(3);
             $table->unsignedBigInteger('major_id')->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

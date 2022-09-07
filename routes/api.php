@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Route;
 //     Route::delete('delete/{id}', 'UserController@delete');
 // });
 
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::name('major')->prefix('major')->group(function () {
         Route::get('get-all', [MajorController::class, 'index'])->name('index');
@@ -36,3 +37,4 @@ Route::middleware('auth:sanctum')->group(function () {
     });
     
 });
+

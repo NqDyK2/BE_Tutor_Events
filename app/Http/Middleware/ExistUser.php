@@ -2,11 +2,11 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
-class Admin
+class ExistUser
 {
     /**
      * Handle an incoming request.
@@ -17,12 +17,16 @@ class Admin
      */
     public function handle(Request $request, Closure $next)
     {
-        if(Auth::user()->role_id != USER_ROLE_ADMIN){
+        $user = User::find($request->id);
+        
+        if ($user === null) {
             return response([
                 'status' => false,
-                'message' => 'You are not Admin'
-            ]);
+                'message' => 'User not exist'
+            ], 404);
         }
+        $request->attributes->add(['user' => $user]);
+
         return $next($request);
     }
 }

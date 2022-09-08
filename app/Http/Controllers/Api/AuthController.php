@@ -3,13 +3,18 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Services\AuthServices;
 use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
 {
+    private $authServices;
+
+    public function __construct(AuthServices $authServices)
+    {
+        $this->authServices = $authServices;
+    }
+
     public function index()
     {
         return view('auth.login');
@@ -24,32 +29,13 @@ class AuthController extends Controller
     {
         try {
             $googleUser = Socialite::driver('google')->user();
-            $userCode = explode("@", Socialite::driver('google')->user()->email)[0];
-            // if ($googleUser->user['hd'] != 'fpt.edu.vn') {
-            //     return response()->json([
-            //         'status' => false,
-            //         'message' => 'Email not accepted',
-            //     ], 401);
-            // }
-            
-            $user = User::updateOrCreate([
-                'google_id' => $googleUser->id,
-            ], [
-                'user_code' => $userCode,
-                'google_id' => $googleUser->id,
-                'name' => $googleUser->name,
-                'email' => $googleUser->email,
-            ]);
-            return response()->json([
-                'status' => true,
-                'message' => 'User created successfully',
-                'token' => $user->createToken('API TOKEN')->plainTextToken
-            ], 201);
+
+            return $this->authServices->loginGoogle($googleUser);
         }
         catch (\Exception $error) {
-            return response()->json([
+            return response([
+                'status' => 'false',
                 'message' => 'Login Error',
-                'error' => $error,
             ], 500);
         }
     }

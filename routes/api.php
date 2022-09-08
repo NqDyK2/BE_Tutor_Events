@@ -16,25 +16,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::prefix('user')->group(function () {
-//     Route::get('get', 'UserController@get');
-//     Route::get('get-one/{user}', 'UserController@show');
-//     Route::post('store', 'UserController@store');
-//     Route::put('update/{user}', 'UserController@update');
-//     Route::delete('delete/{id}', 'UserController@delete');
-// });
-
-
-Route::middleware('auth:sanctum')->group(function () {
-    Route::name('major')->prefix('major')->group(function () {
-        Route::get('get-all', [MajorController::class, 'index'])->name('index');
-        Route::get('show/{id}', [MajorController::class, 'show'])->name('show');
-        Route::middleware('admin')->group((function () {
-            Route::post('store', [MajorController::class, 'store'])->name('store');
-            Route::put('update/{id}', [MajorController::class, 'update'])->name('update');
-            Route::delete('destroy/{id}', [MajorController::class, 'destroy'])->name('destroy');
-        }));
-    });
-    
+Route::prefix('major')->group(function () {
+    Route::get('get-all', 'MajorController@index');
+    Route::get('show/{id}', 'MajorController@show');
+    Route::middleware('admin')->group((function () {
+        Route::post('store', 'MajorController@store');
+        Route::put('update/{id}', 'MajorController@update');
+        Route::delete('destroy/{id}', 'MajorController@destroy');
+    }));
 });
 
+Route::prefix('user')->group(function () {
+    Route::get('get', 'UserController@get');
+    Route::middleware('existUser')->group((function () {
+        Route::get('show/{id}', 'UserController@show');
+        Route::put('update/{id}', 'UserController@update');
+    }));
+});

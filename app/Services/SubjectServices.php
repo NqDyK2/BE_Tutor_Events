@@ -24,7 +24,7 @@ class SubjectServices
     public function update($data,$id)
     {
         $subject = Subject::find($id);
-        return $subject::update($data);
+        return $subject->update($data);
     }
 
     public function destroy($id)

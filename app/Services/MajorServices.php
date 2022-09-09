@@ -18,11 +18,10 @@ class MajorServices
 
     public function show($id)
     {
-        return $major = Major::find($id);
+        return Major::find($id);
     }
-    public function update($data,$id)
+    public function update($data,$major)
     {
-        $major = Major::find($id);
         return $major->update($data);
     }
 

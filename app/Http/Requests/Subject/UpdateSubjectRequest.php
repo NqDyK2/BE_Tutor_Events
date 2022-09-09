@@ -25,6 +25,7 @@ class UpdateSubjectRequest extends FormRequest
     {
         return [
             'name' => 'required|min:5|max:100|string|unique:subjects,name,'.$this->id,
+            'major_id' => 'required|exists:majors,id'
         ];
     }
 }

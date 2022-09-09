@@ -13,12 +13,10 @@ use Illuminate\Http\Request;
 class SubjectController extends Controller
 {
     private $subjectServices;
-    private $majorServices;
 
-    public function __construct(SubjectServices $subjectServices , MajorServices $majorServices)
+    public function __construct(SubjectServices $subjectServices)
     {
         $this->subjectServices = $subjectServices;
-        $this->majorServices = $majorServices;
 
     }
 
@@ -41,9 +39,9 @@ class SubjectController extends Controller
         ],201);
     }
 
-    public function show($id)
+    public function show(Request $request)
     {
-        $subject = $this->subjectServices->show($id);
+        $subject = $request->get('subject');
 
         return response([
             'status' => true ,
@@ -51,27 +49,16 @@ class SubjectController extends Controller
         ],201);
     }
 
-    public function update(UpdateSubjectRequest $request, $id)
+    public function update(UpdateSubjectRequest $request)
     {
-        $subject = $this->subjectServices->update($request->input(),$id);
-        $major = $this->majorServices->getAll();
-        $checkMajorId = $request->input('major_id');
-        json_decode($major, true);
+        $sub = $request->get('subject');
+        $subject = $this->subjectServices->update($request->input(),$sub);
         if($subject)
         {
-            foreach($major as $val){
-                if($val->id == $checkMajorId)
-                {
-                    return response([
-                        'status' => true,
-                        'massage' => 'Subject Update Successfully',
-                    ],201);
-                }
-            }
             return response([
-                'status' => false,
-                'massage' => 'Major_id does not exist',
-            ],404);
+                'status' => true,
+                'massage' => 'Subject Update Successfully',
+            ],201);
         }else {
             return response([
                 'status' => false,
@@ -80,9 +67,10 @@ class SubjectController extends Controller
         }
     }
 
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        $subject = $this->subjectServices->destroy($id);
+        $sub = $request->get('subject');
+        $subject = $this->subjectServices->destroy($sub);
 
         if($subject){
             return response([

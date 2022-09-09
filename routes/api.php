@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\MajorController;
 use App\Models\Major;
+use App\Http\Controllers\Api\SubjectController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -33,3 +34,17 @@ Route::prefix('user')->group(function () {
         Route::put('update/{id}', 'UserController@update');
     }));
 });
+
+
+Route::name('subject')->prefix('subject')->group(function () {
+    Route::get('get-all',[SubjectController::class, 'index'])->name('index');
+    Route::get('show/{id}',[SubjectController::class, 'show'])->name('show');
+    Route::middleware('admin')->group(function (){
+        Route::post('store',[SubjectController::class, 'store'])->name('store');
+        Route::put('update/{id}',[SubjectController::class, 'update'])->name('update');
+        Route::delete('destroy/{id}',[SubjectController::class, 'destroy'])->name('destroy');
+    });
+});
+
+
+

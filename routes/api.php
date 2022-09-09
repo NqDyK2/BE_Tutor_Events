@@ -3,6 +3,8 @@
 use App\Http\Controllers\Api\MajorController;
 use App\Models\Major;
 use App\Http\Controllers\Api\SubjectController;
+use App\Http\Controllers\Api\ClassroomController;
+use App\Http\Controllers\Api\ClassStudentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -48,3 +50,10 @@ Route::name('subject')->prefix('subject')->group(function () {
 
 
 
+Route::name('classroom')->prefix('classroom')->group(function () {
+    Route::get('get-all', [ClassroomController::class, 'index'])->name('index');
+    Route::post('store', [ClassroomController::class, 'store'])->name('store');
+    Route::get('show/{id}', [ClassroomController::class, 'show'])->name('show');
+    Route::put('update/{id}', [ClassroomController::class, 'update'])->name('update');
+    Route::delete('destroy/{id}', [ClassroomController::class, 'destroy'])->name('destroy');
+});

@@ -16,8 +16,7 @@ Class ClassroomServices
         return $classroom = Classroom::find($id);
     }
 
-    public function update($data, $id){
-        $classroom = Classroom::find($id);
+    public function update($data, $classroom){
         return $classroom->update($data);
     }
 

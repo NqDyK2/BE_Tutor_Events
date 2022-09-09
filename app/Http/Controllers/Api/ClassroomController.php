@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ClassroomRequest;
 use App\Services\ClassroomServices;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 class ClassroomController extends Controller
@@ -43,9 +44,13 @@ class ClassroomController extends Controller
         ],200);
     }
 
-    public function update(ClassroomRequest $request, $id)
+    public function update(ClassroomRequest $request)
     {
-        $classroom = $this->classroomServices->update($request->input(), $id);
+        dd(Auth::user());
+        $classroom = $request->get('classroom');
+        $this->authorize('updateClassroom', $classroom);
+
+        $classroom = $this->classroomServices->update($request->input(), $classroom );
         if ($classroom) {
             return response([
                 'message' => 'update Classroom successfully',

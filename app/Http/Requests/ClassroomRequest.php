@@ -27,13 +27,13 @@ class ClassroomRequest extends FormRequest
         {
             case 'POST':
                 $checkName = 'required|unique:classrooms,name';
-                $checkLocationOff = 'required|unique:classrooms,default_offline_class_location';
-                $checkLocationOnl = 'required|unique:classrooms,default_online_class_location';
+                $checkLocationOff = 'nullable|string|min:3|max:200';
+                $checkLocationOnl = 'nullable|string|min:3|max:200';
                 break;
             case 'PUT':
                 $checkName = 'required|unique:classrooms,name,'.$this->id;
-                $checkLocationOff = 'required|unique:classrooms,default_offline_class_location,'.$this->id;
-                $checkLocationOnl = 'required|unique:classrooms,default_online_class_location,'.$this->id;
+                $checkLocationOff = 'nullable|string|min:3|max:200';
+                $checkLocationOnl = 'nullable|string|min:3|max:200';
                 break;
         }
         return [

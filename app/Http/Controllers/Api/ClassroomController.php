@@ -46,11 +46,11 @@ class ClassroomController extends Controller
 
     public function update(ClassroomRequest $request)
     {
-        dd(Auth::user());
+        // dd(Auth::user());
         $classroom = $request->get('classroom');
         $this->authorize('updateClassroom', $classroom);
 
-        $classroom = $this->classroomServices->update($request->input(), $classroom );
+        $classroom = $this->classroomServices->update($request->input(), $classroom);
         if ($classroom) {
             return response([
                 'message' => 'update Classroom successfully',

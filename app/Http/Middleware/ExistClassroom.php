@@ -17,7 +17,6 @@ class ExistClassroom
      */
     public function handle(Request $request, Closure $next)
     {
-        dd(111);
         $classroom = Classroom::find($request->id);
 
         if ($classroom === null) {

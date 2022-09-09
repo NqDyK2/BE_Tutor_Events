@@ -6,15 +6,20 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Subject\CreateSubjectRequest;
 use App\Http\Requests\Subject\UpdateSubjectRequest;
 use App\Services\SubjectServices;
+use App\Http\Controllers\Api\MajorController;
+use App\Services\MajorServices;
 use Illuminate\Http\Request;
 
 class SubjectController extends Controller
 {
     private $subjectServices;
+    private $majorServices;
 
-    public function __construct(SubjectServices $subjectServices)
+    public function __construct(SubjectServices $subjectServices , MajorServices $majorServices)
     {
-        return $this->subjectServices = $subjectServices;
+        $this->subjectServices = $subjectServices;
+        $this->majorServices = $majorServices;
+
     }
 
     public function index()
@@ -49,14 +54,24 @@ class SubjectController extends Controller
     public function update(UpdateSubjectRequest $request, $id)
     {
         $subject = $this->subjectServices->update($request->input(),$id);
-
+        $major = $this->majorServices->getAll();
+        $checkMajorId = $request->input('major_id');
+        json_decode($major, true);
         if($subject)
         {
+            foreach($major as $val){
+                if($val->id == $checkMajorId)
+                {
+                    return response([
+                        'status' => true,
+                        'massage' => 'Subject Update Successfully',
+                    ],201);
+                }
+            }
             return response([
-                'status' => true,
-                'massage' => 'Subject Update Successfully',
-                'data' => $subject
-            ],201);
+                'status' => false,
+                'massage' => 'Major_id does not exist',
+            ],404);
         }else {
             return response([
                 'status' => false,

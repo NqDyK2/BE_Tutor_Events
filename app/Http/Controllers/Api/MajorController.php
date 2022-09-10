@@ -39,23 +39,25 @@ class MajorController extends Controller
         ],201);
     }
 
-    public function show($id)
+    public function show(Request $request)
     {
-        $majorShow = $this->majorServices->show($id);
+        $majorShow = $request->get('major');
         return response([
             'status' => true,
             'data' => $majorShow
         ],200);
     }
 
-    public function update(UpdateMajorRequests $request, $id)
+    public function update(UpdateMajorRequests $request)
     {
-        $majors = $this->majorServices->update($request->input() , $id);
+        $major = $request->get('major');
+
+        $majors = $this->majorServices->update($request->input() , $major);
 
         if ($majors){
             return response([
                 'status' => true,
-                'massage' => 'Major created successfully',
+                'massage' => 'Major update successfully',
                 'data' => $majors
             ],201);
         }else{
@@ -64,12 +66,12 @@ class MajorController extends Controller
                 'massage' => 'update Subject failed'
             ],400);
         }
-        
     }
 
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        $majorDelete = $this->majorServices->destroy($id);
+        $major = $request->get('major');
+        $majorDelete = $this->majorServices->destroy($major);
 
         if($majorDelete){
             return response([

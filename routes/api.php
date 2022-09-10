@@ -19,12 +19,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('major')->group(function () {
     Route::get('get-all', 'MajorController@index');
-    Route::get('show/{id}', 'MajorController@show');
-    Route::middleware('admin')->group((function () {
-        Route::post('store', 'MajorController@store');
-        Route::put('update/{id}', 'MajorController@update');
-        Route::delete('destroy/{id}', 'MajorController@destroy');
-    }));
+    Route::middleware('existMajor')->group(function (){
+        Route::get('show/{id}', 'MajorController@show');
+        Route::middleware('admin')->group(function () {
+            Route::put('update/{id}', 'MajorController@update');
+            // Route::delete('destroy/{id}', 'MajorController@destroy');
+        });
+    });
+    Route::post('store', 'MajorController@store')->middleware('admin');
 });
 
 Route::prefix('user')->group(function () {
@@ -37,12 +39,16 @@ Route::prefix('user')->group(function () {
 
 
 Route::name('subject')->prefix('subject')->group(function () {
-    Route::get('get-all',[SubjectController::class, 'index'])->name('index');
-    Route::get('show/{id}',[SubjectController::class, 'show'])->name('show');
+    Route::get('get-all',[SubjectController::class, 'index']);
+    Route::middleware('existSubject')->group(function (){
+        Route::get('show/{id}',[SubjectController::class, 'show']);
+        Route::middleware('admin')->group(function (){
+            Route::put('update/{id}',[SubjectController::class, 'update']);
+            // Route::delete('destroy/{id}',[SubjectController::class, 'destroy']);
+        });
+    });
     Route::middleware('admin')->group(function (){
-        Route::post('store',[SubjectController::class, 'store'])->name('store');
-        Route::put('update/{id}',[SubjectController::class, 'update'])->name('update');
-        Route::delete('destroy/{id}',[SubjectController::class, 'destroy'])->name('destroy');
+        Route::post('store',[SubjectController::class, 'store']);
     });
 });
 

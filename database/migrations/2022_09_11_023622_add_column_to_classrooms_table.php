@@ -13,9 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('class_students', function (Blueprint $table) {
-            $table->dropColumn('user_id');
-            $table->string('user_code');
+        Schema::table('classrooms', function (Blueprint $table) {
+            $table->string('default_tutor_email')->nullable();
         });
     }
 
@@ -26,9 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('class_students', function (Blueprint $table) {
-            $table->unsignedBigInteger('user_id');
-            $table->dropColumn('user_code');
+        Schema::table('classrooms', function (Blueprint $table) {
+            $table->dropColumn('default_tutor_email');
         });
     }
 };

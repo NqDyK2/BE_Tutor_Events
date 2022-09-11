@@ -64,4 +64,11 @@ Route::prefix('classroom')->group(function () {
         Route::put('update/{id}', [ClassroomController::class, 'update']);
         Route::delete('destroy/{id}', [ClassroomController::class, 'destroy']);
     }));
+Route::prefix('class-student')->group(function () {
+    Route::get('get-all', [ClassStudentController::class, 'index']);
+    Route::post('store', [ClassStudentController::class, 'store']);
+    // Route::middleware('existClassroom')->group((function () {
+        Route::put('update/{id}', [ClassStudentController::class, 'update']);
+        Route::delete('destroy/{id}', [ClassStudentController::class, 'destroy']);
+    // }));
 });

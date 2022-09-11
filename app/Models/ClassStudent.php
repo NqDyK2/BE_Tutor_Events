@@ -8,14 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class ClassStudent extends Model
 {
     use HasFactory;
-
+    const DEFAULT_PAGINATE = 10;
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
-        'user_id',
+        'user_email',
         'classroom_id',
         'role_student'
     ];

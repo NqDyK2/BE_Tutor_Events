@@ -23,6 +23,7 @@ class Classroom extends Model
         'subject_id',
         'semester_id',
         'default_online_class_location',
-        'default_offline_class_location'
+        'default_offline_class_location',
+        'default_tutor_email'
     ];
 }

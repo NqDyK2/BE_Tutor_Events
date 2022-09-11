@@ -28,12 +28,12 @@ class ClassroomRequest extends FormRequest
             case 'POST':
                 $checkName = 'required|unique:classrooms,name';
                 $checkLocationOff = 'nullable|string|min:3|max:200';
-                $checkLocationOnl = 'nullable|string|min:3|max:200';
+                $checkLocationOnl = 'nullable|string|url';
                 break;
             case 'PUT':
                 $checkName = 'required|unique:classrooms,name,'.$this->id;
                 $checkLocationOff = 'nullable|string|min:3|max:200';
-                $checkLocationOnl = 'nullable|string|min:3|max:200';
+                $checkLocationOnl = 'nullable|string|url';
                 break;
         }
         return [
@@ -43,6 +43,7 @@ class ClassroomRequest extends FormRequest
             'semester_id' => 'required|integer|exists:semesters,id',
             'default_offline_class_location' =>  $checkLocationOff,
             'default_online_class_location' => $checkLocationOnl,
+            'default_tutor_email' => 'nullable|email',   
         ];
     }
 }

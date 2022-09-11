@@ -12,17 +12,16 @@ Class ClassroomServices
         return Classroom::create($data);
     }
 
-    public function show($id){
-        return $classroom = Classroom::find($id);
+    public function show($classroom){
+        return $classroom;
     }
 
     public function update($data, $classroom){
         return $classroom->update($data);
     }
 
-    public function destroy($id)
+    public function destroy($classroom)
     {
-        $classroom = Classroom::find($id);
         $classroom->delete();
         return $classroom->trashed();
     }

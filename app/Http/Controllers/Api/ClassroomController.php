@@ -35,9 +35,12 @@ class ClassroomController extends Controller
         ],201);
     }
 
-    public function show($id)
+    public function show(Request $request)
     {
-        $subject = $this->classroomServices->show($id);
+        $classroom = $request->get('classroom');
+
+        $subject = $this->classroomServices->show($classroom);
+        
         return response([
             'status' => true,
             'data' => $subject
@@ -46,11 +49,11 @@ class ClassroomController extends Controller
 
     public function update(ClassroomRequest $request)
     {
-        // dd(Auth::user());
         $classroom = $request->get('classroom');
         $this->authorize('updateClassroom', $classroom);
 
         $classroom = $this->classroomServices->update($request->input(), $classroom);
+
         if ($classroom) {
             return response([
                 'message' => 'update Classroom successfully',
@@ -64,9 +67,12 @@ class ClassroomController extends Controller
         }
     }
 
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        $checkDeleteSubject = $this->classroomServices->destroy($id);
+        $classroom = $request->get('classroom');
+        $this->authorize('updateClassroom', $classroom);
+
+        $checkDeleteSubject = $this->classroomServices->destroy($classroom);
 
         if ($checkDeleteSubject) {
             return response([

@@ -18,12 +18,11 @@ class SubjectServices
 
     public function show($id)
     {
-        return $subject = Subject::find($id);
+        return Subject::find($id);
     }
 
-    public function update($data,$id)
+    public function update($data,$subject)
     {
-        $subject = Subject::find($id);
         return $subject->update($data);
     }
 

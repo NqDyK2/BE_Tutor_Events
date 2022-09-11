@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Subject\CreateSubjectRequest;
 use App\Http\Requests\Subject\UpdateSubjectRequest;
 use App\Services\SubjectServices;
+use App\Http\Controllers\Api\MajorController;
+use App\Services\MajorServices;
 use Illuminate\Http\Request;
 
 class SubjectController extends Controller
@@ -14,7 +16,8 @@ class SubjectController extends Controller
 
     public function __construct(SubjectServices $subjectServices)
     {
-        return $this->subjectServices = $subjectServices;
+        $this->subjectServices = $subjectServices;
+
     }
 
     public function index()
@@ -36,9 +39,9 @@ class SubjectController extends Controller
         ],201);
     }
 
-    public function show($id)
+    public function show(Request $request)
     {
-        $subject = $this->subjectServices->show($id);
+        $subject = $request->get('subject');
 
         return response([
             'status' => true ,
@@ -46,16 +49,15 @@ class SubjectController extends Controller
         ],201);
     }
 
-    public function update(UpdateSubjectRequest $request, $id)
+    public function update(UpdateSubjectRequest $request)
     {
-        $subject = $this->subjectServices->update($request->input(),$id);
-
+        $sub = $request->get('subject');
+        $subject = $this->subjectServices->update($request->input(),$sub);
         if($subject)
         {
             return response([
                 'status' => true,
                 'massage' => 'Subject Update Successfully',
-                'data' => $subject
             ],201);
         }else {
             return response([
@@ -65,9 +67,10 @@ class SubjectController extends Controller
         }
     }
 
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        $subject = $this->subjectServices->destroy($id);
+        $sub = $request->get('subject');
+        $subject = $this->subjectServices->destroy($sub);
 
         if($subject){
             return response([

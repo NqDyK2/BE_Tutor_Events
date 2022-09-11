@@ -10,6 +10,8 @@ class Semester extends Model
 {
     use HasFactory, SoftDeletes;
 
+    const DEFAULT_PAGINATE = 20;
+
     /**
      * The attributes that are mass assignable.
      *

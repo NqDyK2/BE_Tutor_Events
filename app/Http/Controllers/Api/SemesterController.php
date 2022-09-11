@@ -66,10 +66,10 @@ class SemesterController extends Controller
 
     public function destroy(Request $request)
     {
-        $semester = $request->get('subject');
-        $subjectDestroy = $this->subjectServices->destroy($semester);
+        $semester = $request->get('semester');
+        $semesterDestroy = $this->semesterServices->destroy($semester);
 
-        if($subjectDestroy){
+        if($semesterDestroy){
             return response([
                 'status' => true,
                 'massage' => 'Semester Delete Successfully'

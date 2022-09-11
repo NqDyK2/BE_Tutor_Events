@@ -8,17 +8,12 @@ class SemesterServices
 {
     public function getAll()
     {
-        return Semester::paginate(Semester::DEFAULT_PAGINATE);
+        return Semester::paginate(DEFAULT_PAGINATE);
     }
 
     public function create($data)
     {
         return Semester::create($data);
-    }
-
-    public function show($id)
-    {
-        return Semester::find($id);
     }
 
     public function update($data,$Semester)

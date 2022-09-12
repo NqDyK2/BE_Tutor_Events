@@ -4,6 +4,8 @@ use App\Http\Controllers\Api\MajorController;
 use App\Http\Controllers\Api\SemesterController;
 use App\Models\Major;
 use App\Http\Controllers\Api\SubjectController;
+use App\Http\Controllers\Api\ClassroomController;
+use App\Http\Controllers\Api\ClassStudentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -69,3 +71,12 @@ Route::name('semester')->prefix('semester')->group(function () {
 
 
 
+Route::prefix('classroom')->group(function () {
+    Route::get('get-all', [ClassroomController::class, 'index']);
+    Route::post('store', [ClassroomController::class, 'store']);
+    Route::middleware('existClassroom')->group((function () {
+        Route::get('show/{id}', [ClassroomController::class, 'show']);
+        Route::put('update/{id}', [ClassroomController::class, 'update']);
+        Route::delete('destroy/{id}', [ClassroomController::class, 'destroy']);
+    }));
+});

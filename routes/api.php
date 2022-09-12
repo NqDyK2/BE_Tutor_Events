@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\MajorController;
+use App\Http\Controllers\Api\SemesterController;
 use App\Models\Major;
 use App\Http\Controllers\Api\SubjectController;
 use App\Http\Controllers\Api\ClassroomController;
@@ -51,6 +52,20 @@ Route::name('subject')->prefix('subject')->group(function () {
     });
     Route::middleware('admin')->group(function (){
         Route::post('store',[SubjectController::class, 'store']);
+    });
+});
+
+Route::name('semester')->prefix('semester')->group(function () {
+    Route::get('get-all',[SemesterController::class, 'index']);
+    Route::middleware('existSemester')->group(function (){
+        Route::get('show/{id}',[SemesterController::class, 'show']);
+        Route::middleware('admin')->group(function (){
+            Route::put('update/{id}',[SemesterController::class, 'update']);
+            // Route::delete('destroy/{id}',[SemestertController::class, 'destroy']);
+        });
+    });
+    Route::middleware('admin')->group(function (){
+        Route::post('store',[SemesterController::class, 'store']);
     });
 });
 

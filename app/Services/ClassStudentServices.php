@@ -16,14 +16,9 @@ Class ClassStudentServices
         return ClassStudent::find($id);
     }
 
-    public function update($data, $classroom){
-        return $classroom->update($data);
-    }
-
     public function destroy($id)
     {
         $classroom = ClassStudent::find($id);
-        $classroom->delete();
-        return $classroom->trashed();
+        return $classroom->delete();
     }
 }

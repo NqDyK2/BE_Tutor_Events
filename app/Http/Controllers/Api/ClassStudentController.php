@@ -4,15 +4,20 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateClassStudentRequest;
+use App\Services\ClassroomServices;
 use App\Services\ClassStudentServices;
 use Illuminate\Http\Request;
 
 class ClassStudentController extends Controller
 {
     private $classStudentServices;
-
-    public function __construct(ClassStudentServices $classStudentServices){
+    private $classroomServices;
+    public function __construct(
+        ClassStudentServices $classStudentServices,
+        ClassroomServices $classroomServices
+    ){
         $this->classStudentServices = $classStudentServices;
+        $this->classroomServices = $classroomServices;
     }
 
     public function index()
@@ -25,7 +30,6 @@ class ClassStudentController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request);
         $classStudent = $this->classStudentServices->store($request->input());
         return response([
             'status' => true,
@@ -34,40 +38,20 @@ class ClassStudentController extends Controller
         ],201);
     }
 
-    public function show($id)
-    {
-        $classStudent = $this->classStudentServices->show($id);
-        return response([
-            'status' => true,
-            'data' => $classStudent
-        ],200);
-    }
-
-    public function update(Request $request, $id)
-    {
-        // // dd(Auth::user());
-        // $classStudent = $request->get('classroom');
-        // $this->authorize('updateClassroom', $classroom);
-
-        $classStudent = $this->classStudentServices->update($request->input(), $id);
-        if ($classStudent) {
-            return response([
-                'message' => 'update Classroom successfully',
-                'status' => true
-            ],200);
-        } else {
-            return response([
-                'message' => 'update Classroom failed',
-                'status' => false
-            ],400);
-        }
-    }
-
     public function destroy($id)
     {
-        $checkDeleteclassStudent = $this->classStudentServices->destroy($id);
+        $classStudent = $this->classStudentServices->show($id);
+        $this->authorize('updateClassroom', $classStudent->classroom);
+        $isStarted = $this->classroomServices->isStarted($classStudent->classroom->id);
+        if ($isStarted) {
+            return response([
+                'message' => 'you cannot delete this record',
+                'status' => false
+            ],200);
+        }
+        $checkDeleteClassStudent = $this->classStudentServices->destroy($id);
 
-        if ($checkDeleteclassStudent) {
+        if ($checkDeleteClassStudent) {
             return response([
                 'message' => 'delete classroom successfully',
                 'status' => true

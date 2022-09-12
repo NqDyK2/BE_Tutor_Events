@@ -50,6 +50,7 @@ class ClassroomController extends Controller
     public function update(ClassroomRequest $request)
     {
         $classroom = $request->get('classroom');
+        
         $this->authorize('updateClassroom', $classroom);
 
         $classroom = $this->classroomServices->update($request->input(), $classroom);
@@ -71,7 +72,6 @@ class ClassroomController extends Controller
     {
         $classroom = $request->get('classroom');
         $this->authorize('updateClassroom', $classroom);
-
         $checkDeleteSubject = $this->classroomServices->destroy($classroom);
 
         if ($checkDeleteSubject) {

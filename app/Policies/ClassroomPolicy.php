@@ -23,7 +23,7 @@ class ClassroomPolicy
 
     public function updateClassroom($auth, $classroom)
     {
-        if ($auth->id == $classroom->user_id) {
+        if ($auth->id == $classroom->user_id && $auth->role_id == USER_ROLE_TEACHER) {
             return true;
         }
         return false;

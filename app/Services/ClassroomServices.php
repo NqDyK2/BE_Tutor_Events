@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 use App\Models\Classroom;
+use App\Models\Lession;
 
 Class ClassroomServices
 {
@@ -24,5 +25,13 @@ Class ClassroomServices
     {
         $classroom->delete();
         return $classroom->trashed();
+    }
+
+    public function isStarted($id){
+        $lession = Lession::where('classroom_id',$id)->where('start_time','<',now())->first();
+        if ($lession) {
+            return true;
+        }
+        return false;
     }
 }

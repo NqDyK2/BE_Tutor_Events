@@ -19,4 +19,9 @@ class ClassStudent extends Model
         'classroom_id',
         'role_student'
     ];
+    
+    public function classroom()
+    {
+        return $this->belongsTo(Classroom::class, 'classroom_id');
+    }
 }

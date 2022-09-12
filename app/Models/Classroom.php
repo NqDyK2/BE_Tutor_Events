@@ -26,4 +26,10 @@ class Classroom extends Model
         'default_offline_class_location',
         'default_tutor_email'
     ];
+    public function classStudents(){
+        return $this->hasMany(ClassStudent::class,'classroom_id');
+    }
+    public function lessions(){
+        return $this->hasMany(Lession::class,'classroom_id');
+    }
 }

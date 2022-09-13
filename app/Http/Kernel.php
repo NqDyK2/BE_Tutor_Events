@@ -69,5 +69,6 @@ class Kernel extends HttpKernel
         'existMajor' => \App\Http\Middleware\ExistMajor::class,
         'existSubject' => \App\Http\Middleware\ExistSubject::class,
         'existSemester' => \App\Http\Middleware\ExistSemester::class,
+        'existIssue' => \App\Http\Middleware\ExistIssue::class,
     ];
 }

@@ -8,7 +8,7 @@ class SubjectServices
 {
     public function getAll()
     {
-        return Subject::paginate(Subject::DEFAULT_PAGINATE);
+        return Subject::paginate(DEFAULT_PAGINATE);
     }
 
     public function create($data)
@@ -16,14 +16,8 @@ class SubjectServices
         return Subject::create($data);
     }
 
-    public function show($id)
+    public function update($data,$subject)
     {
-        return $subject = Subject::find($id);
-    }
-
-    public function update($data,$id)
-    {
-        $subject = Subject::find($id);
         return $subject->update($data);
     }
 

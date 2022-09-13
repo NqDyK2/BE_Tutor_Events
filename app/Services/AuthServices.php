@@ -11,6 +11,7 @@ class AuthServices
         $user = User::where('google_id', $googleUser->id)->first();
 
         if (!$user) {
+
             $user = User::create([
                 'user_code' => explode("@", $googleUser->email)[0],
                 'google_id' => $googleUser->id,
@@ -23,6 +24,7 @@ class AuthServices
                 'status' => false,
                 'message' => 'This account has been blocked',
             ], 403);
+
         }
         
         return response([

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Subject;
+namespace App\Http\Requests\Semester;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateSubjectRequest extends FormRequest
+class CreateSemesterRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,9 @@ class UpdateSubjectRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|min:5|max:100|string|unique:subjects,name,'.$this->id,
-            'major_id' => 'required|exists:majors,id'
+            'name' => 'required|min:5|max:100|string|unique:semesters,name,'.$this->id,
+            'start_time' => 'required|date|before:end_time',
+            'end_time' => 'required|date'
         ];
     }
 }

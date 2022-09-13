@@ -15,7 +15,7 @@ class Issue extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'lession_id',
+        'lesson_id',
         'content',
         'is_resolved',
     ];

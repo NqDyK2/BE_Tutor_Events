@@ -7,6 +7,6 @@
     <title>Document</title>
 </head>
 <body>
-    <h1><a href="{{ route('auth.redirect') }}">GOOGLE</a></h1>
+    <h1><a href="{{ route('auth.getUrl') }}">GOOGLE</a></h1>
 </body>
 </html>

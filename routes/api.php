@@ -20,6 +20,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::middleware('auth:sanctum')->get('user', function (Request $request) {
+    return response()->json([
+        'data' => $request->user(),
+    ], 200);
+});
+
 Route::prefix('major')->group(function () {
     Route::get('get-all', 'MajorController@index');
     Route::middleware('existMajor')->group(function (){

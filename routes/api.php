@@ -6,6 +6,7 @@ use App\Models\Major;
 use App\Http\Controllers\Api\SubjectController;
 use App\Http\Controllers\Api\ClassroomController;
 use App\Http\Controllers\Api\ClassStudentController;
+use App\Http\Controllers\Api\IssueController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -85,4 +86,14 @@ Route::prefix('classroom')->group(function () {
         Route::put('update/{id}', [ClassroomController::class, 'update']);
         Route::delete('destroy/{id}', [ClassroomController::class, 'destroy']);
     }));
+});
+
+Route::name('issue')->prefix('issue')->group(function () {
+    Route::get('get-all',[IssueController::class, 'index']);
+    Route::post('store',[IssueController::class, 'store']); 
+    Route::middleware('existIssue')->group(function (){
+        Route::get('show/{id}',[IssueController::class, 'show']);
+        Route::put('update/{id}',[IssueController::class, 'update']);
+        // Route::delete('destroy/{id}',[IssueController::class, 'destroy']);
+    });
 });

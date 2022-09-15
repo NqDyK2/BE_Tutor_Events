@@ -25,8 +25,7 @@ class CreateIssueRequest extends FormRequest
     {
         return [
             'lesson_id' => 'required|exists:lessons,id',
-            'content' => 'required|string',
-            'is_resolved' => 'required|numeric'
+            'content' => 'required|string|min:5|max:200',
         ];
     }
 }

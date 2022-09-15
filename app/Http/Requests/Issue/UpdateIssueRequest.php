@@ -24,9 +24,8 @@ class UpdateIssueRequest extends FormRequest
     public function rules()
     {
         return [
-            'lesson_id' => 'required|exists:lessons,id',
-            'content' => 'required|string',
-            'is_resolved' => 'required|numeric'
+            'content' => 'required|string|min:5|max:200',
+            'is_resolved' => 'boolean'
         ];
     }
 }

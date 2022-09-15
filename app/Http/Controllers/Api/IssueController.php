@@ -78,13 +78,11 @@ class IssueController extends Controller
     public function destroy(Request $request)
     {
 
-        $issue = $request->get('issue');
-
-        $lesson = Lesson::find($issue->lesson_id);
+        $lesson = Lesson::find($request->lesson_id);
 
         $this->authorize('updateClassroom', $lesson->classroom);
 
-        $issueDestroy = $this->issueServices->destroy($issue);
+        $issueDestroy = $this->issueServices->destroy($request);
 
         if($issueDestroy){
             return response([

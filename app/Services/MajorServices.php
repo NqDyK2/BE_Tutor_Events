@@ -8,12 +8,7 @@ class MajorServices
 {
     public function getAll()
     {
-        return Major::paginate( Major::DEFAULT_PAGINATE);
-    }
-
-    public function create($data)
-    {
-        return Major::create($data);
+        return Major::paginate(DEFAULT_PAGINATE);
     }
 
     public function show($id)

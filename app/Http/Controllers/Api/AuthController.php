@@ -18,9 +18,10 @@ class AuthController extends Controller
     public function index()
     {
         return view('auth.login');
+        
     }
 
-    public function redirect()
+    public function getUrl()
     {
         return Socialite::driver('google')->redirect();
     }
@@ -30,7 +31,8 @@ class AuthController extends Controller
         try {
             $googleUser = Socialite::driver('google')->user();
 
-            return $this->authServices->loginGoogle($googleUser);
+            $token = $this->authServices->loginGoogle($googleUser);
+            return redirect("http://localhost:3000/checkpoint?token=" . $token);
         }
         catch (\Exception $error) {
             return response([

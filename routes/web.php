@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use GuzzleHttp\Psr7\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('', [AuthController::class, 'index'])->name('login');
 
-Route::name('auth.')->prefix('auth')->group(function () {
-    Route::get('redirect', [AuthController::class, 'redirect'])->name('redirect');
+Route::name('auth.')->prefix('api/auth')->group(function () {
+    Route::get('get-url', [AuthController::class, 'getUrl'])->name('getUrl');
     Route::get('checkpoint', [AuthController::class, 'checkpoint'])->name('checkpoint');
 });

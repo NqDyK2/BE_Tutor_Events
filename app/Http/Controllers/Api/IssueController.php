@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Issue\CreateIssueRequest;
 use App\Http\Requests\Issue\UpdateIssueRequest;
+use App\Models\Classroom;
 use App\Models\Issue;
+use App\Models\Lesson;
 use App\Services\IssueServices;
 use Illuminate\Http\Request;
 
@@ -29,8 +31,12 @@ class IssueController extends Controller
 
     public function store(CreateIssueRequest $request)
     {
-        $issue = $this->issueServices->create($request->input());
+        $lesson = Lesson::find($request->lesson_id);
 
+        $this->authorize('updateClassroom', $lesson->classroom);
+
+        $issue = $this->issueServices->create($request->input());
+        
         return response([
             'status' => true,
             'message' => 'Issue created successfully',
@@ -51,6 +57,9 @@ class IssueController extends Controller
     public function update(UpdateIssueRequest $request)
     {
         $issue = $request->get('issue');
+        // dd($issue->lesson->classroom);
+        $this->authorize('updateClassroom', $issue->lesson->classroom);
+
         $issueUpdate = $this->issueServices->update($request->input(),$issue);
         if($issueUpdate)
         {
@@ -68,7 +77,13 @@ class IssueController extends Controller
 
     public function destroy(Request $request)
     {
+
         $issue = $request->get('issue');
+
+        $lesson = Lesson::find($issue->lesson_id);
+
+        $this->authorize('updateClassroom', $lesson->classroom);
+
         $issueDestroy = $this->issueServices->destroy($issue);
 
         if($issueDestroy){

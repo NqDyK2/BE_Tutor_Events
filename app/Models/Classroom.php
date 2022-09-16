@@ -15,7 +15,6 @@ class Classroom extends Model
      *
      * @var array<int, string>
      */
-    const DEFAULT_PAGINATE = 20;
     protected $fillable = [
         'name',
         'user_id',
@@ -26,4 +25,14 @@ class Classroom extends Model
         'default_offline_class_location',
         'default_tutor_email'
     ];
+    public function classStudents(){
+        return $this->hasMany(ClassStudent::class,'classroom_id');
+    }
+    public function lessions(){
+        return $this->hasMany(Lession::class,'classroom_id');
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

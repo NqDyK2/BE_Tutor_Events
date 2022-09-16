@@ -87,6 +87,13 @@ Route::prefix('classroom')->group(function () {
         Route::delete('destroy/{id}', [ClassroomController::class, 'destroy']);
     }));
 });
+Route::prefix('class-student')->group(function () {
+    Route::get('get-all', [ClassStudentController::class, 'index']);
+    Route::post('store', [ClassStudentController::class, 'store']);
+    Route::middleware('existClassStudent')->group((function () {
+        Route::delete('destroy/{id}', [ClassStudentController::class, 'destroy']);
+    }));
+});
 
 Route::name('issue')->prefix('issue')->group(function () {
     Route::get('get-all',[IssueController::class, 'index']);

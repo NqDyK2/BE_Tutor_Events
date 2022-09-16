@@ -11,7 +11,7 @@ Class ClassStudentServices
         $this->mailService = $mailService;
     }
     public function index(){
-        return ClassStudent::paginate(ClassStudent::DEFAULT_PAGINATE);
+        return ClassStudent::paginate(DEFAULT_PAGINATE);
     }
 
     public function store($data){

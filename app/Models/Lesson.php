@@ -22,9 +22,9 @@ class Lesson extends Model
         'start_time',
         'end_time',
     ];
-    
+
     public function classroom()
     {
-        return $this->belongsTo(Classroom::class, 'classroom_id');
+        return $this->belongsTo(Classroom::class,'classroom_id');
     }
 }

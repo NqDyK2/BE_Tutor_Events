@@ -1,12 +1,12 @@
 <?php
 namespace App\Services;
 use App\Models\Classroom;
-use App\Models\Lession;
+use App\Models\Lesson;
 
 Class ClassroomServices
 {
     public function index(){
-        return Classroom::paginate(Classroom::DEFAULT_PAGINATE);
+        return Classroom::paginate(DEFAULT_PAGINATE);
     }
 
     public function store($data){
@@ -28,8 +28,8 @@ Class ClassroomServices
     }
 
     public function isStarted($id){
-        $lession = Lession::where('classroom_id',$id)->where('start_time','<',now())->first();
-        if ($lession) {
+        $lesson = Lesson::where('classroom_id',$id)->where('start_time','<',now())->first();
+        if ($lesson) {
             return true;
         }
         return false;

@@ -71,6 +71,7 @@ class ClassroomController extends Controller
     public function destroy(Request $request)
     {
         $classroom = $request->get('classroom');
+        
         $this->authorize('updateClassroom', $classroom);
         $checkDeleteSubject = $this->classroomServices->destroy($classroom);
 

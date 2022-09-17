@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CreateClassStudentRequest;
+use App\Http\Requests\ClassStudentRequest;
 use App\Services\ClassroomServices;
 use App\Services\ClassStudentServices;
-use Illuminate\Http\Request;
 
 class ClassStudentController extends Controller
 {
@@ -28,7 +27,7 @@ class ClassStudentController extends Controller
         ],200);
     }
 
-    public function store(Request $request)
+    public function store(ClassStudentRequest $request)
     {
         $classStudent = $this->classStudentServices->store($request->input());
         return response([

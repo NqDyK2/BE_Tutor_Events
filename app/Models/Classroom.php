@@ -15,7 +15,6 @@ class Classroom extends Model
      *
      * @var array<int, string>
      */
-    const DEFAULT_PAGINATE = 20;
     protected $fillable = [
         'name',
         'user_id',

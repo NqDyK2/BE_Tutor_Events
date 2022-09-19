@@ -15,9 +15,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('', [AuthController::class, 'index'])->name('login');
-
-Route::name('auth.')->prefix('api/auth')->group(function () {
-    Route::get('get-url', [AuthController::class, 'getUrl'])->name('getUrl');
-    Route::get('checkpoint', [AuthController::class, 'checkpoint'])->name('checkpoint');
-});
+Route::get('', [AuthController::class, 'index']);
+Route::get('auth/get-url', [AuthController::class, 'getUrl'])->name('getUrl');
+Route::get('auth/checkpoint', [AuthController::class, 'checkpoint']);

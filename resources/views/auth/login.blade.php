@@ -25,7 +25,7 @@
 </head>
 <body>
     <div class="container">
-        <h1><a href="{{ route('auth.getUrl') }}">Nhấn vào đây để gửi ngàn lời yêu thương đến bạn Đàm Minh Hiếu</a></h1>
+        <h1><a href="{{ route('getUrl') }}">Nhấn vào đây để gửi ngàn lời yêu thương đến bạn Đàm Minh Hiếu</a></h1>
     </div>
 </body>
 </html>

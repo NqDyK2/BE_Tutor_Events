@@ -32,8 +32,8 @@ return [
     ],
 
     'google' => [
-        'client_id' => '943292523374-4j0m2m3tksgt2qarn44iivbqf085jj9f.apps.googleusercontent.com',
-        'client_secret' => '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',
-        'redirect' => 'http://127.0.0.1:8000/api/auth/checkpoint',
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'redirect' => env('GOOGLE_REDIRECT'),
     ],
 ];

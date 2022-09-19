@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ClassroomRequest;
+use App\Http\Requests\Classroom\CreateClassroomRequest;
+use App\Http\Requests\Classroom\UpdateClassroomRequest;
 use App\Services\ClassroomServices;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 
 class ClassroomController extends Controller
 {
@@ -25,7 +24,7 @@ class ClassroomController extends Controller
         ],200);
     }
 
-    public function store(ClassroomRequest $request)
+    public function store(CreateClassroomRequest $request)
     {
         $classroom = $this->classroomServices->store($request->input());
         return response([
@@ -47,7 +46,7 @@ class ClassroomController extends Controller
         ],200);
     }
 
-    public function update(ClassroomRequest $request)
+    public function update(UpdateClassroomRequest $request)
     {
         $classroom = $request->get('classroom');
         

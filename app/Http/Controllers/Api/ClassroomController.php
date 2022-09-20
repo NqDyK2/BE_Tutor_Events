@@ -26,9 +26,7 @@ class ClassroomController extends Controller
 
     public function store(CreateClassroomRequest $request)
     {
-        dd(111);
         $classroom = $this->classroomServices->store($request->input());
-
         return response([
             'status' => true,
             'message' => 'Create Classroom successfully',

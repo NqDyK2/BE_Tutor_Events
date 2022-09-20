@@ -13,7 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::rename('lessions', 'lessons');
+        Schema::create('school_teachers', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('code')->nullable();
+            $table->timestamps();
+        });
     }
 
     /**
@@ -23,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::rename('lessons', 'lessions');
+        Schema::dropIfExists('school_teachers');
     }
 };

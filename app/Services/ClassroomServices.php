@@ -13,10 +13,6 @@ Class ClassroomServices
         return Classroom::create($data);
     }
 
-    public function show($classroom){
-        return $classroom;
-    }
-
     public function update($data, $classroom){
         return $classroom->update($data);
     }
@@ -28,8 +24,8 @@ Class ClassroomServices
     }
 
     public function isStarted($id){
-        $lession = Lesson::where('classroom_id',$id)->where('start_time','<',now())->first();
-        if ($lession) {
+        $lesson = Lesson::where('classroom_id',$id)->where('start_time','<',now())->first();
+        if ($lesson) {
             return true;
         }
         return false;

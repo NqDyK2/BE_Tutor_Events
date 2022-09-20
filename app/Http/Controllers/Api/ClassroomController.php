@@ -18,15 +18,17 @@ class ClassroomController extends Controller
 
     public function index()
     {
-        $Subject = $this->classroomServices->index();
+        $classroom = $this->classroomServices->index();
         return response([
-            '$Subject' => $Subject
+            '$classroom' => $classroom
         ],200);
     }
 
     public function store(CreateClassroomRequest $request)
     {
+        dd(111);
         $classroom = $this->classroomServices->store($request->input());
+
         return response([
             'status' => true,
             'message' => 'Create Classroom successfully',
@@ -37,12 +39,10 @@ class ClassroomController extends Controller
     public function show(Request $request)
     {
         $classroom = $request->get('classroom');
-
-        $subject = $this->classroomServices->show($classroom);
         
         return response([
             'status' => true,
-            'data' => $subject
+            'data' => $classroom
         ],200);
     }
 
@@ -50,7 +50,7 @@ class ClassroomController extends Controller
     {
         $classroom = $request->get('classroom');
         
-        $this->authorize('updateClassroom', $classroom);
+        $this->authorize('checkOwnership', $classroom);
 
         $classroom = $this->classroomServices->update($request->input(), $classroom);
 
@@ -71,10 +71,11 @@ class ClassroomController extends Controller
     {
         $classroom = $request->get('classroom');
         
-        $this->authorize('updateClassroom', $classroom);
-        $checkDeleteSubject = $this->classroomServices->destroy($classroom);
+        $this->authorize('checkOwnership', $classroom);
+        
+        $checkDeleteClassroom = $this->classroomServices->destroy($classroom);
 
-        if ($checkDeleteSubject) {
+        if ($checkDeleteClassroom) {
             return response([
                 'message' => 'delete classroom successfully',
                 'status' => true

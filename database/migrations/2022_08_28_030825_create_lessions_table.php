@@ -18,8 +18,8 @@ return new class extends Migration
             $table->unsignedBigInteger('classroom_id');
             $table->integer('type');
             $table->string('class_location')->nullable();
-            $table->dateTime('start_time')->default(now());
-            $table->dateTime('end_time')->default(now());
+            $table->dateTime('start_time')->nullable();
+            $table->dateTime('end_time')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

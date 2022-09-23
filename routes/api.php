@@ -81,13 +81,12 @@ Route::name('semester')->prefix('semester')->group(function () {
 
 Route::prefix('classroom')->group(function () {
     Route::get('get-all', [ClassroomController::class, 'index']);
-    Route::middleware('checkRoleTeacherOrAdmin')->group((function () {
-        Route::post('store', [ClassroomController::class, 'store']);
-        Route::middleware('existClassroom')->group((function () {
-            Route::get('show/{id}', [ClassroomController::class, 'show']);
-            Route::put('update/{id}', [ClassroomController::class, 'update']);
-            Route::delete('destroy/{id}', [ClassroomController::class, 'destroy']);
-        }));
+    Route::post('store', [ClassroomController::class, 'store']);
+    Route::middleware('existClassroom')->group((function () {
+        Route::get('students_class/{id}', [ClassroomController::class, 'students_class']);
+        Route::get('show/{id}', [ClassroomController::class, 'show']);
+        Route::put('update/{id}', [ClassroomController::class, 'update']);
+        Route::delete('destroy/{id}', [ClassroomController::class, 'destroy']);
     }));
 });
 Route::prefix('class-student')->group(function () {

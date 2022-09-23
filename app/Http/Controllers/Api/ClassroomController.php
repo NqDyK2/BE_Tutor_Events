@@ -85,4 +85,15 @@ class ClassroomController extends Controller
             ],400);
         }
     }
+
+    public function students_class(Request $request)
+    {
+        $classroom = $request->get('classroom');
+        $students = $this->classroomServices->students($classroom->id);
+        
+        return response([
+            'status' => true,
+            'data' => $students
+        ],200);
+    }
 }

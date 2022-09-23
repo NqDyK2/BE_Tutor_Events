@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('classrooms', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('subject_id');
             $table->unsignedBigInteger('semester_id');
             $table->string('default_offline_class_location')->nullable();

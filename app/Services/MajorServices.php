@@ -15,6 +15,12 @@ class MajorServices
     {
         return Major::find($id);
     }
+
+    public function create($data)
+    {
+        return Major::create($data);
+    }
+
     public function update($data,$major)
     {
         return $major->update($data);

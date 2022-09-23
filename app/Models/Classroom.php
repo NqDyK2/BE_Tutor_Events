@@ -28,8 +28,8 @@ class Classroom extends Model
     public function classStudents(){
         return $this->hasMany(ClassStudent::class,'classroom_id');
     }
-    public function lessions(){
-        return $this->hasMany(Lession::class,'classroom_id');
+    public function lessons(){
+        return $this->hasMany(Lesson::class,'classroom_id');
     }
     public function user()
     {

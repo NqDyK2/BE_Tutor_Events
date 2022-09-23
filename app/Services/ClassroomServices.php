@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 use App\Models\Classroom;
+use App\Models\ClassStudent;
 use App\Models\Lesson;
 
 Class ClassroomServices
@@ -11,10 +12,6 @@ Class ClassroomServices
 
     public function store($data){
         return Classroom::create($data);
-    }
-
-    public function show($classroom){
-        return $classroom;
     }
 
     public function update($data, $classroom){
@@ -28,8 +25,8 @@ Class ClassroomServices
     }
 
     public function isStarted($id){
-        $lession = Lesson::where('classroom_id',$id)->where('start_time','<',now())->first();
-        if ($lession) {
+        $lesson = Lesson::where('classroom_id',$id)->where('start_time','<',now())->first();
+        if ($lesson) {
             return true;
         }
         return false;
@@ -38,5 +35,12 @@ Class ClassroomServices
     public function getClassroom($data)
     {
         return Classroom::where('semester_id',$data)->get();
+    }
+
+    public function students($id)
+
+    {
+        $students = ClassStudent::where('classroom_id',$id)->get();
+        return $students;
     }
 }

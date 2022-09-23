@@ -7,7 +7,9 @@ use App\Models\Major;
 use App\Http\Controllers\Api\SubjectController;
 use App\Http\Controllers\Api\ClassroomController;
 use App\Http\Controllers\Api\ClassStudentController;
+use App\Http\Controllers\Api\ExcelController;
 use App\Http\Controllers\Api\IssueController;
+use App\Http\Controllers\Api\LessonController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -71,19 +73,19 @@ Route::name('semester')->prefix('semester')->group(function () {
             Route::put('update/{id}',[SemesterController::class, 'update']);
             // Route::delete('destroy/{id}',[SemestertController::class, 'destroy']);
         });
+        Route::post('import/{id}',[ExcelController::class, 'import']);
     });
     Route::middleware('admin')->group(function (){
         Route::post('store',[SemesterController::class, 'store']);
     });
 });
 
-
-
 Route::prefix('classroom')->group(function () {
     Route::get('get-all', [ClassroomController::class, 'index']);
     Route::post('store', [ClassroomController::class, 'store']);
     Route::middleware('existSemester')->get('semester/{id}', [ClassroomController::class, 'semester']);
     Route::middleware('existClassroom')->group((function () {
+        Route::get('students_class/{id}', [ClassroomController::class, 'students_class']);
         Route::get('show/{id}', [ClassroomController::class, 'show']);
         Route::put('update/{id}', [ClassroomController::class, 'update']);
         Route::delete('destroy/{id}', [ClassroomController::class, 'destroy']);
@@ -105,4 +107,10 @@ Route::name('issue')->prefix('issue')->group(function () {
         Route::put('update/{id}',[IssueController::class, 'update']);
         // Route::delete('destroy/{id}',[IssueController::class, 'destroy']);
     });
+});
+
+Route::prefix('lesson')->group(function () {
+    Route::post('store',[LessonController::class, 'store']);
+    Route::put('update/{id}',[LessonController::class, 'update']);
+    Route::delete('destroy/{id}',[LessonController::class, 'destroy']);
 });

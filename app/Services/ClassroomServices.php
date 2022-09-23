@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 use App\Models\Classroom;
+use App\Models\ClassStudent;
 use App\Models\Lesson;
 
 Class ClassroomServices
@@ -33,5 +34,12 @@ Class ClassroomServices
             return true;
         }
         return false;
+    }
+
+    public function students($id)
+
+    {
+        $students = ClassStudent::where('classroom_id',$id)->get();
+        return $students;
     }
 }

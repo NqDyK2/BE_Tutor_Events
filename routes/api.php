@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AttendanceController;
 use App\Http\Controllers\Api\MajorController;
 use App\Http\Controllers\Api\SemesterController;
 use App\Models\Major;
@@ -81,6 +82,7 @@ Route::name('semester')->prefix('semester')->group(function () {
 Route::prefix('classroom')->group(function () {
     Route::get('get-all', [ClassroomController::class, 'index']);
     Route::post('store', [ClassroomController::class, 'store']);
+    Route::middleware('existSemester')->get('semester/{id}', [ClassroomController::class, 'semester']);
     Route::middleware('existClassroom')->group((function () {
         Route::get('show/{id}', [ClassroomController::class, 'show']);
         Route::put('update/{id}', [ClassroomController::class, 'update']);

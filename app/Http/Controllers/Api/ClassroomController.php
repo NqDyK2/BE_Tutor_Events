@@ -86,4 +86,14 @@ class ClassroomController extends Controller
             ],400);
         }
     }
+
+    public function semester(Request $request)
+    {
+        $classroom = $this->classroomServices->getClassroom($request->id);
+
+        return response([
+            'status' => true,
+            'data' => $classroom
+        ],200);
+    }
 }

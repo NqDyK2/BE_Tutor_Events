@@ -34,4 +34,9 @@ Class ClassroomServices
         }
         return false;
     }
+
+    public function getClassroom($data)
+    {
+        return Classroom::where('semester_id',$data)->get();
+    }
 }

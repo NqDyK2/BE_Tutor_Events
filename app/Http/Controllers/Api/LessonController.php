@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Lesson\CreateLessonRequest;
 use App\Http\Requests\Lesson\UpdateLessonRequest;
+use App\Models\Classroom;
 use App\Services\LessonServices;
 use Illuminate\Http\Request;
 
@@ -16,10 +17,20 @@ class LessonController extends Controller
         $this->lessonServices = $lessonServices;
     }
 
-    public function store(CreateLessonRequest $request){
-        
-        // $this->authorize('updateClassroom', $classroom);
+    public function index(Request $request, $classroom_id)
+    {
+        $pageSize = $request->page_size ?? DEFAULT_PAGINATE;
+        $lesson = $this->lessonServices->index($classroom_id)->paginate($pageSize);
+        return response([
+            'Total lesson' => $lesson->total(),
+            'Detail lesson' => $lesson->items(),
+        ],200);
+    }
 
+    public function store(CreateLessonRequest $request)
+    {
+        $classroom = Classroom::find($request->classroom_id);
+        $this->authorize('checkOwnership', $classroom);
         $lesson = $this->lessonServices->store($request->input());
         if ($lesson) {
             return response([
@@ -36,7 +47,10 @@ class LessonController extends Controller
         }
     }
 
-    public function update(UpdateLessonRequest $request, $id){
+    public function update(UpdateLessonRequest $request, $id)
+    {
+        $classroom = Classroom::find($request->classroom_id);
+        $this->authorize('checkOwnership', $classroom);
         $lesson = $this->lessonServices->update($request->input(), $id);
         if ($lesson) {
             return response([

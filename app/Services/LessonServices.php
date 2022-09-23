@@ -5,6 +5,10 @@ use App\Models\Lesson;
 
 class LessonServices
 {
+    public function index($classroom_id){
+        return Lesson::where('classroom_id', $classroom_id);
+    }
+
     public function store($data)
     {
        return Lesson::create($data);

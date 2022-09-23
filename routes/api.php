@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AttendanceController;
 use App\Http\Controllers\Api\MajorController;
 use App\Http\Controllers\Api\SemesterController;
 use App\Models\Major;
@@ -82,6 +83,7 @@ Route::name('semester')->prefix('semester')->group(function () {
 Route::prefix('classroom')->group(function () {
     Route::get('get-all', [ClassroomController::class, 'index']);
     Route::post('store', [ClassroomController::class, 'store']);
+    Route::middleware('existSemester')->get('semester/{id}', [ClassroomController::class, 'semester']);
     Route::middleware('existClassroom')->group((function () {
         Route::get('students_class/{id}', [ClassroomController::class, 'students_class']);
         Route::get('show/{id}', [ClassroomController::class, 'show']);
@@ -108,7 +110,10 @@ Route::name('issue')->prefix('issue')->group(function () {
 });
 
 Route::prefix('lesson')->group(function () {
-    Route::post('store',[LessonController::class, 'store']);
-    Route::put('update/{id}',[LessonController::class, 'update']);
-    Route::delete('destroy/{id}',[LessonController::class, 'destroy']);
+    Route::get('{classroom_id}/get-all',[LessonController::class, 'index']);
+    Route::middleware('checkRoleTeacherOrAdmin')->group(function (){
+        Route::post('store',[LessonController::class, 'store']);
+        Route::put('update/{id}',[LessonController::class, 'update']);
+        Route::delete('destroy/{id}',[LessonController::class, 'destroy']);
+    });
 });

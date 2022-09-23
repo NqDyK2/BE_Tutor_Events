@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('semesters', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->dateTime('start_time')->default(now());
-            $table->dateTime('end_time')->default(now());
+            $table->string('name')->unique();
+            $table->dateTime('start_time')->nullable();
+            $table->dateTime('end_time')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -21,7 +21,7 @@ class ClassroomPolicy
         }
     }
 
-    public function updateClassroom($auth, $classroom)
+    public function checkOwnership($auth, $classroom)
     {
         if ($auth->id == $classroom->user_id && $auth->role_id == USER_ROLE_TEACHER) {
             return true;

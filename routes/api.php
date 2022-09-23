@@ -6,7 +6,9 @@ use App\Models\Major;
 use App\Http\Controllers\Api\SubjectController;
 use App\Http\Controllers\Api\ClassroomController;
 use App\Http\Controllers\Api\ClassStudentController;
+use App\Http\Controllers\Api\ExcelController;
 use App\Http\Controllers\Api\IssueController;
+use App\Http\Controllers\Api\LessonController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -70,13 +72,12 @@ Route::name('semester')->prefix('semester')->group(function () {
             Route::put('update/{id}',[SemesterController::class, 'update']);
             // Route::delete('destroy/{id}',[SemestertController::class, 'destroy']);
         });
+        Route::post('import/{id}',[ExcelController::class, 'import']);
     });
     Route::middleware('admin')->group(function (){
         Route::post('store',[SemesterController::class, 'store']);
     });
 });
-
-
 
 Route::prefix('classroom')->group(function () {
     Route::get('get-all', [ClassroomController::class, 'index']);
@@ -104,4 +105,10 @@ Route::name('issue')->prefix('issue')->group(function () {
         Route::put('update/{id}',[IssueController::class, 'update']);
         // Route::delete('destroy/{id}',[IssueController::class, 'destroy']);
     });
+});
+
+Route::prefix('lesson')->group(function () {
+    Route::post('store',[LessonController::class, 'store']);
+    Route::put('update/{id}',[LessonController::class, 'update']);
+    Route::delete('destroy/{id}',[LessonController::class, 'destroy']);
 });

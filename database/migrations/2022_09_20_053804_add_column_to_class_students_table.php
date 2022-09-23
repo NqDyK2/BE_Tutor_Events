@@ -14,9 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::table('class_students', function (Blueprint $table) {
-            $table->string('reason');
-            $table->string('school_classroom');
-            $table->unsignedBigInteger('school_teacher_id');
+            $table->string('reason')->nullable();
+            $table->string('school_classroom')->nullable();
+            $table->unsignedBigInteger('school_teacher_id')->nullable();
         });
     }
 

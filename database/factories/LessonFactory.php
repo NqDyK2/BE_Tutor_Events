@@ -17,7 +17,11 @@ class LessonFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'classroom_id' => rand(1,30),
+            'type' => rand(0,5),
+            'class_location' => $this->faker->secondaryAddress(),
+            'start_time' => $this->faker->date(),
+            'end_time' => $this->faker->date(),
         ];
     }
 }

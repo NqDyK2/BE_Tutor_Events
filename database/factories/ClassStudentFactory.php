@@ -17,7 +17,11 @@ class ClassStudentFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'user_email' => $this->faker,
+            'classroom_id',
+            'school_teacher_id',
+            'school_classroom',
+            'reason'
         ];
     }
 }

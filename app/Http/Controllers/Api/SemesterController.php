@@ -30,7 +30,7 @@ class SemesterController extends Controller
         ],200);
     }
 
-    public function store(CreateSemesterRequest $request)
+    public function store(Request $request)
     {
         $semester = $this->semesterServices->create($request->input());
 

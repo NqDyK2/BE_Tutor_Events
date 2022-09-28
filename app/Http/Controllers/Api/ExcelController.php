@@ -21,8 +21,6 @@ class ExcelController extends Controller
 
     public function import(Request $request)
     {
-        Cache::put('dashboard', "sdf", 30);
-
         $subject = $this->excelServices->requireSubjectImport($request->data);
         $classrooms = $this->excelServices->requireClassroomsImport($subject, $request->id);
         $teachers = $this->excelServices->requireTeacherImport($request->data);

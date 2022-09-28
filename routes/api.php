@@ -80,9 +80,9 @@ Route::name('semester')->prefix('semester')->group(function () {
 Route::prefix('classroom')->group(function () {
     Route::get('get-all', [ClassroomController::class, 'index']);
     Route::post('store', [ClassroomController::class, 'store']);
-    Route::middleware('existSemester')->get('semester/{id}', [ClassroomController::class, 'semester']);
+    Route::middleware('existSemester')->get('in-semester/{id}', [ClassroomController::class, 'semester']);
     Route::middleware('existClassroom')->group((function () {
-        Route::get('students_class/{id}', [ClassroomController::class, 'students_class']);
+        Route::get('get-student/{id}', [ClassroomController::class, 'students_class']);
         Route::get('show/{id}', [ClassroomController::class, 'show']);
         Route::put('update/{id}', [ClassroomController::class, 'update']);
         Route::delete('destroy/{id}', [ClassroomController::class, 'destroy']);

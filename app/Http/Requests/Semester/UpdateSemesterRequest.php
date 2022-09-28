@@ -24,9 +24,9 @@ class UpdateSemesterRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|min:5|max:100|string|unique:semesters,name,'.$this->id,
-            'start_time' => 'required|date|before:end_time',
-            'end_time' => 'required|date'
+            'name' => 'min:5|max:100|string|unique:semesters,name,'.$this->id,
+            'start_time' => 'date|before:end_time',
+            'end_time' => 'date'
         ];
     }
 }

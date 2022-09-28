@@ -126,16 +126,19 @@ class ExcelServices
 
     public function requireUserImport($data)
     {
-        $user = User::firstOrCreate(
-            [
-                'email' => $data['student_email'],
-            ],
-            [
-                'name' => $data['student_name'],
-                'user_code' => $data['student_code'],
-                'phone_number' => $data['student_phone'],
-            ]
-        )->id;
+        try {
+            $user = User::firstOrCreate(
+                [
+                    'email' => $data['student_email'],
+                ],
+                [
+                    'name' => $data['student_name'],
+                    'user_code' => $data['student_code'],
+                    'phone_number' => $data['student_phone'],
+                ]
+            )->id;
+        } catch (\Throwable $th) {
+        }
 
         return $user;
     }

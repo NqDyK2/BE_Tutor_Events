@@ -40,7 +40,10 @@ Class ClassroomServices
     public function students($id)
 
     {
-        $students = ClassStudent::where('classroom_id',$id)->get();
+        // $students = ClassStudent::where('classroom_id',$id)->get();
+        $students = ClassStudent::where('classroom_id',$id)
+        ->join('users', 'users.email', '=', 'class_students.user_email')
+        ->select('class_students.*', 'users.email' , 'users.name', 'users.google_id','users.gender' ,'users.address', 'users.avatar', 'users.user_code', 'users.status', 'users.phone_number')->get();
         return $students;
     }
 }

@@ -17,7 +17,11 @@ class ClassStudentFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'user_email' => $this->faker->email(),
+            'classroom_id' => rand(1,30),
+            'school_teacher_id' => rand(1,30),
+            'school_classroom'=> rand(1,30),
+            'reason' => $this->faker->catchPhrase()
         ];
     }
 }

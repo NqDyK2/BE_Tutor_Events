@@ -17,7 +17,9 @@ class IssueFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'lesson_id' => rand(1,50),
+            'content' => $this->faker->text($maxNbChars = 200),
+            'is_resolved' => rand(0,5),
         ];
     }
 }

@@ -25,7 +25,7 @@ class LessonController extends Controller
         ],200);
     }
 
-    public function store(CreateLessonRequest $request)
+    public function store(Request $request)
     {
         $classroom = Classroom::find($request->classroom_id);
         $this->authorize('checkOwnership', $classroom);

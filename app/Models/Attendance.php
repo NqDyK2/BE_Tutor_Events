@@ -19,6 +19,7 @@ class Attendance extends Model
         'user_id',
         'lesson_id',
         'note',
+        'status'
     ];
 
     public function user()

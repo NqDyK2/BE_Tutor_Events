@@ -28,8 +28,8 @@ class AttendanceServices
 
   public function update($lesson_id, $data)
   {
-    $presentIds = array_filter(array_map( fn($x) => $x['status']==1 ? $x['id'] : null, $data ));
-    $absentIds = array_filter(array_map( fn($x) => $x['status']==0 ? $x['id'] : null, $data ));
+    $presentIds = array_filter(array_map( fn($x) => $x['status']== ATTENDANCE_STATUS_PRESENT ? $x['id'] : null, $data ));
+    $absentIds = array_filter(array_map( fn($x) => $x['status']== ATTENDANCE_STATUS_ABSENT ? $x['id'] : null, $data ));
 
     Attendance::whereIn('id', $absentIds)->update(["status" => true]);
     Attendance::whereIn('id', $presentIds)->update(["status" => false]);

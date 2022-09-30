@@ -111,8 +111,11 @@ Route::prefix('lesson')->group(function () {
     Route::get('{classroom_id}/get-all',[LessonController::class, 'index']);
     Route::middleware('checkRoleTeacherOrAdmin')->group(function (){
         Route::post('store',[LessonController::class, 'store']);
-        Route::put('update/{id}',[LessonController::class, 'update']);
-        Route::delete('destroy/{id}',[LessonController::class, 'destroy']);
+        Route::middleware('existLesson')->group(function (){
+            Route::put('update/{id}',[LessonController::class, 'update']);
+            Route::get('show/{id}',[LessonController::class, 'show']);
+            Route::delete('destroy/{id}',[LessonController::class, 'destroy']);
+        });
     });
 });
 

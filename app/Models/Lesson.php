@@ -18,13 +18,19 @@ class Lesson extends Model
     protected $fillable = [
         'classroom_id',
         'type',
-        'class_location',
         'start_time',
         'end_time',
+        'class_location_online',
+        'class_location_offline',
+        'tutor_email'
     ];
 
     public function classroom()
     {
         return $this->belongsTo(Classroom::class,'classroom_id');
+    }
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class,'lesson_id');
     }
 }

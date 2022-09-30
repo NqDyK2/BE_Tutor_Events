@@ -23,7 +23,7 @@ class LessonController extends Controller
         $lesson = $this->lessonServices->index($classroom_id)->paginate($pageSize);
         return response([
             'Total lesson' => $lesson->total(),
-            'Detail lesson' => $lesson->items(),
+            'List lesson' => $lesson->items(),
         ],200);
     }
 
@@ -47,11 +47,12 @@ class LessonController extends Controller
         }
     }
 
-    public function update(UpdateLessonRequest $request, $id)
+    public function update(UpdateLessonRequest $request)
     {
+        $lesson = $request->get('lesson');
         $classroom = Classroom::find($request->classroom_id);
         $this->authorize('checkOwnership', $classroom);
-        $lesson = $this->lessonServices->update($request->input(), $id);
+        $lesson = $this->lessonServices->update($request->input(), $lesson);
         if ($lesson) {
             return response([
                 'data' => $lesson,
@@ -67,20 +68,25 @@ class LessonController extends Controller
         }
     }
 
-    public function destroy($id){
-        $lesson = $this->lessonServices->destroy($id);
-        if ($lesson) {
-            return response([
-                'data' => $lesson,
-                'messages' => 'Delete lesson successfully',
-                'status' => true,
-            ],200);
-        }else{
-            return response([
-                'data' => null,
-                'messages' => 'Delete lesson failed',
-                'status' => false,
-            ],400);
-        }
+    public function show(Request $request){
+        $lesson = $request->get('lesson');
+        $lesson = $this->lessonServices->show($lesson);
+        return response([
+            'data' => $lesson,
+            'messages' => 'Show lesson successfully',
+            'status' => true,
+        ],200);
+    }
+
+    public function destroy(Request $request){
+        $lesson = $request->get('lesson');
+        $classroom = Classroom::find($lesson->classroom_id);
+        $this->authorize('checkOwnership', $classroom);
+        $lesson = $this->lessonServices->destroy($lesson);
+        return response([
+            'data' => $lesson,
+            'messages' => 'Delete lesson successfully',
+            'status' => true,
+        ],200);
     }
 }

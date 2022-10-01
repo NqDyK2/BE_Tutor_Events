@@ -17,13 +17,11 @@ class LessonController extends Controller
         $this->lessonServices = $lessonServices;
     }
 
-    public function index(Request $request, $classroom_id)
+    public function index($classroom_id)
     {
-        $pageSize = $request->page_size ?? DEFAULT_PAGINATE;
-        $lesson = $this->lessonServices->index($classroom_id)->paginate($pageSize);
+        $lesson = $this->lessonServices->index($classroom_id);
         return response([
-            'total' => $lesson->total(),
-            'data' => $lesson->items(),
+            'data' => $lesson,
         ],200);
     }
 
@@ -35,15 +33,13 @@ class LessonController extends Controller
         if ($lesson) {
             return response([
                 'data' => $lesson,
-                'messages' => 'Create lesson successfully',
-                'status' => true,
-            ],200);
+                'messages' => 'Create lesson successfully'
+            ],201);
         }else{
             return response([
                 'data' => null,
-                'messages' => 'Create lesson failed',
-                'status' => false,
-            ],400);
+                'messages' => 'Create lesson failed'
+            ],500);
         }
     }
 
@@ -56,15 +52,13 @@ class LessonController extends Controller
         if ($lesson) {
             return response([
                 'data' => $lesson,
-                'messages' => 'Update lesson successfully',
-                'status' => true,
+                'messages' => 'Update lesson successfully'
             ],200);
         }else{
             return response([
                 'data' => null,
-                'messages' => 'Update lesson failed',
-                'status' => false,
-            ],400);
+                'messages' => 'Update lesson failed'
+            ],500);
         }
     }
 
@@ -73,8 +67,7 @@ class LessonController extends Controller
         $lesson = $this->lessonServices->show($lesson);
         return response([
             'data' => $lesson,
-            'messages' => 'Show lesson successfully',
-            'status' => true,
+            'messages' => 'Show lesson successfully'
         ],200);
     }
 
@@ -85,8 +78,7 @@ class LessonController extends Controller
         $lesson = $this->lessonServices->destroy($lesson);
         return response([
             'data' => $lesson,
-            'messages' => 'Delete lesson successfully',
-            'status' => true,
+            'messages' => 'Delete lesson successfully'
         ],200);
     }
 }

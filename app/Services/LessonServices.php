@@ -24,23 +24,24 @@ class LessonServices
         ->leftJoin('subjects','subjects.id','classrooms.subject_id')
         ->leftJoin('users','users.id','classrooms.user_id')
         ->where('classroom_id', $classroom_id)
-        ->orderBy('lessons.start_time','ASC','lessons.end_time','ASC');
+        ->orderBy('lessons.start_time','ASC','lessons.end_time','ASC')->get();
         return $lesson;
     }
 
     public function store($data)
     {
         $lesson = Lesson::create($data);
-        $data = [
-            'classroom_id' => $lesson->classroom_id,
-            'type' => $lesson->type,
-            'start_time' => $lesson->start_time,
-            'end_time' => $lesson->end_time,
-            'class_location_online' => $lesson->class_location_online,
-            'class_location_offline' => $lesson->class_location_offline,
-            'tutor_email' => $lesson->tutor_email,
-        ];
-        return $data;
+        return $lesson->only(
+            [
+                'classroom_id',
+                'type',
+                'start_time',
+                'end_time',
+                'class_location_online',
+                'class_location_offline',
+                'tutor_email'
+            ]
+        );
     }
 
     public function update($data, $lesson)
@@ -50,16 +51,17 @@ class LessonServices
 
     public function show($lesson)
     {
-        $data = [
-            'classroom_id' => $lesson->classroom_id,
-            'type' => $lesson->type,
-            'start_time' => $lesson->start_time,
-            'end_time' => $lesson->end_time,
-            'class_location_online' => $lesson->class_location_online,
-            'class_location_offline' => $lesson->class_location_offline,
-            'tutor_email' => $lesson->tutor_email,
-        ];
-        return $data;
+        return $lesson->only(
+            [
+                'classroom_id',
+                'type',
+                'start_time',
+                'end_time',
+                'class_location_online',
+                'class_location_offline',
+                'tutor_email'
+            ]
+        );
     }
 
     public function destroy($lesson)

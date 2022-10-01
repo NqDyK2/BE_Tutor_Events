@@ -24,7 +24,7 @@ class CreateLessonRequest extends FormRequest
      * @return array<string, mixed>
      */
     public function rules()
-    {
+    {        
         function thePresentTime()
         {
             $thePresentTime = now();
@@ -43,7 +43,6 @@ class CreateLessonRequest extends FormRequest
                     }
                 },
             ],
-
             'class_location' => [
                 function ($attribute, $value, $fail) {
                     $checkStartTime = Lesson::where('class_location', $value)

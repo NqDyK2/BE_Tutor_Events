@@ -22,8 +22,8 @@ class LessonController extends Controller
         $pageSize = $request->page_size ?? DEFAULT_PAGINATE;
         $lesson = $this->lessonServices->index($classroom_id)->paginate($pageSize);
         return response([
-            'Total lesson' => $lesson->total(),
-            'List lesson' => $lesson->items(),
+            'total' => $lesson->total(),
+            'data' => $lesson->items(),
         ],200);
     }
 

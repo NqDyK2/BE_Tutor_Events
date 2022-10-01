@@ -88,7 +88,7 @@ class UpdateLessonRequest extends FormRequest
                     }
                 },
                 function ($attribute, $value, $fail) {
-                    $checkStartTime = Lesson::where('classroom_id', $this->classroom_id)->get();
+                    $checkStartTime = Lesson::where('classroom_id', $this->classroom_id)->where('id','<>', $this->id)->get();
                     foreach ($checkStartTime as $time) { 
                         $startTimeIsset = strtotime($time->start_time);
                         $endTimeIsset = strtotime($time->end_time);
@@ -110,7 +110,7 @@ class UpdateLessonRequest extends FormRequest
                     }
                 },
                 function ($attribute, $value, $fail) {
-                    $checkStartTime = Lesson::where('classroom_id', $this->classroom_id)->get();
+                    $checkStartTime = Lesson::where('classroom_id', $this->classroom_id)->where('id','<>', $this->id)->get();
                     foreach ($checkStartTime as $time) { 
                         $startTimeIsset = strtotime($time->start_time);
                         $endTimeIsset = strtotime($time->end_time);

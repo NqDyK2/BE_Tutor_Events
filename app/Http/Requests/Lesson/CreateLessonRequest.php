@@ -43,9 +43,26 @@ class CreateLessonRequest extends FormRequest
                     }
                 },
             ],
-            'class_location' => [
+            'class_location_online' => [
+                'url',
                 function ($attribute, $value, $fail) {
-                    $checkStartTime = Lesson::where('class_location', $value)
+                    $checkStartTime = Lesson::where('class_location_online', $value)
+                    ->where('classroom_id', '<>', $this->classroom_id)->get();
+                    foreach ($checkStartTime as $time) { 
+                        $startTimeIsset = strtotime($time->start_time);
+                        $endTimeIsset = strtotime($time->end_time);
+                        if ($this->start_time >= $startTimeIsset && $this->start_time <= $endTimeIsset) {
+                            $fail('Thời gian bắt đầu tiết học của link meet này đã có lớp đăng ký');
+                        }elseif ($this->end_time >= $startTimeIsset &&  $this->end_time <= $endTimeIsset) {
+                            $fail('Thời gian kết thúc tiết học của link meet này có lớp đăng ký');
+                        }
+                    }
+                },
+            ],
+            'class_location_offline' => [
+                'string',
+                function ($attribute, $value, $fail) {
+                    $checkStartTime = Lesson::where('class_location_offline', $value)
                     ->where('classroom_id', '<>', $this->classroom_id)->get();
                     foreach ($checkStartTime as $time) { 
                         $startTimeIsset = strtotime($time->start_time);
@@ -103,7 +120,8 @@ class CreateLessonRequest extends FormRequest
                 },
             ],
 
-            'type' => 'required|integer'
+            'type' => 'required|integer',
+            'tutor_email' => 'email'
         ];
     }
 }

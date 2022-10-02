@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('phone_number')->change();
+            $table->renameColumn('user_code', 'code');
         });
     }
 
@@ -25,5 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::table('users', function (Blueprint $table) {
+            $table->renameColumn('code', 'user_code');
+        });
     }
 };

@@ -13,8 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('phone_number')->change();
+        Schema::table('attendances', function (Blueprint $table) {
+            $table->unsignedBigInteger('user_id');
+            $table->dropColumn('user_email');
         });
     }
 
@@ -25,5 +26,9 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::table('attendances', function (Blueprint $table) {
+            $table->dropColumn('user_id');
+            $table->string('user_email');
+        });
     }
 };

@@ -120,7 +120,7 @@ Route::prefix('lesson')->group(function () {
 });
 
 Route::prefix('attendance')->group(function () {
-    Route::get('list-class',[AttendanceController::class, 'getListLesson']);
-    Route::get('list-student/{lesson_id}',[AttendanceController::class, 'getListStudent']);
-    Route::put('update/{lesson_id}',[AttendanceController::class, 'update']);
+    Route::get('list-class',[AttendanceController::class, 'getListClass']);
+    Route::get('get/{classroom_id}',[AttendanceController::class, 'getListAttendance']);
+    Route::put('update/{classroom_id}',[AttendanceController::class, 'update']);
 });

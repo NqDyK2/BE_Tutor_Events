@@ -32,9 +32,9 @@ Class ClassroomServices
         return false;
     }
 
-    public function getClassroom($data)
+    public function getClassroom($id)
     {
-        return Classroom::where('semester_id',$data)->get();
+        return Classroom::where('semester_id',$id)->get();
     }
 
     public function students($id)

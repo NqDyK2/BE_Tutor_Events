@@ -30,10 +30,12 @@ class ClassroomController extends Controller
         
         if ($classroom) {
             return response([
+                'data' => $classroom,
                 'message' => 'Create Classroom successfully'
             ],201);
         } else {
             return response([
+                'data' => $classroom,
                 'message' => 'Create Classroom failed'
             ],500);
         }
@@ -44,7 +46,8 @@ class ClassroomController extends Controller
         $classroom = $request->get('classroom');
         
         return response([
-            'data' => $classroom
+            'data' => $classroom,
+            'messages' => 'Show Classroom successfully'
         ],200);
     }
 
@@ -58,10 +61,12 @@ class ClassroomController extends Controller
 
         if ($classroom) {
             return response([
+                'data' => $classroom,
                 'message' => 'update Classroom successfully'
             ],200);
         } else {
             return response([
+                'data' => $classroom,
                 'message' => 'update Classroom failed'
             ],500);
         }
@@ -98,6 +103,7 @@ class ClassroomController extends Controller
     public function students_class(Request $request)
     {
         $classroom = $request->get('classroom');
+        
         $students = $this->classroomServices->students($classroom->id);
         
         return response([

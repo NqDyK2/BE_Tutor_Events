@@ -133,7 +133,7 @@ class ExcelServices
                 ],
                 [
                     'name' => $data['student_name'],
-                    'user_code' => $data['student_code'],
+                    'code' => $data['student_code'],
                     'phone_number' => $data['student_phone'],
                 ]
             )->id;

@@ -30,7 +30,6 @@ class UpdateUserRequest extends FormRequest
             'address' => 'string|min:5|max:150',
             'phone_number' => 'numeric|digits_between:10,12',
             'dob' => 'date|before:now',
-            'major_id' => 'exists:majors,id',
             'role_id' => ['integer', 'exists:roles,id', new AdminRule],
             'status' => ['integer', 'min:0', 'max:1', new AdminRule],
         ];

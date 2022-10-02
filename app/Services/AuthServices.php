@@ -8,13 +8,13 @@ class AuthServices
 {
     public function loginGoogle($googleUser)
     {
-        $user = User::where('google_id', $googleUser->id)->first();
+        $user = User::where('email', $googleUser->email)->first();
 
         if (!$user) {
-
             $user = User::create([
-                'user_code' => explode("@", $googleUser->email)[0],
+                'code' => explode("@", $googleUser->email)[0],
                 'google_id' => $googleUser->id,
+                'avatar' => $googleUser->avatar,
                 'name' => $googleUser->name,
                 'email' => $googleUser->email,
             ]);

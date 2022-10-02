@@ -21,4 +21,12 @@ class Semester extends Model
         'start_time',
         'end_time',
     ];
+    public function classrooms()
+    {
+        return $this->hasMany(Classroom::class, 'semester_id');
+    }
+    public function lessons()
+    {
+        return $this->hasManyThrough(Lesson::class, Classroom::class);
+    }
 }

@@ -15,7 +15,7 @@ class AttendanceController extends Controller
         $this->attendanceServices = $attendanceServices;
     }
 
-    public function getListLesson()
+    public function getListClass()
     {
         $classroom = $this->attendanceServices->getListClass();
         return response([
@@ -23,19 +23,33 @@ class AttendanceController extends Controller
         ]);
     }
 
-    public function getListStudent(Request $request)
+    public function getListAttendance(Request $request)
     {
-        $students = $this->attendanceServices->getListStudent($request->lesson_id);
+        $attendances = $this->attendanceServices->getListAttendance($request->classroom_id);
+
+        if (count($attendances) == 0) {
+            return response ([
+                'message' => 'Chưa đến thời gian điểm danh'
+            ], 400);
+        }
+
         return response([
-            'data' => $students
-        ]);
+            'data' => $attendances
+        ], 200);
     }
 
     public function update(Request $request)
     {
-        $updated = $this->attendanceServices->update($request->id, $request->data);
+        $updated = $this->attendanceServices->update($request->classroom_id, $request->data);
+
+        if (!$updated) {
+            return response([
+                'message' => 'Chưa đến thời gian điểm danh'
+            ], 400);
+        }
+        
         return response([
-            'message' => 'Update attendance successfully'
-        ]);
+            'message' => 'Cập nhật điểm danh thành công'
+        ], 200);
     }
 }

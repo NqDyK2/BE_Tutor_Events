@@ -45,6 +45,7 @@ class UpdateLessonRequest extends FormRequest
             ],
 
             'class_location_online' => [
+                'nullable',
                 'url',
                 function ($attribute, $value, $fail) {
                     $checkStartTime = Lesson::where('class_location_online', $value)
@@ -61,6 +62,7 @@ class UpdateLessonRequest extends FormRequest
                 },
             ],
             'class_location_offline' => [
+                'nullable',
                 'string',
                 function ($attribute, $value, $fail) {
                     $checkStartTime = Lesson::where('class_location_offline', $value)
@@ -122,7 +124,8 @@ class UpdateLessonRequest extends FormRequest
             ],
 
             'type' => 'required|integer',
-            'tutor_email' => 'email'
+            'tutor_email' => 'nullable|email',
+            'document_path' => 'nullable|string',
         ];
     }
 }

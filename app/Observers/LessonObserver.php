@@ -17,11 +17,16 @@ class LessonObserver
     {
         $array_attendances = [];
         $time = now();
-        $ListClassStudent = $lesson->classroom->classStudents;
-        foreach ($ListClassStudent as $key => $classStudent) {
+        $listIdUser = $lesson->select('users.id')
+        ->leftJoin('classrooms','classrooms.id','lessons.classroom_id')
+        ->leftJoin('class_students','class_students.classroom_id','classrooms.id')
+        ->leftJoin('users','users.email','class_students.user_email')
+        ->where('lessons.id',$lesson->id)
+        ->get();
+        foreach ($listIdUser as $key => $user) {
             $array_attendances[] = [
                 'lesson_id' => $lesson->id,
-                'user_email' => $classStudent->user_email,
+                'user_id' => $user->id,
                 'created_at' => $time,
                 'updated_at' => $time,
             ];

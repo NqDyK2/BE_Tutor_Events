@@ -20,18 +20,23 @@ class ClassroomController extends Controller
     {
         $classroom = $this->classroomServices->index();
         return response([
-            '$classroom' => $classroom
+            'data' => $classroom
         ],200);
     }
 
     public function store(CreateClassroomRequest $request)
     {
         $classroom = $this->classroomServices->store($request->input());
-        return response([
-            'status' => true,
-            'message' => 'Create Classroom successfully',
-            'data' => $classroom
-        ],201);
+        
+        if ($classroom) {
+            return response([
+                'message' => 'Create Classroom successfully'
+            ],201);
+        } else {
+            return response([
+                'message' => 'Create Classroom failed'
+            ],500);
+        }
     }
 
     public function show(Request $request)
@@ -39,7 +44,6 @@ class ClassroomController extends Controller
         $classroom = $request->get('classroom');
         
         return response([
-            'status' => true,
             'data' => $classroom
         ],200);
     }
@@ -54,14 +58,12 @@ class ClassroomController extends Controller
 
         if ($classroom) {
             return response([
-                'message' => 'update Classroom successfully',
-                'status' => true
+                'message' => 'update Classroom successfully'
             ],200);
         } else {
             return response([
-                'message' => 'update Classroom failed',
-                'status' => false
-            ],400);
+                'message' => 'update Classroom failed'
+            ],500);
         }
     }
 
@@ -75,14 +77,12 @@ class ClassroomController extends Controller
 
         if ($checkDeleteClassroom) {
             return response([
-                'message' => 'delete classroom successfully',
-                'status' => true
+                'message' => 'delete classroom successfully'
             ],200);
         } else {
             return response([
-                'message' => 'delete classroom failed',
-                'status' => false
-            ],400);
+                'message' => 'delete classroom failed'
+            ],500);
         }
     }
 
@@ -91,7 +91,6 @@ class ClassroomController extends Controller
         $classroom = $this->classroomServices->getClassroom($request->id);
 
         return response([
-            'status' => true,
             'data' => $classroom
         ],200);
     }
@@ -102,7 +101,6 @@ class ClassroomController extends Controller
         $students = $this->classroomServices->students($classroom->id);
         
         return response([
-            'status' => true,
             'data' => $students
         ],200);
     }

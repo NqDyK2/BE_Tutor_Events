@@ -8,7 +8,7 @@ class UserServices
 {
     public function getAll()
     {
-        $user = User::select('id', 'user_code', 'name', 'email', 'avatar', 'gender', 'address', 'phone_number', 'dob', 'role_id', 'major_id')
+        $user = User::select('id', 'code', 'name', 'email', 'avatar', 'gender', 'address', 'phone_number', 'dob', 'role_id')
         ->get();
         return $user;
     }

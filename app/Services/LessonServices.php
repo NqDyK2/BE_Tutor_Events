@@ -15,7 +15,7 @@ class LessonServices
             'lessons.end_time',
             'subjects.name',
             'subjects.code',
-            DB::raw('users.user_code as teacher'),
+            DB::raw('users.code as teacher'),
             DB::raw('lessons.tutor_email as tutor'),
             DB::raw('lessons.class_location_online'),
             DB::raw('lessons.class_location_offline'),

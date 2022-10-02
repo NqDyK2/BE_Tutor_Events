@@ -22,7 +22,7 @@ class User extends Authenticatable
         'google_id',
         'name',
         'status',
-        'user_code',
+        'code',
         'email',
         'avatar',
         'gender',
@@ -30,7 +30,6 @@ class User extends Authenticatable
         'phone_number',
         'dob',
         'role_id',
-        'major_id'
     ];
 
     /**

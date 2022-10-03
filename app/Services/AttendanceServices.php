@@ -13,7 +13,7 @@ class AttendanceServices
 {
   public function getListClass()
   {
-    $classroom = Classroom::select(
+    $classrooms = Classroom::select(
       'classrooms.id',
       DB::raw('users.name as teacher'),
       DB::raw('subjects.name as subject_name'),
@@ -36,7 +36,19 @@ class AttendanceServices
       })
       ->get();
 
-    return ($classroom);
+      $classrooms = $classrooms->toArray();
+
+      if (!$classrooms) return [];
+
+      $classrooms = array_map(function ($x) {
+        $x['start_time'] = data_get(data_get($x['lessons'], 0), 'start_time');
+        $x['end_time'] = data_get(data_get($x['lessons'], 0), 'end_time');
+
+        unset($x['lessons']);
+        return $x;
+      }, $classrooms);
+
+    return ($classrooms);
   }
 
   public function getListAttendance($classroom_id)

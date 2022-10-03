@@ -33,7 +33,6 @@ class UpdateSemesterRequest extends FormRequest
         $this->end_time = strtotime($this->end_time);
         return [
             'name' => 'min:5|max:100|string|unique:semesters,name,'.$this->id,
-
             'start_time' => [
                 'date_format:Y-m-d H:i:s',
                 function($attribute, $value, $fail)

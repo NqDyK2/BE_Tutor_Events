@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Models\Attendance;
 use App\Models\Classroom;
 use App\Models\Lesson;
+use App\Models\Semester;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class AttendanceServices

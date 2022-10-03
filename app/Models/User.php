@@ -22,7 +22,7 @@ class User extends Authenticatable
         'google_id',
         'name',
         'status',
-        'user_code',
+        'code',
         'email',
         'avatar',
         'gender',
@@ -30,7 +30,6 @@ class User extends Authenticatable
         'phone_number',
         'dob',
         'role_id',
-        'major_id'
     ];
 
     /**
@@ -51,7 +50,13 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
     public function classrooms(){
         return $this->hasMany(Classroom::class,'user_id');
+    }
+
+    public function classStudent()
+    {
+        return $this->belongsTo(classStudent::class, 'user_email','email');
     }
 }

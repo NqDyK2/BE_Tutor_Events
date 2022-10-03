@@ -32,9 +32,9 @@ Class ClassroomServices
         return false;
     }
 
-    public function getClassroom($data)
+    public function getClassroom($id)
     {
-        return Classroom::where('semester_id',$data)->get();
+        return Classroom::where('semester_id',$id)->get();
     }
 
     public function students($id)
@@ -43,7 +43,7 @@ Class ClassroomServices
         // $students = ClassStudent::where('classroom_id',$id)->get();
         $students = ClassStudent::where('classroom_id',$id)
         ->join('users', 'users.email', '=', 'class_students.user_email')
-        ->select('class_students.*', 'users.email' , 'users.name', 'users.google_id','users.gender' ,'users.address', 'users.avatar', 'users.user_code', 'users.status', 'users.phone_number')->get();
+        ->select('class_students.*', 'users.email' , 'users.name', 'users.google_id','users.gender' ,'users.address', 'users.avatar', 'users.code', 'users.status', 'users.phone_number')->get();
         return $students;
     }
 }

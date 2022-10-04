@@ -124,7 +124,8 @@ class UpdateLessonRequest extends FormRequest
             ],
 
             'type' => 'required|integer',
-            'tutor_email' => 'email'
+            'tutor_email' => 'nullable|email',
+            'document_path' => 'nullable|string',
         ];
     }
 }

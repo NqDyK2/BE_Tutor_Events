@@ -22,7 +22,8 @@ class Lesson extends Model
         'end_time',
         'class_location_online',
         'class_location_offline',
-        'tutor_email'
+        'tutor_email',
+        'document_path',
     ];
 
     public function classroom()

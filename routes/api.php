@@ -64,16 +64,14 @@ Route::name('subject')->prefix('subject')->group(function () {
 
 Route::name('semester')->prefix('semester')->group(function () {
     Route::get('get-all',[SemesterController::class, 'index']);
+    Route::post('store',[SemesterController::class, 'store'])->middleware('admin');
     Route::middleware('existSemester')->group(function (){
         Route::get('show/{id}',[SemesterController::class, 'show']);
+        Route::post('import/{id}',[ExcelController::class, 'import']);
         Route::middleware('admin')->group(function (){
             Route::put('update/{id}',[SemesterController::class, 'update']);
             // Route::delete('destroy/{id}',[SemestertController::class, 'destroy']);
         });
-        Route::post('import/{id}',[ExcelController::class, 'import']);
-    });
-    Route::middleware('admin')->group(function (){
-        Route::post('store',[SemesterController::class, 'store']);
     });
 });
 

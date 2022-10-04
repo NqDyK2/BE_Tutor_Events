@@ -8,7 +8,13 @@ class SemesterServices
 {
     public function getAll()
     {
-        return Semester::paginate(DEFAULT_PAGINATE);
+        return Semester::select(
+            'id',
+            'name',
+            'start_time',
+            'end_time'
+        )
+        ->paginate(DEFAULT_PAGINATE);
     }
 
     public function create($data)

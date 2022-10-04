@@ -24,57 +24,37 @@ class UpdateSemesterRequest extends FormRequest
      */
     public function rules()
     {
-        function thePresentTime()
-        {
-            $thePresentTime = now();
-            return $thePresentTime = strtotime($thePresentTime);
-        }
-        $this->start_time = strtotime($this->start_time);
-        $this->end_time = strtotime($this->end_time);
         return [
-            'name' => 'min:5|max:100|string|unique:semesters,name,'.$this->id,
-            'start_time' => [
-                'date_format:Y-m-d H:i:s',
-                function($attribute, $value, $fail)
-                {
-                    if($this->start_time >= $this->end_time) {
-                        $fail('Thời gian bắt đầu không được lớn hơn thời gian kết thúc');
-                    }elseif ($this->start_time <= thePresentTime()) {
-                        $fail('Thời gian không hợp lệ');
-                    }
-                },
-                function ($attribute, $value, $fail) {
-                    $checkStartTime = Semester::all();
-                    foreach ($checkStartTime as $time) { 
-                        $startTimeIsset = strtotime($time->start_time);
-                        $endTimeIsset = strtotime($time->end_time);
-                        if ($this->start_time >= $startTimeIsset && $this->start_time <= $endTimeIsset) {
-                            $fail('Thời gian bắt đầu học kỳ bạn đã đăng ký');
-                        }
-                    }
-                },
-            ],
-
+            'name' => 'min:5|max:100|unique:semesters,name,'.$this->id,
+            'start_time' => 'date|before:end_time',
             'end_time' => [
-                'date_format:Y-m-d H:i:s',
+                'date',
                 function ($attribute, $value, $fail) {
-                    if ($this->end_time <= $this->start_time) {
-                        $fail('Thời gian kết thúc không được nhỏ hơn thời gian bắt đầu');
-                    }elseif ($this->end_time <= thePresentTime()) {
-                        $fail('Thời gian không hợp lệ');
-                    }
-                },
-                function ($attribute, $value, $fail) {
-                    $checkStartTime = Semester::all();
-                    foreach ($checkStartTime as $time) { 
-                        $startTimeIsset = strtotime($time->start_time);
-                        $endTimeIsset = strtotime($time->end_time);
-                        if ($this->end_time >= $startTimeIsset &&  $this->end_time <= $endTimeIsset) {
-                            $fail('Thời gian kết thúc học kỳ bạn đã đăng ký');
-                        }
+                    $isExistsAnother = Semester::where('id', '!=', $this->id)
+                    ->where(function ($q){
+                        return $q->where('start_time', '<=', $this->start_time)
+                        ->where('end_time', '>=', $this->start_time)
+                        ->orWhere('start_time', '<=', $this->end_time)
+                        ->where('end_time', '>=', $this->end_time)
+                        ->orWhere('start_time', '>=', $this->start_time)
+                        ->where('end_time', '<=', $this->end_time);
+                    })->first();
+                    if ($isExistsAnother) {
+                        $fail('Đã có kỳ học khác diễn ra trong thời gian này (' . $isExistsAnother->name . ')');
                     }
                 },
             ],
+        ];
+    }
+    public function messages()
+    {
+        return [
+            'name.min' => 'Tên kỳ học phải lớn hơn 5 ký tự',
+            'name.required' => 'Tên kỳ học phải nhỏ hơn 100 ký tự',
+            'name.unique' => 'Tên kỳ học đã tồn tại',
+            'start_time.date' => 'Thời gian bắt đầu không đúng định dạng',
+            'start_time.before' => 'Thời gian bắt đầu phải lớn hơn thời gian kết thúc',
+            'end_time.date' => 'Thời gian bắt đầu không đúng định dạng',
         ];
     }
 }

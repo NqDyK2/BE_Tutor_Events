@@ -24,19 +24,15 @@ class SemesterController extends Controller
     public function index()
     {
         $semester = $this->semesterServices->getAll();
-
         return response([
-            'semester' => $semester
+            'data' => $semester
         ],200);
     }
 
-    public function store(Request $request)
+    public function store(CreateSemesterRequest $request)
     {
         $semester = $this->semesterServices->create($request->input());
-
         return response([
-            'status' => true,
-            'messege' => 'Semester create Successfully',
             'data' => $semester
         ],201);
     }
@@ -44,9 +40,7 @@ class SemesterController extends Controller
     public function show(Request $request)
     {
         $semester = $request->get('semester');
-        
         return response([
-            'status' => true,
             'data' => $semester
         ],201);
     }
@@ -58,12 +52,10 @@ class SemesterController extends Controller
         if($semesterUpdate)
         {
             return response([
-                'status' => true,
                 'massage' => 'Semester Update Successfully',
             ],201);
         }else {
             return response([
-                'status' => false,
                 'massage' => 'Update Semester False'
             ],400);
         }
@@ -76,12 +68,10 @@ class SemesterController extends Controller
 
         if($semesterDestroy){
             return response([
-                'status' => true,
                 'massage' => 'Semester Delete Successfully'
             ],201);
         }else {
             return response([
-                'status' => false,
                 'massage' => 'Delete false'
             ]);
         }

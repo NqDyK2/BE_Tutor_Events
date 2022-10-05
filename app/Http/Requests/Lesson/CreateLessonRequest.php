@@ -52,10 +52,8 @@ class CreateLessonRequest extends FormRequest
                     foreach ($checkStartTime as $time) { 
                         $startTimeIsset = strtotime($time->start_time);
                         $endTimeIsset = strtotime($time->end_time);
-                        if ($this->start_time >= $startTimeIsset && $this->start_time <= $endTimeIsset) {
-                            $fail('Thời gian bắt đầu tiết học của link meet này đã có lớp đăng ký');
-                        }elseif ($this->end_time >= $startTimeIsset &&  $this->end_time <= $endTimeIsset) {
-                            $fail('Thời gian kết thúc tiết học của link meet này có lớp đăng ký');
+                        if ($this->start_time >= $startTimeIsset && $this->start_time <= $endTimeIsset || $this->end_time >= $startTimeIsset &&  $this->end_time <= $endTimeIsset || $startTimeIsset >= $this->start_time && $endTimeIsset <= $this->end_time) {
+                            $fail('Khoảng thời gian này của link meet đã có lớp đăng ký');
                         }
                     }
                 },
@@ -69,10 +67,8 @@ class CreateLessonRequest extends FormRequest
                     foreach ($checkStartTime as $time) { 
                         $startTimeIsset = strtotime($time->start_time);
                         $endTimeIsset = strtotime($time->end_time);
-                        if ($this->start_time >= $startTimeIsset && $this->start_time <= $endTimeIsset) {
-                            $fail('Thời gian bắt đầu tiết học của phòng '. $value .' đã có lớp đăng ký');
-                        }elseif ($this->end_time >= $startTimeIsset &&  $this->end_time <= $endTimeIsset) {
-                            $fail('Thời gian kết thúc tiết học của phòng '. $value .' đã có lớp đăng ký');
+                        if ($this->start_time >= $startTimeIsset && $this->start_time <= $endTimeIsset || $this->end_time >= $startTimeIsset &&  $this->end_time <= $endTimeIsset || $startTimeIsset >= $this->start_time && $endTimeIsset <= $this->end_time) {
+                            $fail('Khoảng thời gian này của phòng học '.$value.' đã có lớp đăng ký');
                         }
                     }
                 },
@@ -81,47 +77,21 @@ class CreateLessonRequest extends FormRequest
             'start_time' => [
                 'required',
                 'date_format:Y-m-d H:i:s',
-                function ($attribute, $value, $fail) {
-                    if ($this->start_time >= $this->end_time) {
-                        $fail('Thời gian bắt đầu không được lớn hơn thời gian kết thúc');
-                    }elseif ($this->start_time <= thePresentTime()) {
-                        $fail('Thời gian không hợp lệ');
-                    }
-                },
+                'before:end_time',
                 function ($attribute, $value, $fail) {
                     $checkStartTime = Lesson::where('classroom_id', $this->classroom_id)->get();
                     foreach ($checkStartTime as $time) { 
                         $startTimeIsset = strtotime($time->start_time);
                         $endTimeIsset = strtotime($time->end_time);
-                        if ($this->start_time >= $startTimeIsset && $this->start_time <= $endTimeIsset) {
-                            $fail('Thời gian bắt đầu tiết học bạn đã đăng ký');
+                        if ($this->start_time >= $startTimeIsset && $this->start_time <= $endTimeIsset || $this->end_time >= $startTimeIsset && $this->end_time <= $endTimeIsset || $startTimeIsset >= $this->start_time && $endTimeIsset <= $this->end_time) {
+                            $fail('Khoảng thời gian này bạn đã đăng ký');
+                        }elseif ($this->end_time <= thePresentTime()) {
+                            $fail('Thời gian không hợp lệ');
                         }
                     }
                 },
             ],
-
-            'end_time' => [
-                'required',
-                'date_format:Y-m-d H:i:s',
-                function ($attribute, $value, $fail) {
-                    if ($this->end_time <= $this->start_time) {
-                        $fail('Thời gian kết thúc không được nhỏ hơn thời gian bắt đầu');
-                    }elseif ($this->end_time <= thePresentTime()) {
-                        $fail('Thời gian không hợp lệ');
-                    }
-                },
-                function ($attribute, $value, $fail) {
-                    $checkStartTime = Lesson::where('classroom_id', $this->classroom_id)->get();
-                    foreach ($checkStartTime as $time) { 
-                        $startTimeIsset = strtotime($time->start_time);
-                        $endTimeIsset = strtotime($time->end_time);
-                        if ($this->end_time >= $startTimeIsset &&  $this->end_time <= $endTimeIsset) {
-                            $fail('Thời gian kết thúc tiết học bạn đã đăng ký');
-                        }
-                    }
-                },
-            ],
-
+            'end_time' => 'required|date_format:Y-m-d H:i:s',
             'type' => 'required|integer',
             'tutor_email' => 'nullable|email',
             'document_path' => 'nullable|string',

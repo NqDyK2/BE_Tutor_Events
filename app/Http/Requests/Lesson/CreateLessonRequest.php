@@ -120,7 +120,7 @@ class CreateLessonRequest extends FormRequest
             'type.integer' => 'phải là số',
 
             'tutor_email.email' => 'Email tutor không đúng định dạng',
-            
+
             'document_path.string' => 'Tài liệu buổi học phải là chuỗi hoặc là đường dẫn',
         ];
     }

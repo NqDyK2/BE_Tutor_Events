@@ -60,7 +60,6 @@ class CreateLessonRequest extends FormRequest
             ],
             'class_location_offline' => [
                 'required',
-                'string',
                 function ($attribute, $value, $fail) {
                     $checkStartTime = Lesson::where('class_location_offline', $value)
                     ->where('classroom_id', '<>', $this->classroom_id)->get();
@@ -91,10 +90,38 @@ class CreateLessonRequest extends FormRequest
                     }
                 },
             ],
+            
             'end_time' => 'required|date_format:Y-m-d H:i:s',
             'type' => 'required|integer',
             'tutor_email' => 'nullable|email',
             'document_path' => 'nullable|string',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'classroom_id.required' => 'Thiếu ID của lớp',
+            'classroom_id.integer' => 'ID của lớp phải là số',
+
+            'class_location_online.required' => 'địa chỉ buổi học online không được để trống',
+            'class_location_online.url' => 'địa chỉ buổi học online phải là đường dẫn',
+
+            'class_location_offline.required' => 'địa chỉ buổi học offline không được để trống',
+
+            'start_time.required' => 'Thời gian bắt đầu không được để trống',
+            'start_time.date_format' => 'Thời gian bắt đầu không đúng định dạng',
+            'start_time.before' => 'Thời gian bắt đầu phải tồn tại trước thời gian kết thúc',
+
+            'end_time.required' => 'Thời gian kết thúc không được để trống',
+            'end_time.date_format' => 'Thời gian kết thúc không đúng định dạng',
+
+            'type.required' => 'Hình thức học không được để trống',
+            'type.integer' => 'phải là số',
+
+            'tutor_email.email' => 'Email tutor không đúng định dạng',
+            
+            'document_path.string' => 'Tài liệu buổi học phải là chuỗi hoặc là đường dẫn',
         ];
     }
 }

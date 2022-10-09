@@ -19,17 +19,14 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'google_id',
         'name',
-        'status',
-        'code',
+        'google_id',
         'email',
+        'code',
         'avatar',
-        'gender',
-        'address',
         'phone_number',
-        'dob',
         'role_id',
+        'status',
     ];
 
     /**
@@ -51,12 +48,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function classrooms(){
-        return $this->hasMany(Classroom::class,'user_id');
-    }
-
-    public function classStudent()
+    public function classStudents()
     {
-        return $this->belongsTo(classStudent::class, 'user_email','email');
+        return $this->hasMany(classStudent::class, 'student_email', 'email');
     }
 }

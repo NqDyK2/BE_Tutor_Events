@@ -16,6 +16,8 @@ return new class extends Migration
         Schema::create('majors', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('teacher_email');
+            $table->string('slug');
             $table->timestamps();
             $table->softDeletes();
         });

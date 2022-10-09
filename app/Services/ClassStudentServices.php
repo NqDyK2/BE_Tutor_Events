@@ -10,10 +10,12 @@ Class ClassStudentServices
     public function __construct(MailServices $mailService) {
         $this->mailService = $mailService;
     }
-    public function index(){
-        return ClassStudent::paginate(DEFAULT_PAGINATE);
-    }
 
+    public function classStudentsInClassroom($id)
+    {
+        return ClassStudent::where('classroom_id',$id)->get();
+    }
+    
     public function store($data){
         $classroom = Classroom::find($data['classroom_id']);
         $content = [

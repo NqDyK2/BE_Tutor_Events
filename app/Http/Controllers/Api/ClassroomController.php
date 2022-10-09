@@ -16,9 +16,10 @@ class ClassroomController extends Controller
         $this->classroomServices = $classroomServices;
     }
 
-    public function index()
+    public function classroomsInSemester($id)
     {
-        $classroom = $this->classroomServices->index();
+        $classroom = $this->classroomServices->classroomsInSemester($id);
+
         return response([
             'data' => $classroom
         ],200);
@@ -89,25 +90,5 @@ class ClassroomController extends Controller
                 'message' => 'delete classroom failed'
             ],500);
         }
-    }
-
-    public function semester(Request $request)
-    {
-        $classroom = $this->classroomServices->getClassroom($request->id);
-
-        return response([
-            'data' => $classroom
-        ],200);
-    }
-
-    public function students_class(Request $request)
-    {
-        $classroom = $request->get('classroom');
-        
-        $students = $this->classroomServices->students($classroom->id);
-        
-        return response([
-            'data' => $students
-        ],200);
     }
 }

@@ -19,15 +19,15 @@ class ClassStudentController extends Controller
         $this->classroomServices = $classroomServices;
     }
 
-    public function index()
-    {
-        $classStudent = $this->classStudentServices->index();
+    public function classStudentsInClassroom($id)
+    {   
+        $students = $this->classStudentServices->classStudentsInClassroom($id);
         return response([
-            'data' => $classStudent
+            'data' => $students
         ],200);
     }
 
-    public function store(ClassStudentRequest $request)
+    public function update(ClassStudentRequest $request)
     {
         $classStudent = $this->classStudentServices->store($request->input());
         return response([
@@ -35,31 +35,5 @@ class ClassStudentController extends Controller
             'message' => 'Create Classroom successfully',
             'data' => $classStudent
         ],201);
-    }
-
-    public function destroy($id)
-    {
-        $classStudent = $this->classStudentServices->show($id);
-        $this->authorize('updateClassroom', $classStudent->classroom);
-        $isStarted = $this->classroomServices->isStarted($classStudent->classroom->id);
-        if ($isStarted) {
-            return response([
-                'message' => 'you cannot delete this record',
-                'status' => false
-            ],200);
-        }
-        $checkDeleteClassStudent = $this->classStudentServices->destroy($id);
-
-        if ($checkDeleteClassStudent) {
-            return response([
-                'message' => 'delete classroom successfully',
-                'status' => true
-            ],200);
-        } else {
-            return response([
-                'message' => 'delete classroom failed',
-                'status' => false
-            ],400);
-        }
     }
 }

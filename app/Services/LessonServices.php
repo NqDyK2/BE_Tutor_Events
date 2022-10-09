@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\DB;
 
 class LessonServices
 {
-    public function index($classroom_id){
+    public function lessonsInClassroom($id){
         $lesson = Lesson::select(
             'lessons.id',
             'lessons.classroom_id',
@@ -23,7 +23,7 @@ class LessonServices
         ->leftJoin('classrooms','classrooms.id','lessons.classroom_id')
         ->leftJoin('subjects','subjects.id','classrooms.subject_id')
         ->leftJoin('users','users.id','classrooms.user_id')
-        ->where('classroom_id', $classroom_id)
+        ->where('classroom_id', $id)
         ->orderBy('lessons.start_time','ASC','lessons.end_time','ASC')->get();
         return $lesson;
     }

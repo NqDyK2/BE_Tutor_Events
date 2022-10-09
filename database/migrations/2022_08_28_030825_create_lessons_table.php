@@ -13,13 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('lessions', function (Blueprint $table) {
+        Schema::create('lessons', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('classroom_id');
-            $table->integer('type');
-            $table->string('class_location')->nullable();
+            $table->integer('type')->default('1');
+            $table->string('content')->nullable();
+            $table->string('teacher_email')->nullable();
+            $table->string('tutor_email')->nullable();
             $table->dateTime('start_time')->nullable();
             $table->dateTime('end_time')->nullable();
+            $table->string('class_location_offline')->nullable();
+            $table->string('class_location_online')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -32,6 +36,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lessions');
+        Schema::dropIfExists('lessons');
     }
 };

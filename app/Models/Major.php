@@ -18,6 +18,8 @@ class Major extends Model
      */
     protected $fillable = [
         'name',
+        'teacher_email',
+        'slug'
     ];
 
     /**

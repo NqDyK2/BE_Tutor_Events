@@ -14,13 +14,12 @@ class ClassStudent extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'user_email',
         'classroom_id',
-        'school_teacher_id',
-        'school_classroom',
-        'reason'
+        'student_email',
+        'reason',
+        'final_result',
     ];
-    
+
     public function classroom()
     {
         return $this->belongsTo(Classroom::class, 'classroom_id');
@@ -28,6 +27,6 @@ class ClassStudent extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_email','email');
+        return $this->belongsTo(User::class, 'user_email', 'email');
     }
 }

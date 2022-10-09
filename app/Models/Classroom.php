@@ -17,24 +17,34 @@ class Classroom extends Model
      */
     protected $fillable = [
         'name',
-        'user_id',
-        'email',
         'subject_id',
         'semester_id',
-        'default_online_class_location',
         'default_offline_class_location',
+        'default_online_class_location',
+        'default_teacher_email',
         'default_tutor_email'
     ];
-    public function classStudents(){
-        return $this->hasMany(ClassStudent::class,'classroom_id');
-    }
-    public function lessons(){
-        return $this->hasMany(Lesson::class,'classroom_id');
-    }
-    public function user()
+
+    public function classStudents()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->hasMany(ClassStudent::class, 'classroom_id');
     }
+
+    public function lessons()
+    {
+        return $this->hasMany(Lesson::class, 'classroom_id');
+    }
+
+    public function teacher()
+    {
+        return $this->belongsTo(User::class, 'default_teacher_email', 'email');
+    }
+
+    public function tutor()
+    {
+        return $this->belongsTo(User::class, 'user_email', 'email');
+    }
+
     public function semester()
     {
         return $this->belongsTo(Semester::class, 'semester_id');

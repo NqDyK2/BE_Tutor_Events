@@ -15,9 +15,10 @@ return new class extends Migration
     {
         Schema::create('class_students', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('classroom_id');
-            $table->integer('role_student')->default(1);
+            $table->string('student_email');
+            $table->string('reason');
+            $table->boolean('final_result');
             $table->timestamps();
         });
     }

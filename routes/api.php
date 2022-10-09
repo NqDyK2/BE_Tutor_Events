@@ -77,6 +77,7 @@ Route::name('semester')->prefix('semester')->group(function () {
 
 Route::prefix('classroom')->group(function () {
     Route::get('get-all', [ClassroomController::class, 'index']);
+
     Route::middleware('checkRoleTeacherOrAdmin')->group(function (){
         Route::post('store', [ClassroomController::class, 'store']);
         Route::middleware('existSemester')->get('in-semester/{id}', [ClassroomController::class, 'semester']);

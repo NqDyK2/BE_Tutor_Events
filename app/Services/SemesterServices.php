@@ -14,7 +14,8 @@ class SemesterServices
             'start_time',
             'end_time'
         )
-        ->paginate(DEFAULT_PAGINATE);
+        ->orderBy('start_time', 'desc')
+        ->get();
     }
 
     public function create($data)

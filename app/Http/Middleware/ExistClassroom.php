@@ -21,8 +21,7 @@ class ExistClassroom
 
         if ($classroom === null) {
             return response([
-                'status' => false,
-                'message' => 'Lớp học này không tồn tại'
+                'message' => 'Lớp học không tồn tại'
             ], 404);
         }
 

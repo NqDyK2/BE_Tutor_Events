@@ -17,7 +17,7 @@ class ExistLesson
      */
     public function handle(Request $request, Closure $next)
     {
-        $lesson = Lesson::find($request->id);
+        $lesson = Lesson::find($request->lesson_id);
 
         if ($lesson === null) {
             return response([

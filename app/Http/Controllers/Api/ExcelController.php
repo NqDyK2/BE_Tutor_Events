@@ -22,7 +22,7 @@ class ExcelController extends Controller
     public function import(Request $request)
     {
         $subject = $this->excelServices->requireSubjectImport($request->data);
-        $classrooms = $this->excelServices->requireClassroomsImport($subject, $request->id);
+        $classrooms = $this->excelServices->requireClassroomsImport($subject, $request->semester_id);
         $teachers = $this->excelServices->requireTeacherImport($request->data);
 
         foreach ($request->data as $x) {

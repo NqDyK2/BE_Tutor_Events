@@ -17,7 +17,7 @@ class ExistSemester
      */
     public function handle(Request $request, Closure $next)
     {
-        $semester = Semester::find($request->id);
+        $semester = Semester::find($request->semester_id);
 
         if($semester === null) {
             return response([

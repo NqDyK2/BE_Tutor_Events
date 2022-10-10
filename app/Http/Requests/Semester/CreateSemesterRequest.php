@@ -39,7 +39,7 @@ class CreateSemesterRequest extends FormRequest
                         ->where('end_time', '<=', $this->end_time)
                         ->first();
                     if ($isExistsAnother) {
-                        $fail('Đã có kỳ học khác diễn ra trong thời gian này (' . $isExistsAnother->name . ')');
+                        $fail('Đã có kỳ học khác diễn ra trong thời gian này: '. $isExistsAnother->name .' ('. substr($isExistsAnother->start_time, 0, 10) .' to '. substr($isExistsAnother->end_time, 0, 10) .')');
                     }
                 },
             ],

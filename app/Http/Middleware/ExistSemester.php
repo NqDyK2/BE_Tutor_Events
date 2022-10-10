@@ -21,8 +21,7 @@ class ExistSemester
 
         if($semester === null) {
             return response([
-                'status' => false,
-                'message' => 'kì học này không tồn tại'
+                'message' => 'Kỳ học không tồn tại'
             ], 404);
         }
         $request->attributes->add(['semester' => $semester]);

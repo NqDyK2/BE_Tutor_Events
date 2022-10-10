@@ -21,8 +21,7 @@ class ExistClassStudent
 
         if ($classStudent === null) {
             return response([
-                'status' => false,
-                'message' => 'Class Student not exist'
+                'message' => 'Sinh viên không tồn tại'
             ], 404);
         }
 

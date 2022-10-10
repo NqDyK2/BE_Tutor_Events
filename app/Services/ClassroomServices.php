@@ -1,14 +1,28 @@
 <?php
 namespace App\Services;
 use App\Models\Classroom;
-use App\Models\ClassStudent;
 use App\Models\Lesson;
+use Illuminate\Support\Facades\DB;
 
 Class ClassroomServices
 {
-    public function classroomsInSemester($id)
+    public function classroomsInSemester($semester_id)
     {
-        return Classroom::where('semester_id',$id)->get();
+        return Classroom::select([
+            'classrooms.name',
+            DB::raw('subjects.name as subject_name'),
+            DB::raw('subjects.code as subject_code'),
+            DB::raw('semesters.name as semester_name'),
+            DB::raw('classrooms.default_teacher_email as default_teacher_email'),
+            DB::raw('classrooms.default_tutor_email as default_tutor_email'),
+        ])
+        ->join('subjects', 'subjects.id', '=', 'classrooms.subject_id')
+        ->join('semesters', 'semesters.id', '=', 'classrooms.semester_id')
+        ->where('semester_id',$semester_id)
+        ->withCount('classStudents')
+        ->withCount('lessons')
+        ->orderBy('subjects.code', 'asc')
+        ->get();
     }
     
     public function store($data){

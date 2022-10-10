@@ -21,8 +21,7 @@ class ExistLesson
 
         if ($lesson === null) {
             return response([
-                'status' => false,
-                'message' => 'Lesson not exist'
+                'message' => 'Buổi học không tồn tại'
             ], 404);
         }
 

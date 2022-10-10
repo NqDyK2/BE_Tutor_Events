@@ -21,8 +21,7 @@ class ExistUser
         
         if ($user === null) {
             return response([
-                'status' => false,
-                'message' => 'User not exist'
+                'message' => 'Người dùng không tồn tại'
             ], 404);
         }
         $request->attributes->add(['user' => $user]);

@@ -17,7 +17,7 @@ class ExistClassroom
      */
     public function handle(Request $request, Closure $next)
     {
-        $classroom = Classroom::find($request->id);
+        $classroom = Classroom::find($request->classroom_id);
 
         if ($classroom === null) {
             return response([

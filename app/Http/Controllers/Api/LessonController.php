@@ -17,9 +17,9 @@ class LessonController extends Controller
         $this->lessonServices = $lessonServices;
     }
 
-    public function lessonsInClassroom($id)
+    public function lessonsInClassroom($classroom_id)
     {
-        $lesson = $this->lessonServices->lessonsInClassroom($id);
+        $lesson = $this->lessonServices->lessonsInClassroom($classroom_id);
         return response([
             'data' => $lesson,
         ],200);

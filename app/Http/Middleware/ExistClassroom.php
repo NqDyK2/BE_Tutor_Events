@@ -22,7 +22,7 @@ class ExistClassroom
         if ($classroom === null) {
             return response([
                 'status' => false,
-                'message' => 'Classroom not exist'
+                'message' => 'Lớp học này không tồn tại'
             ], 404);
         }
 

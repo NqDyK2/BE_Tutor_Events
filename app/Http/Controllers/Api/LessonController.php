@@ -32,13 +32,11 @@ class LessonController extends Controller
         $lesson = $this->lessonServices->store($request->input());
         if ($lesson) {
             return response([
-                'data' => $lesson,
-                'messages' => 'Create lesson successfully'
+                'message' => 'Create lesson successfully'
             ],201);
         }else{
             return response([
-                'data' => null,
-                'messages' => 'Create lesson failed'
+                'message' => 'Create lesson failed'
             ],500);
         }
     }
@@ -51,24 +49,13 @@ class LessonController extends Controller
         $lesson = $this->lessonServices->update($request->input(), $lesson);
         if ($lesson) {
             return response([
-                'data' => $lesson,
-                'messages' => 'Update lesson successfully'
+                'message' => 'Update lesson successfully'
             ],200);
         }else{
             return response([
-                'data' => null,
-                'messages' => 'Update lesson failed'
+                'message' => 'Update lesson failed'
             ],500);
         }
-    }
-
-    public function show(Request $request){
-        $lesson = $request->get('lesson');
-        $lesson = $this->lessonServices->show($lesson);
-        return response([
-            'data' => $lesson,
-            'messages' => 'Show lesson successfully'
-        ],200);
     }
 
     public function destroy(Request $request){
@@ -78,7 +65,7 @@ class LessonController extends Controller
         $lesson = $this->lessonServices->destroy($lesson);
         return response([
             'data' => $lesson,
-            'messages' => 'Delete lesson successfully'
+            'message' => 'Delete lesson successfully'
         ],200);
     }
 }

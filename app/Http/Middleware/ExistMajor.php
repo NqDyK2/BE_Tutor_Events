@@ -21,8 +21,7 @@ class ExistMajor
 
         if($major === null) {
             return response([
-                'status' => false,
-                'message' => 'Major not exist'
+                'message' => 'Chuyên ngành không tồn tại'
             ], 404);
         }
         $request->attributes->add(['major' => $major]);

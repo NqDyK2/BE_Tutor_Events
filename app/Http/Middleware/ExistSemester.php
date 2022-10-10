@@ -17,12 +17,11 @@ class ExistSemester
      */
     public function handle(Request $request, Closure $next)
     {
-        $semester = Semester::find($request->id);
+        $semester = Semester::find($request->semester_id);
 
         if($semester === null) {
             return response([
-                'status' => false,
-                'message' => 'kì học này không tồn tại'
+                'message' => 'Kỳ học không tồn tại'
             ], 404);
         }
         $request->attributes->add(['semester' => $semester]);

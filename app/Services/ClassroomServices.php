@@ -7,23 +7,23 @@ use Illuminate\Support\Facades\DB;
 
 Class ClassroomServices
 {
-    public function classroomsInSemester($id)
+    public function classroomsInSemester($semester_id)
     {
-        $classroom = Classroom::select(
+        return Classroom::select([
             'classrooms.name',
-            'subjects.code',
-            'classrooms.default_teacher_email',
-            'classrooms.default_tutor_email',
-            DB::raw('COUNT(lessons.id) as total_lesson'),
-            DB::raw('COUNT(class_students.id) as total_student'),
-        )
-        ->leftJoin('subjects','classrooms.subject_id','subjects.id')
-        ->leftJoin('lessons','lessons.classroom_id','classrooms.id')
-        ->leftJoin('class_students','class_students.classroom_id','classrooms.id')
-        ->where('semester_id',$id)
-        ->groupBy('classrooms.name','subjects.code','classrooms.default_teacher_email','classrooms.default_tutor_email')
+            DB::raw('subjects.name as subject_name'),
+            DB::raw('subjects.code as subject_code'),
+            DB::raw('semesters.name as semester_name'),
+            DB::raw('classrooms.default_teacher_email as default_teacher_email'),
+            DB::raw('classrooms.default_tutor_email as default_tutor_email'),
+        ])
+        ->join('subjects', 'subjects.id', '=', 'classrooms.subject_id')
+        ->join('semesters', 'semesters.id', '=', 'classrooms.semester_id')
+        ->where('semester_id',$semester_id)
+        ->withCount('classStudents')
+        ->withCount('lessons')
+        ->orderBy('subjects.code', 'asc')
         ->get();
-        return $classroom;
     }
     
     public function store($data){

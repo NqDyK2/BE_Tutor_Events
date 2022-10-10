@@ -13,13 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('majors', function (Blueprint $table) {
+        Schema::create('dev_tokens', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('teacher_email')->nullable();
-            $table->string('slug');
+            $table->string('token');
+            $table->string('desc');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -30,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('majors');
+        Schema::dropIfExists('dev_tokens');
     }
 };

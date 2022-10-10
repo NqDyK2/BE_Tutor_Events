@@ -21,8 +21,7 @@ class ExistSubject
 
         if ($subject === null) {
             return response([
-                'status' => false,
-                'message' => 'Subject not exist'
+                'message' => 'Môn học không tồn tại'
             ], 404);
         }
         $request->attributes->add(['subject' => $subject]);

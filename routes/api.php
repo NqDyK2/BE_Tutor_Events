@@ -7,8 +7,8 @@ use App\Http\Controllers\Api\SubjectController;
 use App\Http\Controllers\Api\ClassroomController;
 use App\Http\Controllers\Api\ClassStudentController;
 use App\Http\Controllers\Api\ExcelController;
-use App\Http\Controllers\Api\IssueController;
 use App\Http\Controllers\Api\LessonController;
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -29,49 +29,65 @@ Route::get('auth/user', function (Request $request) {
     ], 200);
 });
 
-Route::prefix('major')->group(function () {
-    Route::get('get-all', [MajorController::class, 'index']);
-    Route::post('store', 'MajorController@store')->middleware('admin');
-    Route::middleware('existMajor')->group(function (){
-        Route::get('show/{id}', [MajorController::class, 'show']);
-        Route::middleware('admin')->group(function () {
-            Route::put('update/{id}', [MajorController::class, 'update']);
-        });
+// Route::prefix('major')->group(function () {
+//     Route::get('get-all', [MajorController::class, 'index']);
+//     Route::post('store', 'MajorController@store')->middleware('admin');
+//     Route::middleware('existMajor')->group(function (){
+//         Route::get('show/{id}', [MajorController::class, 'show']);
+//         Route::middleware('admin')->group(function () {
+//             Route::put('update/{id}', [MajorController::class, 'update']);
+//         });
+//     });
+// });
+// Route::prefix('user')->group(function () {
+//     Route::get('get', [UserController::class, 'get']);
+//     Route::middleware('existUser')->group((function () {
+//         Route::get('show/{id}', [UserController::class, 'show']);
+//         Route::put('update/{id}', [UserController::class, 'update']);
+//     }));
+// });
+// Route::name('subject')->prefix('subject')->group(function () {
+//     Route::get('get-all',[SubjectController::class, 'index']);
+//     Route::middleware('existSubject')->group(function (){
+//         Route::get('show/{id}',[SubjectController::class, 'show']);
+//         Route::middleware('admin')->group(function (){
+//             Route::put('update/{id}',[SubjectController::class, 'update']);
+//             // Route::delete('destroy/{id}',[SubjectController::class, 'destroy']);
+//         });
+//     });
+//     Route::middleware('admin')->group(function (){
+//         Route::post('store',[SubjectController::class, 'store']);
+//     });
+// });
+// Route::prefix('class-student')->group(function () {
+//     Route::get('in-classroom/{id}', [ClassStudentController::class, 'classStudentsInClassroom'])->middleware('existClassroom');
+//     Route::post('store', [ClassStudentController::class, 'store']);
+//     Route::middleware('existClassStudent')->group((function () {
+//         Route::delete('update/{id}', [ClassStudentController::class, 'update']);
+//     }));
+// });
+
+// API FOR MANAGE
+
+Route::prefix('semester')->group(function () {
+    Route::get('get-all', [SemesterController::class, 'index']);
+    Route::post('store', [SemesterController::class, 'store'])->middleware('admin');
+    Route::middleware('existSemester')->group(function () {
+        Route::post('{semester_id}/import', [ExcelController::class, 'import'])->middleware('admin');
+        Route::put('{semester_id}/update', [SemesterController::class, 'update'])->middleware('admin');
+
+        Route::get('{semester_id}/classrooms', [ClassroomController::class, 'classroomsInSemester']);
     });
 });
 
-Route::prefix('user')->group(function () {
-    Route::get('get', [UserController::class, 'get']);
-    Route::middleware('existUser')->group((function () {
-        Route::get('show/{id}', [UserController::class, 'show']);
-        Route::put('update/{id}', [UserController::class, 'update']);
-    }));
-});
+Route::prefix('classroom')->middleware('checkRoleTeacherOrAdmin')->group(function () {
+    Route::post('store', [ClassroomController::class, 'store']);
+    Route::middleware('existClassroom')->group(function () {
+        Route::put('{classroom_id}/update', [ClassroomController::class, 'update']);
+        Route::delete('{classroom_id}/destroy', [ClassroomController::class, 'destroy']);
 
-Route::name('subject')->prefix('subject')->group(function () {
-    Route::get('get-all',[SubjectController::class, 'index']);
-    Route::middleware('existSubject')->group(function (){
-        Route::get('show/{id}',[SubjectController::class, 'show']);
-        Route::middleware('admin')->group(function (){
-            Route::put('update/{id}',[SubjectController::class, 'update']);
-            // Route::delete('destroy/{id}',[SubjectController::class, 'destroy']);
-        });
-    });
-    Route::middleware('admin')->group(function (){
-        Route::post('store',[SubjectController::class, 'store']);
-    });
-});
-
-Route::name('semester')->prefix('semester')->group(function () {
-    Route::get('get-all',[SemesterController::class, 'index']);
-    Route::post('store',[SemesterController::class, 'store'])->middleware('admin');
-    Route::middleware('existSemester')->group(function (){
-        Route::get('show/{id}',[SemesterController::class, 'show']);
-        Route::post('import/{id}',[ExcelController::class, 'import']);
-        Route::middleware('admin')->group(function (){
-            Route::put('update/{id}',[SemesterController::class, 'update']);
-            // Route::delete('destroy/{id}',[SemestertController::class, 'destroy']);
-        });
+        Route::get('{classroom_id}/lessons', [LessonController::class, 'lessonsInClassroom']);
+        Route::get('{classroom_id}/students', [ClassStudentController::class, 'studentsInClassroom']);
     });
 });
 
@@ -87,28 +103,21 @@ Route::prefix('classroom')->group(function () {
     });
 });
 
-Route::prefix('class-student')->group(function () {
-    Route::get('in-classroom/{id}', [ClassStudentController::class, 'classStudentsInClassroom'])->middleware('existClassroom');
-    Route::post('store', [ClassStudentController::class, 'store']);
-    Route::middleware('existClassStudent')->group((function () {
-        Route::delete('update/{id}', [ClassStudentController::class, 'update']);
-    }));
-});
-
-Route::prefix('lesson')->group(function () {
-    Route::get('in-classroom/{id}',[LessonController::class, 'lessonsInClassroom'])->middleware('existClassroom');
-    Route::middleware('checkRoleTeacherOrAdmin')->group(function (){
-        Route::post('store',[LessonController::class, 'store']);
-        Route::middleware('existLesson')->group(function (){
-            Route::put('update/{id}',[LessonController::class, 'update']);
-            Route::get('show/{id}',[LessonController::class, 'show']);
-            Route::delete('destroy/{id}',[LessonController::class, 'destroy']);
-        });
+Route::prefix('lesson')->middleware('checkRoleTeacherOrAdmin')->group(function () {
+    Route::post('store', [LessonController::class, 'store']);
+    Route::middleware('existLesson')->group(function () {
+        Route::put('{lesson_id}/update', [LessonController::class, 'update']);
+        Route::delete('{lesson_id}/destroy', [LessonController::class, 'destroy']);
     });
 });
 
+
+// API FOR ATTENDANCE
+
 Route::prefix('attendance')->group(function () {
-    Route::get('list-class',[AttendanceController::class, 'getListClass']);
-    Route::get('get/{classroom_id}',[AttendanceController::class, 'getListAttendance']);
-    Route::put('update/{classroom_id}',[AttendanceController::class, 'update']);
+    Route::get('list-class', [AttendanceController::class, 'getListClass']);
+    Route::middleware('existClassroom')->group(function () {
+        Route::get('get/{classroom_id}', [AttendanceController::class, 'getListAttendance']);
+        Route::put('update/{classroom_id}', [AttendanceController::class, 'update']);
+    });
 });

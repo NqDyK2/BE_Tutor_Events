@@ -15,7 +15,6 @@ class AttendanceServices
   {
     $classrooms = Classroom::select(
       'classrooms.id',
-      DB::raw('users.name as teacher'),
       DB::raw('subjects.name as subject_name'),
       DB::raw('subjects.code as subject_code'),
     )
@@ -24,14 +23,15 @@ class AttendanceServices
           ->where('start_time', '<', now());
       })
       ->join('subjects', 'subjects.id', '=', 'classrooms.subject_id')
-      ->leftJoin('users', 'users.id', '=', 'classrooms.user_id')
       ->with('lessons', function ($q) {
         return $q->select(
           'start_time',
           'end_time',
+          'teacher_email',
+          'tutor_email',
           'classroom_id',
         )
-          ->where('start_time', '>', now())
+          ->where('end_time', '>', now())
           ->orderBy('start_time', 'ASC');
       })
       ->get();
@@ -43,6 +43,8 @@ class AttendanceServices
       $classrooms = array_map(function ($x) {
         $x['start_time'] = data_get(data_get($x['lessons'], 0), 'start_time');
         $x['end_time'] = data_get(data_get($x['lessons'], 0), 'end_time');
+        $x['teacher_email'] = data_get(data_get($x['lessons'], 0), 'teacher_email');
+        $x['tutor_email'] = data_get(data_get($x['lessons'], 0), 'tutor_email');
 
         unset($x['lessons']);
         return $x;
@@ -56,7 +58,7 @@ class AttendanceServices
     $getListStudent = Attendance::select(
       'attendances.id',
       'attendances.status',
-      'attendances.user_id',
+      'attendances.student_email',
       DB::raw('users.name as user_name'),
       DB::raw('users.code as user_code'),
       'attendances.note',
@@ -67,7 +69,7 @@ class AttendanceServices
           ->where('end_time', '>', now());
       })
 
-      ->leftJoin('users', 'users.id', '=', 'attendances.user_id')
+      ->leftJoin('users', 'users.email', '=', 'attendances.student_email')
       ->get();
     return $getListStudent;
   }

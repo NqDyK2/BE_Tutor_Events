@@ -17,12 +17,11 @@ class ExistLesson
      */
     public function handle(Request $request, Closure $next)
     {
-        $lesson = Lesson::find($request->id);
+        $lesson = Lesson::find($request->lesson_id);
 
         if ($lesson === null) {
             return response([
-                'status' => false,
-                'message' => 'Lesson not exist'
+                'message' => 'Buổi học không tồn tại'
             ], 404);
         }
 

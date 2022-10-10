@@ -17,7 +17,7 @@ class ClassroomController extends Controller
     }
 
     public function classroomsInSemester($id)
-    {
+{
         $classroom = $this->classroomServices->classroomsInSemester($id);
 
         return response([
@@ -32,24 +32,14 @@ class ClassroomController extends Controller
         if ($classroom) {
             return response([
                 'data' => $classroom,
-                'message' => 'Create Classroom successfully'
+                'message' => 'Tạo mới lớp học thành công'
             ],201);
         } else {
             return response([
                 'data' => $classroom,
-                'message' => 'Create Classroom failed'
+                'message' => 'Tạo mới lớp học thất bại'
             ],500);
         }
-    }
-
-    public function show(Request $request)
-    {
-        $classroom = $request->get('classroom');
-        
-        return response([
-            'data' => $classroom,
-            'messages' => 'Show Classroom successfully'
-        ],200);
     }
 
     public function update(UpdateClassroomRequest $request)
@@ -63,12 +53,12 @@ class ClassroomController extends Controller
         if ($classroom) {
             return response([
                 'data' => $classroom,
-                'message' => 'update Classroom successfully'
+                'message' => 'Cập nhật lớp học thành công'
             ],200);
         } else {
             return response([
                 'data' => $classroom,
-                'message' => 'update Classroom failed'
+                'message' => 'Cập nhật lớp học thất bại'
             ],500);
         }
     }
@@ -78,16 +68,24 @@ class ClassroomController extends Controller
         $classroom = $request->get('classroom');
         
         $this->authorize('checkOwnership', $classroom);
-        
-        $checkDeleteClassroom = $this->classroomServices->destroy($classroom);
+
+        $checkDeleteClassroom = $this->classroomServices->isStarted($classroom->id);
 
         if ($checkDeleteClassroom) {
             return response([
-                'message' => 'delete classroom successfully'
+                'message' => 'Lớp học này đã bắt đầu bạn không thể xóa'
+            ],405);
+        }
+
+        $classroom = $this->classroomServices->destroy($classroom);
+
+        if ($classroom) {
+            return response([
+                'message' => 'Xóa lớp học thành công'
             ],200);
         } else {
             return response([
-                'message' => 'delete classroom failed'
+                'message' => 'Xóa lớp học thất bại'
             ],500);
         }
     }

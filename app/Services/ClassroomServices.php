@@ -2,6 +2,7 @@
 namespace App\Services;
 use App\Models\Classroom;
 use App\Models\Lesson;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 Class ClassroomServices
@@ -26,6 +27,7 @@ Class ClassroomServices
     }
     
     public function store($data){
+        $data['default_teacher_email'] = Auth::user()->email;
         return Classroom::create($data);
     }
 

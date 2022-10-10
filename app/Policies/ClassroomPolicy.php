@@ -23,7 +23,7 @@ class ClassroomPolicy
 
     public function checkOwnership($auth, $classroom)
     {
-        if ($auth->id == $classroom->user_id && $auth->role_id == USER_ROLE_TEACHER) {
+        if ($auth->email == $classroom->default_teacher_email && $auth->role_id == USER_ROLE_TEACHER) {
             return true;
         }
         return false;

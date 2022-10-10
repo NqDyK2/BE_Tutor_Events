@@ -25,7 +25,11 @@
 </head>
 <body>
     <div class="container">
-        <h1><a href="{{ route('getUrl') }}">Nhấn vào đây để gửi ngàn lời yêu thương đến bạn Đàm Minh Hiếu</a></h1>
+        <h1><a href="{{ route('getUrl') }}">Login With Google</a></h1>
+        <p>Token for dev</p>
+        @foreach ($tokens as $x)
+            <a href="http://localhost:3000/checkpoint?token={{$x->token}}">{{$x->desc}}</a>
+        @endforeach
     </div>
 </body>
 </html>

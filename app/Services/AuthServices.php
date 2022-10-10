@@ -24,7 +24,6 @@ class AuthServices
                 'status' => false,
                 'message' => 'This account has been blocked',
             ], 403);
-
         }
         
         return $user->createToken('API TOKEN')->plainTextToken;

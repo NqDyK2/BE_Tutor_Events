@@ -20,7 +20,7 @@ class TeacherOrAdmin
         if(Auth::user()->role_id != USER_ROLE_ADMIN && Auth::user()->role_id != USER_ROLE_TEACHER){
             return response([
                 'status' => false,
-                'message' => 'You are not Admin or Teacher'
+                'message' => 'Bạn không có quyền truy cập'
             ]);
         }
         return $next($request);

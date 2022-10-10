@@ -30,42 +30,13 @@ class LessonServices
 
     public function store($data)
     {
-        $lesson = Lesson::create($data);
-        return $lesson->only(
-            [
-                'classroom_id',
-                'type',
-                'start_time',
-                'end_time',
-                'class_location_online',
-                'class_location_offline',
-                'tutor_email',
-                'document_path',
-            ]
-        );
+        return Lesson::create($data);
     }
 
     public function update($data, $lesson)
     {
         return $lesson->update($data);
     }
-
-    public function show($lesson)
-    {
-        return $lesson->only(
-            [
-                'classroom_id',
-                'type',
-                'start_time',
-                'end_time',
-                'class_location_online',
-                'class_location_offline',
-                'tutor_email',
-                'document_path',
-            ]
-        );
-    }
-
     public function destroy($lesson)
     {
         $lesson->delete();

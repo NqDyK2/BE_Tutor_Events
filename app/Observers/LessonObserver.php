@@ -16,25 +16,20 @@ class LessonObserver
     public function created(Lesson $lesson)
     {
         $array_attendances = [];
-        $time = now();
-        $listIdUser = $lesson->select('users.id')
-        ->leftJoin('classrooms','classrooms.id','lessons.classroom_id')
-        ->leftJoin('class_students','class_students.classroom_id','classrooms.id')
-        ->leftJoin('users','users.email','class_students.user_email')
-        ->where('lessons.id',$lesson->id)
-        ->get();
-        foreach ($listIdUser as $key => $user) {
+        $listIdUser = $lesson->select('class_students.student_email', 'lessons.classroom_id', 'class_students.classroom_id')
+            ->join('classrooms', 'classrooms.id', '=', 'lessons.classroom_id')
+            ->join('class_students', 'class_students.classroom_id', '=', 'classrooms.id')
+            ->where('lessons.id', $lesson->id)
+            ->get();
+
+        foreach ($listIdUser as $user) {
             $array_attendances[] = [
                 'lesson_id' => $lesson->id,
-                'user_id' => $user->id,
-                'created_at' => $time,
-                'updated_at' => $time,
+                'student_email' => $user->student_email,
             ];
         }
         Attendance::insert($array_attendances);
-            
     }
-
 
     /**
      * Handle the Lesson "updated" event.

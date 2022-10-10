@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('classroom_id');
             $table->string('student_email');
-            $table->string('reason');
-            $table->boolean('final_result');
+            $table->string('reason')->nullable();
+            $table->boolean('final_result')->nullable();
             $table->timestamps();
         });
     }

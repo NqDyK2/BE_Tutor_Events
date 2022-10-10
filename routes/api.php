@@ -91,18 +91,6 @@ Route::prefix('classroom')->middleware('checkRoleTeacherOrAdmin')->group(functio
     });
 });
 
-Route::prefix('classroom')->group(function () {
-    Route::get('in-semester/{id}', [ClassroomController::class, 'classroomsInSemester'])->middleware('existSemester');
-    Route::middleware('checkRoleTeacherOrAdmin')->group(function (){
-        Route::post('store', [ClassroomController::class, 'store']);
-        Route::middleware('existClassroom')->group(function () {
-            Route::get('get-student/{id}', [ClassroomController::class, 'students_class']);
-            Route::put('update/{id}', [ClassroomController::class, 'update']);
-            Route::delete('destroy/{id}', [ClassroomController::class, 'destroy']);
-        });
-    });
-});
-
 Route::prefix('lesson')->middleware('checkRoleTeacherOrAdmin')->group(function () {
     Route::post('store', [LessonController::class, 'store']);
     Route::middleware('existLesson')->group(function () {

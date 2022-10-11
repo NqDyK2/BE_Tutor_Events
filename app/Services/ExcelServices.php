@@ -13,12 +13,13 @@ use Illuminate\Support\Str;
 
 class ExcelServices
 {
+    //Trả về các bản ghi Major cần thiết, nếu bản ghi chưa có sẽ tự động tạo
     public function requireMajorImport($data)
     {
         $majors = [];
         $requireMajors = [];
 
-        //lay cac major can thiet trong data
+        //Lấy danh sách majors mà data cần
         $requireMajors = array_unique(array_map(function ($x) {
             return $x['major'];
         }, $data));
@@ -31,7 +32,7 @@ class ExcelServices
             ];
         }, $requireMajors);
 
-        //tao cac major con thieu va tra ve mang major
+        //tao cac major con thieu va tra ve mang majors lay tu database
         foreach ($requireMajors as $rm) {
             $majors[$rm['slug']] = Major::firstOrCreate(
                 ['slug' => $rm['slug']],
@@ -41,7 +42,7 @@ class ExcelServices
         return $majors;
     }
 
-    //tra ve mang cac subject can thiet trong data
+    //Trả về các bản ghi Subject cần thiết, nếu bản ghi chưa có sẽ tự động tạo
     public function requireSubjectImport($data)
     {
         $subjects = [];
@@ -53,15 +54,18 @@ class ExcelServices
             return Str::slug($x['major']) . "&|&" . Str::slug($x['subject']) . "&|&" . $x['subject'];
         }, $data));
 
+        //them slug cua subject
         foreach ($requireSubjects as $i => $rs) {
             $sbj = explode("&|&", $rs);
             $requireSubjects[$i] = [
                 "major_id" => $majors[$sbj[0]],
                 "slug" => $sbj[1],
+                "code" => $sbj[1],
                 "name" => $sbj[2],
             ];
         }
 
+        //Tao cac subject con thieu va tra ve mang subjects lay tu database
         foreach ($requireSubjects as $rs) {
             $subjects[$rs['slug']] = Subject::firstOrCreate(
                 [
@@ -76,34 +80,7 @@ class ExcelServices
         return $subjects;
     }
 
-    public function requireTeacherImport($data)
-    {
-        $teachers = [];
-        $requireTeachers = [];
-
-        //lay cac major can thiet trong data
-        $requireTeachers = array_unique(array_map(function ($x) {
-            return Str::slug($x['school_teacher_code']) . "&|&" . $x['school_teacher_name'];
-        }, $data));
-
-        foreach ($requireTeachers as $i => $rt) {
-            $tch = explode("&|&", $rt);
-            $requireTeachers[$i] = [
-                "code" => $tch[0],
-                "name" => $tch[1],
-            ];
-        }
-
-        //tao cac major con thieu va tra ve mang major
-        foreach ($requireTeachers as $rt) {
-            $teachers[$rt['code']] = SchoolTeacher::firstOrCreate(
-                ['code' => $rt['code']],
-                ['name' => $rt['name']]
-            )->id;
-        }
-        return $teachers;
-    }
-
+    //Tạo các subject c
     public function requireClassroomsImport(array $subjectIds, $semesterId)
     {
         $classrooms = [];
@@ -116,7 +93,6 @@ class ExcelServices
                 ],
                 [
                     'name' => $name,
-                    'user_id' => Auth::id()
                 ]
             )->id;
         }
@@ -126,26 +102,17 @@ class ExcelServices
 
     public function requireUserImport($data)
     {
-        try {
             $user = User::firstOrCreate(
                 [
                     'email' => $data['student_email'],
+                    'code' => $data['student_code'],
                 ],
                 [
                     'name' => $data['student_name'],
-                    'code' => $data['student_code'],
                     'phone_number' => $data['student_phone'],
                 ]
             )->id;
-        } catch (\Throwable $th) {
-        }
 
         return $user;
     }
-
-    public function requireUserClassroom($data)
-    {
-        ClassStudent::updateOrCreate($data[0], $data[1]);
-    }
-
 }

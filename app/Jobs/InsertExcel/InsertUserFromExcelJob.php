@@ -2,9 +2,9 @@
 
 namespace App\Jobs\InsertExcel;
 
+use App\Models\ClassStudent;
 use App\Services\ExcelServices;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -18,8 +18,7 @@ class InsertUserFromExcelJob implements ShouldQueue
     private $excelServices;
     private $data;
     private $classrooms;
-    private $teachers;
-    
+
     /**
      * Create a new job instance.
      *
@@ -30,7 +29,6 @@ class InsertUserFromExcelJob implements ShouldQueue
         $this->excelServices = $excelServices;
         $this->data = $data['data'];
         $this->classrooms = $data['classrooms'];
-        $this->teachers = $data['teachers'];
     }
 
     /**
@@ -42,13 +40,11 @@ class InsertUserFromExcelJob implements ShouldQueue
     {
         $user_id = $this->excelServices->requireUserImport($this->data);
 
-        $this->excelServices->requireUserClassroom([[
-            'user_email' => $this->data['student_email'],
+        ClassStudent::updateOrCreate([
+            'student_email' => $this->data['student_email'],
             "classroom_id" => $this->classrooms[Str::slug($this->data['subject'])],
         ], [
-            "school_teacher_id" => $this->teachers[Str::slug($this->data['school_teacher_code'])],
             "reason" => $this->data['reason'],
-            "school_classroom" => $this->data['school_classroom'],
-        ]]);
+        ]);
     }
 }

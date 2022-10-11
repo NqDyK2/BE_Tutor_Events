@@ -72,6 +72,7 @@ class ExcelServices
                     'slug' => $rs['slug']
                 ],
                 [
+                    'code' => $rs['slug'],
                     'name' => $rs['name'],
                     'major_id' => $rs['major_id']
                 ]
@@ -80,7 +81,7 @@ class ExcelServices
         return $subjects;
     }
 
-    //Tạo các subject c
+    //Tao cac classroom con thieu va tra ve mang classrooms lay tu database
     public function requireClassroomsImport(array $subjectIds, $semesterId)
     {
         $classrooms = [];
@@ -102,16 +103,13 @@ class ExcelServices
 
     public function requireUserImport($data)
     {
-            $user = User::firstOrCreate(
-                [
-                    'email' => $data['student_email'],
-                    'code' => $data['student_code'],
-                ],
-                [
-                    'name' => $data['student_name'],
-                    'phone_number' => $data['student_phone'],
-                ]
-            )->id;
+        $user = User::firstOrCreate([
+            'email' => $data['student_email'],
+            'code' => $data['student_code'],
+        ], [
+            'name' => $data['student_name'],
+            'phone_number' => $data['student_phone'],
+        ])->id;
 
         return $user;
     }

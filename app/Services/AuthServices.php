@@ -21,7 +21,6 @@ class AuthServices
         }
         elseif ($user->status == USER_STATUS_DEACTIVATE) {
             return response([
-                'status' => false,
                 'message' => 'This account has been blocked',
             ], 403);
         }

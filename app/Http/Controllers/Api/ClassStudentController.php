@@ -31,9 +31,7 @@ class ClassStudentController extends Controller
     {
         $classStudent = $this->classStudentServices->store($request->input());
         return response([
-            'status' => true,
             'message' => 'Create Classroom successfully',
-            'data' => $classStudent
         ],201);
     }
 }

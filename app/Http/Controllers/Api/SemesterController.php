@@ -33,7 +33,7 @@ class SemesterController extends Controller
     {
         $semester = $this->semesterServices->create($request->input());
         return response([
-            'data' => $semester
+            'message' => 'Tạo kỳ học thành công'
         ],201);
     }
 
@@ -52,11 +52,11 @@ class SemesterController extends Controller
         if($semesterUpdate)
         {
             return response([
-                'massage' => 'Semester Update Successfully',
+                'massage' => 'Cập nhật kỳ học thành công',
             ],201);
         }else {
             return response([
-                'massage' => 'Update Semester False'
+                'massage' => 'Cập nhật kỳ học thất bại'
             ],400);
         }
     }

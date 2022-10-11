@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 use App\Models\Classroom;
+use App\Models\ClassStudent;
 use App\Models\Lesson;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -48,4 +49,24 @@ Class ClassroomServices
         }
         return false;
     }
+
+    // public function classroomsInUser($semester_id){
+    //     $classrooms = ClassStudent::select(
+    //         'classrooms.name as classroom_name',
+    //         'subjects.name as subject_name',
+    //         'subjects.code as subject_code',
+    //         'semesters.name as semester_name',
+    //         'classrooms.default_teacher_email as default_teacher_email',
+    //         'classrooms.default_tutor_email as default_tutor_email',
+    //         'semesters.start_time as semester_start_time',
+    //         'semesters.end_time as semester_end_time',
+    //     )
+    //     ->leftJoin('classrooms','class_students.classroom_id','classrooms.id')
+    //     ->leftJoin('subjects','classrooms.subject_id','subjects.id')
+    //     ->leftJoin('semesters', 'semesters.id', 'classrooms.semester_id')
+    //     ->where('class_students.student_email',Auth::user()->email)
+    //     ->where('classrooms.semester_id',$semester_id)
+    //     ->get();
+    //     return $classrooms;
+    // }
 }

@@ -68,4 +68,12 @@ class LessonController extends Controller
             'message' => 'Delete lesson successfully'
         ],200);
     }
+
+    public function lessonsInUser()
+    {
+        $lesson = $this->lessonServices->lessonsInUser();
+        return response([
+            'data' => $lesson,
+        ],200);
+    }
 }

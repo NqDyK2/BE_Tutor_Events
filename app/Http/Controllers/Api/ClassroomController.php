@@ -89,4 +89,12 @@ class ClassroomController extends Controller
             ],500);
         }
     }
+
+    // public function classroomsInUser($id){
+    //     $classroom = $this->classroomServices->classroomsInUser($id);
+
+    //     return response([
+    //         'data' => $classroom
+    //     ],200);
+    // }
 }

@@ -109,3 +109,10 @@ Route::prefix('attendance')->group(function () {
         Route::put('update/{classroom_id}', [AttendanceController::class, 'update']);
     });
 });
+
+// API FOR STUDENT
+
+Route::prefix('student')->middleware('CheckLoginUser')->group(function () {
+    // Route::get('semester/{semester_id}/classrooms', [ClassroomController::class, 'classroomsInUser'])->middleware('existSemester');
+    Route::get('lessons', [LessonController::class, 'lessonsInUser']);
+});

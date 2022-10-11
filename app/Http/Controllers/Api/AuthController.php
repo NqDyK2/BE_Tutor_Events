@@ -48,7 +48,6 @@ class AuthController extends Controller
         }
         catch (\Exception $error) {
             return response([
-                'status' => 'false',
                 'message' => 'Login Error',
             ], 500);
         }

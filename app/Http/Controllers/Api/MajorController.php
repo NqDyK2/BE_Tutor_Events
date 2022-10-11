@@ -33,9 +33,7 @@ class MajorController extends Controller
         $majors = $this->majorServices->create($request->input());
 
         return response([
-            'status' => true,
             'massage' => 'Major created successfully',
-            'data' => $majors
         ],201);
     }
 
@@ -43,7 +41,6 @@ class MajorController extends Controller
     {
         $majorShow = $request->get('major');
         return response([
-            'status' => true,
             'data' => $majorShow
         ],200);
     }
@@ -56,13 +53,10 @@ class MajorController extends Controller
 
         if ($majors){
             return response([
-                'status' => true,
                 'massage' => 'Major update successfully',
-                'data' => $majors
             ],201);
         }else{
             return response([
-                'status' => false,
                 'massage' => 'update Subject failed'
             ],400);
         }
@@ -75,12 +69,10 @@ class MajorController extends Controller
 
         if($majorDelete){
             return response([
-                'status' => true,
                 'message' => 'Delete Major successfully',
             ],200);
         } else {
             return response([
-                'status' => false,
                 'massage' => 'Delete Major false'
             ],400);
         }

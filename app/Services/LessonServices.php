@@ -9,8 +9,8 @@ class LessonServices
     public function lessonsInClassroom($id){
         $lesson = Lesson::select(
             'lessons.id',
-            'subjects.name',
-            'subjects.code',
+            DB::raw('subjects.name as subject_name'),
+            DB::raw('subjects.code as subjects_code'),
             'lessons.start_time',
             'lessons.end_time',
             DB::raw('lessons.teacher_email as teacher_email'),

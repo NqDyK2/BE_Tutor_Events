@@ -99,7 +99,7 @@ class CreateLessonRequest extends FormRequest
             ],
             'type' => 'required|boolean',
             'teacher_email' => 'required|email',
-            'tutor_email' => 'required|email',
+            'tutor_email' => 'email',
             'document_path' => 'url',
         ];
     }

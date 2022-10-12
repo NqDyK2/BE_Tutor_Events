@@ -10,7 +10,6 @@
             height: 100vh;
             width: 100vw;
             display: table-cell;
-            vertical-align: middle;
             justify-content: center;
             text-align: center;
         };
@@ -18,18 +17,27 @@
             margin: 0 auto;
         }
         a{
-            color: orange;
+            color: white;
+            padding: 5px 10px;
             text-decoration: none;
+            background: rgb(54, 61, 85);
+            border-radius: 10px;
+        }
+        a:hover{
+            background: rgb(0, 0, 0);
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1><a href="{{ route('getUrl') }}">Login With Google</a></h1>
-        <p>Token for dev</p>
-        @foreach ($tokens as $x)
-            <a href="http://localhost:3000/checkpoint?token={{$x->token}}">{{$x->desc}}</a>
-        @endforeach
+        <h3><a href="{{ route('getUrl') }}">Login With your Google account</a></h3>
+        <p>Danh sách token:</p>
+        <b>
+            @foreach ($tokens as $x)
+            <span>{{$x->desc}}: {{$x->token}} </span>
+            <a href="http://localhost:3000/checkpoint?token={{$x->token}}">Login</a>
+            @endforeach
+        </b>
     </div>
 </body>
 </html>

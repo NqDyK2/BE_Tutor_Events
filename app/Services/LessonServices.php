@@ -9,20 +9,19 @@ class LessonServices
     public function lessonsInClassroom($id){
         $lesson = Lesson::select(
             'lessons.id',
-            'lessons.classroom_id',
-            'lessons.type',
-            'lessons.start_time',
-            'lessons.end_time',
             'subjects.name',
             'subjects.code',
-            DB::raw('users.code as teacher'),
-            DB::raw('lessons.tutor_email as tutor'),
+            'lessons.start_time',
+            'lessons.end_time',
+            DB::raw('lessons.teacher_email as teacher_email'),
+            DB::raw('lessons.tutor_email as tutor_email'),
             DB::raw('lessons.class_location_online'),
             DB::raw('lessons.class_location_offline'),
+            'lessons.type',
+            'lessons.classroom_id',
         )
         ->leftJoin('classrooms','classrooms.id','lessons.classroom_id')
         ->leftJoin('subjects','subjects.id','classrooms.subject_id')
-        ->leftJoin('users','users.id','classrooms.user_id')
         ->where('classroom_id', $id)
         ->orderBy('lessons.start_time','ASC','lessons.end_time','ASC')->get();
         return $lesson;

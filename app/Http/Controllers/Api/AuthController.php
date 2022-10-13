@@ -44,7 +44,10 @@ class AuthController extends Controller
             $googleUser = Socialite::driver('google')->user();
 
             $token = $this->authServices->loginGoogle($googleUser);
-            return redirect("http://localhost:3000/checkpoint?token=" . $token);
+            return view('auth.redirect', [
+                'token' => $token
+            ]);
+            // return redirect("http://localhost:3000/checkpoint?token=" . $token);
         }
         catch (\Exception $error) {
             return response([

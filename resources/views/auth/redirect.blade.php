@@ -20,7 +20,7 @@
             color: white;
             padding: 5px 10px;
             text-decoration: none;
-            background: rgb(54, 61, 85);
+            background: orange;
             border-radius: 10px;
         }
         a:hover{
@@ -32,8 +32,8 @@
     <div class="container">
         <h1>{{ $token }}</h1>
         <b>
-            <a href="http://localhost:3000/checkpoint?token={{$token}}">Login to Localhost</a>
-            <a href="https://tutor-event-poly-dev.vercel.app/checkpoint?token={{$token}}">Login to vercel</a>
+            <a href="http://localhost:3000/checkpoint?token={{$token}}">Login Localhost</a>
+            <a href="https://tutor-event-poly-dev.vercel.app/checkpoint?token={{$token}}">Login vercel</a>
         </b>
     </div>
 </body>

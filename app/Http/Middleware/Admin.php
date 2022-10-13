@@ -19,9 +19,8 @@ class Admin
     {
         if(Auth::user()->role_id != USER_ROLE_ADMIN){
             return response([
-                'status' => false,
-                'message' => 'You are not Admin'
-            ]);
+                'message' => 'Bạn không có quyền thực hiện tác vụ này'
+            ], 403);
         }
         return $next($request);
     }

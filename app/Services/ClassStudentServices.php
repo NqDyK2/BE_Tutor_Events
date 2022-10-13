@@ -13,6 +13,16 @@ Class ClassStudentServices
 
     public function classStudentsInClassroom($id)
     {
+        return ClassStudent::select([
+            'users.name',
+            'users.email',
+            'users.code',
+            'users.phone_number',
+            'class_students.reason',
+        ])
+        ->join('users', 'users.email', '=', 'class_students.student_email')
+        ->where('class_students.classroom_id', $id)
+        ->get();
         return ClassStudent::where('classroom_id',$id)->get();
     }
     

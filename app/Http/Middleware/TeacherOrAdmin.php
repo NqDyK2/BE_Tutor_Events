@@ -17,11 +17,10 @@ class TeacherOrAdmin
      */
     public function handle(Request $request, Closure $next)
     {
-        if(Auth::user()->role_id != USER_ROLE_ADMIN && Auth::user()->role_id != USER_ROLE_TEACHER){
+        if(!(Auth::user()->role_id == USER_ROLE_ADMIN || Auth::user()->role_id == USER_ROLE_TEACHER)){
             return response([
-                'status' => false,
-                'message' => 'Bạn không có quyền truy cập'
-            ]);
+                'message' => 'Bạn không có quyền thực hiện tác vụ này'
+            ], 403);
         }
         return $next($request);
     }

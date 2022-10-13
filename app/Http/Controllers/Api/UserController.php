@@ -23,7 +23,6 @@ class UserController extends Controller
         $users = $this->userServices->getAll();
         
         return response([
-            'status' => true,
             'data' => $users
         ], 200);
     }
@@ -33,7 +32,6 @@ class UserController extends Controller
         $users = $this->userServices->getOne($id);
         
         return response([
-            'status' => true,
             'data' => $users
         ], 200);
     }
@@ -46,7 +44,6 @@ class UserController extends Controller
         $updated = $this->userServices->update($user, $request->all());
 
         return response([
-            'status' => $updated,
             'message' => $updated ? 'Update user successfully' : 'Update failled'
         ], $updated ? 200 : 409);
 

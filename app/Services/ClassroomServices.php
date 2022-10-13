@@ -11,6 +11,7 @@ Class ClassroomServices
     public function classroomsInSemester($semester_id)
     {
         return Classroom::select([
+            'classrooms.id',
             'classrooms.name',
             DB::raw('subjects.name as subject_name'),
             DB::raw('subjects.code as subject_code'),

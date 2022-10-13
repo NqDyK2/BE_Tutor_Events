@@ -33,9 +33,7 @@ class SubjectController extends Controller
         $subject = $this->subjectServices->create($request->input());
 
         return response([
-            'status' => true,
             'massage' => 'Subject create Successfully',
-            'data' => $subject
         ],201);
     }
 
@@ -44,7 +42,6 @@ class SubjectController extends Controller
         $subject = $request->get('subject');
 
         return response([
-            'status' => true ,
             'data' => $subject
         ],201);
     }
@@ -56,12 +53,10 @@ class SubjectController extends Controller
         if($subject)
         {
             return response([
-                'status' => true,
                 'massage' => 'Subject Update Successfully',
             ],201);
         }else {
             return response([
-                'status' => false,
                 'massage' => 'Update Subject False'
             ],400);
         }
@@ -74,12 +69,10 @@ class SubjectController extends Controller
 
         if($subject){
             return response([
-                'status' => true,
                 'massage' => 'Subject Delete Successfully'
             ],201);
         }else {
             return response([
-                'status' => false,
                 'massage' => 'Delete false'
             ]);
         }

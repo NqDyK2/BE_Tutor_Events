@@ -35,7 +35,8 @@
         <b>
             @foreach ($tokens as $x)
             <span>{{$x->desc}}: {{$x->token}} </span>
-            <a href="http://localhost:3000/checkpoint?token={{$x->token}}">Login</a>
+            <a href="http://localhost:3000/checkpoint?token={{$x->token}}">Login localhost</a>
+            <a href="https://tutor-event-poly-dev.vercel.app/checkpoint?token={{$x->token}}">Login vercel</a>
             @endforeach
         </b>
     </div>

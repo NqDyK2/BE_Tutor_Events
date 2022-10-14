@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\SubjectController;
 use App\Http\Controllers\Api\ClassroomController;
 use App\Http\Controllers\Api\ClassStudentController;
 use App\Http\Controllers\Api\ExcelController;
+use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\LessonController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
@@ -96,6 +97,7 @@ Route::prefix('lesson')->middleware('checkRoleTeacherOrAdmin')->group(function (
     Route::middleware('existLesson')->group(function () {
         Route::put('{lesson_id}/update', [LessonController::class, 'update']);
         Route::delete('{lesson_id}/destroy', [LessonController::class, 'destroy']);
+        Route::get('{lesson_id}/feedbacks', [FeedbackController::class, 'feedbackInLesson']);
     });
 });
 
@@ -108,4 +110,8 @@ Route::prefix('attendance')->group(function () {
         Route::get('get/{classroom_id}', [AttendanceController::class, 'getListAttendance']);
         Route::put('update/{classroom_id}', [AttendanceController::class, 'update']);
     });
+});
+
+Route::prefix('feedback')->group(function () {
+    Route::post('store', [FeedbackController::class, 'store']);
 });

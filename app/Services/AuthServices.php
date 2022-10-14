@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\Lesson;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class AuthServices
 {
@@ -26,5 +28,33 @@ class AuthServices
         }
         
         return $user->createToken('API TOKEN')->plainTextToken;
+    }
+
+    public function getAuthDetail()
+    {
+        $auth = Auth::user();
+
+        $isTeacher = Lesson::join('classrooms', 'classrooms.id', 'lessons.classroom_id')
+        ->join('semesters', 'semesters.id', 'classrooms.semester_id')
+        ->where('semesters.start_time', '<=', now())->where('semesters.end_time', '>=', now())
+        ->where('lessons.teacher_email', $auth->email)
+        ->exists();
+
+        if ($isTeacher) {
+            $auth->role_id = 2;
+            return $auth;
+        }
+        
+        $isTutor = Lesson::join('classrooms', 'classrooms.id', 'lessons.classroom_id')
+        ->join('semesters', 'semesters.id', 'classrooms.semester_id')
+        ->where('semesters.start_time', '<=', now())->where('semesters.end_time', '>=', now())
+        ->where('lessons.tutor_email', $auth->email)
+        ->exists();
+
+        if ($isTutor) {
+            $auth->role_id = 4;
+            return $auth;
+        }
+
     }
 }

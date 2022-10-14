@@ -25,6 +25,11 @@ class AuthController extends Controller
         ]);
     }
 
+    public function getAuthDetail()
+    {
+        $user = $this->authServices->getAuthDetail();
+    }
+
     public function storeToken(Request $request)
     {
         DevTokens::create([

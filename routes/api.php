@@ -30,6 +30,8 @@ Route::get('auth/user', function (Request $request) {
     ], 200);
 });
 
+Route::get('auth/user2', [AuthController::class, 'getAuthDetail']);
+
 // Route::prefix('major')->group(function () {
 //     Route::get('get-all', [MajorController::class, 'index']);
 //     Route::post('store', 'MajorController@store')->middleware('admin');

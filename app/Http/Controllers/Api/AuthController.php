@@ -28,6 +28,10 @@ class AuthController extends Controller
     public function getAuthDetail()
     {
         $user = $this->authServices->getAuthDetail();
+
+        return response([
+            'data' => $user
+        ], 200);
     }
 
     public function storeToken(Request $request)

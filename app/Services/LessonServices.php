@@ -25,7 +25,7 @@ class LessonServices
         )
         ->leftJoin('classrooms','classrooms.id','lessons.classroom_id')
         ->leftJoin('subjects','subjects.id','classrooms.subject_id')
-        ->where('classroom_id', $id)
+        ->where('classroom_id', $classroom_id)
         ->orderBy('lessons.start_time','ASC','lessons.end_time','ASC')->get();
         return $lesson;
     }

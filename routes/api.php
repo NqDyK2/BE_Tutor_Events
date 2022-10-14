@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AttendanceController;
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\MajorController;
 use App\Http\Controllers\Api\SemesterController;
 use App\Http\Controllers\Api\SubjectController;
@@ -103,10 +104,10 @@ Route::prefix('lesson')->middleware('checkRoleTeacherOrAdmin')->group(function (
 // API FOR ATTENDANCE
 
 Route::prefix('attendance')->group(function () {
-    Route::get('list-class', [AttendanceController::class, 'getListClass']);
+    Route::get('classrooms', [AttendanceController::class, 'getListClass']);
     Route::middleware('existClassroom')->group(function () {
-        Route::get('get/{classroom_id}', [AttendanceController::class, 'getListAttendance']);
-        Route::put('update/{classroom_id}', [AttendanceController::class, 'update']);
+        Route::get('{classroom_id}/students', [AttendanceController::class, 'getListAttendance']);
+        Route::put('{classroom_id}/update', [AttendanceController::class, 'update']);
     });
 });
 

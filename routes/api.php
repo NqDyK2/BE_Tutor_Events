@@ -97,7 +97,7 @@ Route::prefix('lesson')->middleware('checkRoleTeacherOrAdmin')->group(function (
     Route::middleware('existLesson')->group(function () {
         Route::put('{lesson_id}/update', [LessonController::class, 'update']);
         Route::delete('{lesson_id}/destroy', [LessonController::class, 'destroy']);
-        Route::get('{lesson_id}/feedbacks', [FeedbackController::class, 'feedbackInLesson']);
+        Route::get('{lesson_id}/feedback', [FeedbackController::class, 'feedbackInLesson']);
     });
 });
 

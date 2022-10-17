@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Models\Feedback;
+use Illuminate\Support\Facades\DB;
 
 Class FeedbackServices
 {
@@ -12,6 +13,7 @@ Class FeedbackServices
     public function feedbackInLesson($id)
     {
         $feedBack = Feedback::where('lesson_id', $id)->get();
+        // $feedBack = DB::table('feedbacks')->where('lesson_id', $id)->get();
         return $feedBack;
     }
 

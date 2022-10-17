@@ -25,6 +25,15 @@ class AuthController extends Controller
         ]);
     }
 
+    public function getAuthDetail()
+    {
+        $user = $this->authServices->getAuthDetail();
+
+        return response([
+            'data' => $user
+        ], 200);
+    }
+
     public function storeToken(Request $request)
     {
         DevTokens::create([
@@ -44,7 +53,10 @@ class AuthController extends Controller
             $googleUser = Socialite::driver('google')->user();
 
             $token = $this->authServices->loginGoogle($googleUser);
-            return redirect("http://localhost:3000/checkpoint?token=" . $token);
+            return view('auth.redirect', [
+                'token' => $token
+            ]);
+            // return redirect("http://localhost:3000/checkpoint?token=" . $token);
         }
         catch (\Exception $error) {
             return response([

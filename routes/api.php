@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AttendanceController;
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\MajorController;
 use App\Http\Controllers\Api\SemesterController;
 use App\Http\Controllers\Api\SubjectController;
@@ -24,11 +25,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('auth/user', function (Request $request) {
-    return response()->json([
-        'data' => $request->user(),
-    ], 200);
-});
+// Route::get('auth/user', function (Request $request) {
+//     return response()->json([
+//         'data' => $request->user(),
+//     ], 200);
+// });
+
+Route::get('auth/user', [AuthController::class, 'getAuthDetail']);
 
 // Route::prefix('major')->group(function () {
 //     Route::get('get-all', [MajorController::class, 'index']);
@@ -105,13 +108,19 @@ Route::prefix('lesson')->middleware('checkRoleTeacherOrAdmin')->group(function (
 // API FOR ATTENDANCE
 
 Route::prefix('attendance')->group(function () {
-    Route::get('list-class', [AttendanceController::class, 'getListClass']);
+    Route::get('classrooms', [AttendanceController::class, 'getListClass']);
     Route::middleware('existClassroom')->group(function () {
-        Route::get('get/{classroom_id}', [AttendanceController::class, 'getListAttendance']);
-        Route::put('update/{classroom_id}', [AttendanceController::class, 'update']);
+        Route::get('{classroom_id}/students', [AttendanceController::class, 'getListAttendance']);
+        Route::put('{classroom_id}/update', [AttendanceController::class, 'update']);
     });
 });
 
 Route::prefix('feedback')->group(function () {
     Route::post('store', [FeedbackController::class, 'store']);
+
+// API FOR STUDENT
+
+Route::prefix('student')->middleware('CheckLoginUser')->group(function () {
+    // Route::get('semester/{semester_id}/classrooms', [ClassroomController::class, 'classroomsInUser'])->middleware('existSemester');
+    Route::get('lessons', [LessonController::class, 'lessonsInUser']);
 });

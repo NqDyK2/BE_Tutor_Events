@@ -2,11 +2,11 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-class ExistUser
+class CheckLoginUser
 {
     /**
      * Handle an incoming request.
@@ -17,15 +17,18 @@ class ExistUser
      */
     public function handle(Request $request, Closure $next)
     {
-        $user = User::find($request->id);
-        
-        if ($user === null) {
+        if (Auth::check()) {
+            if (Auth::user()->status == 2) {
+                return response([
+                    'message' => 'Tài khoản của bạn đã bị khóa !'
+                ], 404);
+            }
+            return $next($request);
+        }else {
             return response([
-                'message' => 'Người dùng không tồn tại'
+                'message' => 'Bạn chưa đăng nhập !'
             ], 404);
         }
-        $request->attributes->add(['user' => $user]);
 
-        return $next($request);
     }
 }

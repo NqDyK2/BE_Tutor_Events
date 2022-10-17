@@ -20,7 +20,7 @@
             color: white;
             padding: 5px 10px;
             text-decoration: none;
-            background: rgb(54, 61, 85);
+            background: orange;
             border-radius: 10px;
         }
         a:hover{
@@ -30,14 +30,10 @@
 </head>
 <body>
     <div class="container">
-        <h3><a href="{{ route('getUrl') }}">Login With your Google account</a></h3>
-        <p>Danh sách token:</p>
+        <h1>{{ $token }}</h1>
         <b>
-            @foreach ($tokens as $x)
-            <span>{{$x->desc}}: {{$x->token}} </span>
-            <a href="http://localhost:3000/checkpoint?token={{$x->token}}">Login localhost</a>
-            <a href="https://tutor-event-poly-dev.vercel.app/checkpoint?token={{$x->token}}">Login vercel</a>
-            @endforeach
+            <a href="http://localhost:3000/checkpoint?token={{$token}}">Login Localhost</a>
+            <a href="https://tutor-event-poly-dev.vercel.app/checkpoint?token={{$token}}">Login vercel</a>
         </b>
     </div>
 </body>

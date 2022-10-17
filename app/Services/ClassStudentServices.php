@@ -15,7 +15,7 @@ Class ClassStudentServices
     {
         return ClassStudent::select([
             'users.name',
-            'class_students.student_email',
+            'users.email',
             'users.code',
             'users.phone_number',
             'class_students.reason',

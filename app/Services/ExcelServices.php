@@ -3,12 +3,9 @@
 namespace App\Services;
 
 use App\Models\Classroom;
-use App\Models\ClassStudent;
 use App\Models\Major;
-use App\Models\SchoolTeacher;
 use App\Models\Subject;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class ExcelServices
@@ -101,8 +98,34 @@ class ExcelServices
         return $classrooms;
     }
 
+    public function getListRequireClassroom($semesterId, $data)
+    {
+        $classrooms = [];
+
+        $requireSubjects = array_unique(array_map(function ($x) {
+            return Str::slug($x['subject']);
+        }, $data));
+
+        $classroomsSelected = Classroom::select(
+            'classrooms.id',
+            'subjects.code',
+            'classrooms.semester_id'
+        )
+        ->join('subjects', 'subjects.id', 'classrooms.subject_id')
+        ->where('classrooms.semester_id', $semesterId)
+        ->whereIn('subjects.code', $requireSubjects)
+        ->get();
+
+        foreach ($classroomsSelected as $cs) {
+            $classrooms[$cs->code] = $cs->id;
+        }
+
+        return $classrooms;
+    }
+
     public function requireUserImport($data)
     {
+
         $user = User::firstOrCreate([
             'email' => $data['student_email'],
             'code' => $data['student_code'],

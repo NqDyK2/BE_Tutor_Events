@@ -1,0 +1,9 @@
+
+   INFO  Processing jobs from the [default] queue.  
+
+  2022-10-19 16:41:47 App\Jobs\InsertExcel\InsertUserFromExcelJob  16.41ms DONE
+  2022-10-19 16:41:47 App\Jobs\InsertExcel\InsertUserFromExcelJob  6.15ms DONE
+  2022-10-19 16:42:11 App\Jobs\InsertExcel\InsertUserFromExcelJob  5.35ms DONE
+  2022-10-19 16:42:11 App\Jobs\InsertExcel\InsertUserFromExcelJob  4.65ms DONE
+  2022-10-19 16:42:32 App\Jobs\InsertExcel\InsertUserFromExcelJob  5.84ms DONE
+  2022-10-19 16:42:32 App\Jobs\InsertExcel\InsertUserFromExcelJob  3.25ms DONE

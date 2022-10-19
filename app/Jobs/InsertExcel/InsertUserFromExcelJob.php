@@ -3,7 +3,7 @@
 namespace App\Jobs\InsertExcel;
 
 use App\Models\ClassStudent;
-use App\Services\ExcelServices;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -15,8 +15,7 @@ class InsertUserFromExcelJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private $excelServices;
-    private $data;
+    private $user;
     private $classrooms;
 
     /**
@@ -24,11 +23,10 @@ class InsertUserFromExcelJob implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(ExcelServices $excelServices, $data)
+    public function __construct($user, $classrooms)
     {
-        $this->excelServices = $excelServices;
-        $this->data = $data['data'];
-        $this->classrooms = $data['classrooms'];
+        $this->user = $user;
+        $this->classrooms = $classrooms;
     }
 
     /**
@@ -38,13 +36,19 @@ class InsertUserFromExcelJob implements ShouldQueue
      */
     public function handle()
     {
-        $this->excelServices->requireUserImport($this->data);
+        $user = User::updateOrCreate([
+            'email' => $this->user['student_email'],
+        ], [
+            'name' => $this->user['student_name'],
+            'code' => $this->user['student_code'],
+            'phone_number' => $this->user['student_phone'],
+        ]);
 
         ClassStudent::updateOrCreate([
-            'student_email' => $this->data['student_email'],
-            "classroom_id" => $this->classrooms[Str::slug($this->data['subject'])],
+            'student_email' => $this->user['student_email'],
+            "classroom_id" => $this->classrooms[Str::slug($this->user['subject'])],
         ], [
-            "reason" => $this->data['reason'],
+            "reason" => $this->user['reason'],
         ]);
     }
 }

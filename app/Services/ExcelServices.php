@@ -101,16 +101,28 @@ class ExcelServices
         return $classrooms;
     }
 
-    public function requireUserImport($data)
+    public function getListRequireClassroom($semesterId, $data)
     {
-        $user = User::firstOrCreate([
-            'email' => $data['student_email'],
-            'code' => $data['student_code'],
-        ], [
-            'name' => $data['student_name'],
-            'phone_number' => $data['student_phone'],
-        ])->id;
+        $classrooms = [];
 
-        return $user;
+        $requireSubjects = array_unique(array_map(function ($x) {
+            return Str::slug($x['subject']);
+        }, $data));
+
+        $classroomsSelected = Classroom::select(
+            'classrooms.id',
+            'subjects.code',
+            'classrooms.semester_id'
+        )
+        ->join('subjects', 'subjects.id', 'classrooms.subject_id')
+        ->where('classrooms.semester_id', $semesterId)
+        ->whereIn('subjects.code', $requireSubjects)
+        ->get();
+
+        foreach ($classroomsSelected as $cs) {
+            $classrooms[$cs->code] = $cs->id;
+        }
+
+        return $classrooms;
     }
 }

@@ -38,7 +38,7 @@ class InsertUserFromExcelJob implements ShouldQueue
      */
     public function handle()
     {
-        $user_id = $this->excelServices->requireUserImport($this->data);
+        $this->excelServices->requireUserImport($this->data);
 
         ClassStudent::updateOrCreate([
             'student_email' => $this->data['student_email'],

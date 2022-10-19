@@ -30,6 +30,6 @@ class ExcelController extends Controller
 
         return response([
             'message' => 'Import successfully'
-        ], 201);
+        ], 200);
     }
 }

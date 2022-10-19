@@ -122,18 +122,4 @@ class ExcelServices
 
         return $classrooms;
     }
-
-    public function requireUserImport($data)
-    {
-
-        $user = User::firstOrCreate([
-            'email' => $data['student_email'],
-            'code' => $data['student_code'],
-        ], [
-            'name' => $data['student_name'],
-            'phone_number' => $data['student_phone'],
-        ])->id;
-
-        return $user;
-    }
 }

@@ -26,21 +26,12 @@ class StoreFeedbackRequest extends FormRequest
     public function rules()
     {
         return [
-            'lesson_quality' => 'required',
-            'teacher_quality' => 'required',
-            'support_quality' => 'required',
-            'understand_lesson' => 'required',
+            'lesson_quality' => 'required|min:1|max:3|integer',
+            'teacher_quality' => 'required|min:1|max:3|integer',
+            'support_quality' => 'required|min:1|max:3|integer',
+            'understand_lesson' => 'required|min:0|max:100|integer',
             'message',
             'note',
-            'user_id' => ['required',
-                            'integer',
-                            function ($attribute, $value, $fail) {
-                                $user = User::find($value);
-                                if (!$user) {
-                                    $fail('Học sinh không tồn tại');
-                                }
-                            }
-            ],
             'lesson_id' => ['required',
                                 'integer',
                                 function ($attribute, $value, $fail) {
@@ -55,12 +46,12 @@ class StoreFeedbackRequest extends FormRequest
     public function messages()
     {
         return [
-            'leson_quality' => 'Không được để trống',
-            'teacher_quality' => 'Không được để trống',
-            'teacher_quality' => 'Không được để trống',
-            'understand_lesson' => 'Không được để trống',
-            'user_id' => 'Không được để trống',
-            'user_id' => 'Không được để trống',
+            'leson_quality.required' => 'Đánh giá buổi học không được để trống',
+            'teacher_quality.required' => 'Đánh giá giảng viên hỗ trợ không được để trống',
+            'teacher_quality.required' => 'Đánh giá giảng viên không được để trống',
+            'understand_lesson.required' => 'Đánh giá mức độ hiểu bài không được để trống',
+            'user_id.required' => 'Không được để trống',
+            'lesson_id.required' => 'Không được để trống',
         ];
     }
 }

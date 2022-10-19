@@ -18,18 +18,14 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
-            'google_id' => $this->faker->uuid(),
             'name' => $this->faker->name(),
-            'status' => rand(0,1),
-            'user_code' => Str::random(7),
+            'google_id' => $this->faker->uuid(),
             'email' => $this->faker->email(),
+            'code' => Str::random(7),
             'avatar' => $this->faker->imageUrl(100,150),
-            'gender' => rand(0,1),
-            'address' => $this->faker->address(),
             'phone_number' => $this->faker->phoneNumber(),
-            'dob' => $this->faker->date(),
             'role_id' => rand(0,3),
-            'major_id' => rand(1,20)
+            'status' => rand(0,1),
         ];
     }
 

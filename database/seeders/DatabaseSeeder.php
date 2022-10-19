@@ -7,10 +7,8 @@ namespace Database\Seeders;
 use App\Models\Attendance;
 use App\Models\Classroom;
 use App\Models\ClassStudent;
-use App\Models\Issue;
 use App\Models\Lesson;
 use App\Models\Major;
-use App\Models\SchoolTeacher;
 use App\Models\Semester;
 use App\Models\Subject;
 use App\Models\User;
@@ -32,8 +30,6 @@ class DatabaseSeeder extends Seeder
         Semester::factory(10)->create();
         Lesson::factory(50)->create();
         ClassStudent::factory(30)->create();
-        SchoolTeacher::factory(30)->create();
-        Issue::factory(50)->create();
         Attendance::factory(50)->create();
     }
 }

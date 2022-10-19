@@ -19,9 +19,13 @@ class LessonFactory extends Factory
         return [
             'classroom_id' => rand(1,30),
             'type' => rand(0,5),
-            'class_location' => $this->faker->secondaryAddress(),
+            'content' => $this->faker->secondaryAddress(),
+            'teacher_email' => $this->faker->email(),
+            'tutor_email' => $this->faker->email(),
             'start_time' => $this->faker->date(),
             'end_time' => $this->faker->date(),
+            'class_location_online' => $this->faker->url(),
+            'class_location_offline' => $this->faker->secondaryAddress(),
         ];
     }
 }

@@ -17,9 +17,11 @@ class AttendanceFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => rand(1,30),
+            'student_email' => $this->faker->email(),
             'lesson_id' => rand(1,50),
             'note' => $this->faker->text($maxNbChars = 200),
+            'status' => rand(1,10)
+
         ];
     }
 }

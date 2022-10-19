@@ -18,11 +18,11 @@ class ClassroomFactory extends Factory
     {
         return [
             'name' => $this->faker->name(),
-            'user_id' => rand(1,30),
             'subject_id' => rand(1,30),
             'semester_id' => rand(1,30),
             'default_online_class_location' => $this->faker->secondaryAddress(),
             'default_offline_class_location' => $this->faker->url(),
+            'default_teacher_email' => $this->faker->email(),
             'default_tutor_email' => $this->faker->email()
         ];
     }

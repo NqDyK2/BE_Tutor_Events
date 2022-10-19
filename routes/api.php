@@ -117,7 +117,7 @@ Route::prefix('attendance')->group(function () {
 
 Route::prefix('feedback')->group(function () {
     Route::post('store', [FeedbackController::class, 'store']);
-
+});
 // API FOR STUDENT
 
 Route::prefix('student')->middleware('CheckLoginUser')->group(function () {

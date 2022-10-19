@@ -7,11 +7,20 @@ use Illuminate\Support\Facades\DB;
 Class FeedbackServices
 {
     public function store($data){
-        return Feedback::firstOrCreate(
-            ['lesson_id' => $data['lesson_id']],
-            ['user_id' => $data['user_id']],
+        return Feedback::updateOrCreate(
+            [
+                'lesson_id' => $data['lesson_id'],
+                'user_id' => $data['user_id'],
+            ],
+            [
+                'lesson_quality' => $data['lesson_quality'],
+                'teacher_quality' => $data['teacher_quality'],
+                'support_quality' => $data['support_quality'],
+                'understand_lesson' => $data['understand_lesson'],
+                'message' => $data['message'],
+                'note' => $data['note'],
+            ],
         );
-        // return Feedback::create($data);
     }
 
     public function feedbackInLesson($id)

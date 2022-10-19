@@ -50,7 +50,6 @@ class StoreFeedbackRequest extends FormRequest
             'teacher_quality.required' => 'Đánh giá giảng viên hỗ trợ không được để trống',
             'teacher_quality.required' => 'Đánh giá giảng viên không được để trống',
             'understand_lesson.required' => 'Đánh giá mức độ hiểu bài không được để trống',
-            'user_id.required' => 'Không được để trống',
             'lesson_id.required' => 'Không được để trống',
         ];
     }

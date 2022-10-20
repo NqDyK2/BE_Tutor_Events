@@ -5,6 +5,7 @@ use App\Models\ClassStudent;
 use App\Models\Lesson;
 use App\Models\Semester;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 
 class LessonServices
@@ -45,32 +46,58 @@ class LessonServices
         return $lesson->trashed();
     }
 
-    public function lessonsInUser(){
-        $timePresent = now();
-        $semester = Semester::where('start_time', '<=', $timePresent)->where('end_time', '>=', $timePresent)->first();
-        $classStudent = ClassStudent::select(
-            'lessons.content',
-            'lessons.document_path',
-            'classrooms.name as name_classroom',
-            'subjects.name as name_subject',
-            'subjects.code as code_subject',
-            'lessons.type',
-            'lessons.teacher_email',
-            'lessons.tutor_email',
-            'lessons.class_location_offline',
-            'lessons.class_location_online',
+    // public function studentSchedule(){
+    //     $semester = Semester::where('start_time', '<=', now())->where('end_time', '>=', now())->first();
+
+    //     if (!$semester) return [];
+
+    //     $classStudent = ClassStudent::select(
+    //         'subjects.name as subject_name',
+    //         'subjects.code as subject_code',
+    //         'lessons.start_time',
+    //         'lessons.end_time',
+    //         'lessons.type',
+    //         'lessons.class_location_offline',
+    //         'lessons.class_location_online',
+    //         'lessons.teacher_email',
+    //         'lessons.tutor_email',
+    //         'lessons.content',
+    //         'lessons.document_path',
+    //     )
+    //     ->join('classrooms','classrooms.id','class_students.classroom_id')
+    //     ->join('subjects','subjects.id','classrooms.subject_id')
+    //     ->leftJoin('lessons','classrooms.id','lessons.classroom_id')
+    //     ->where('class_students.student_email', Auth::user()->email)
+    //     ->where('class_students.is_joined', true)
+    //     ->where('lessons.start_time', '>=', $semester->start_time)
+    //     ->where('lessons.end_time', '<=', $semester->end_time)
+    //     ->whereNotNull('lessons.id')
+    //     ->orderBy('lessons.start_time', 'ASC', 'lessons.end_time', 'ASC')
+    //     ->get();
+    //     return $classStudent;
+    // }
+
+    public function studentSchedule(){
+        return ClassStudent::select(
+            'subjects.name as subject_name',
+            'subjects.code as subject_code',
             'lessons.start_time',
             'lessons.end_time',
+            'lessons.type',
+            'lessons.class_location_offline',
+            'lessons.class_location_online',
+            'lessons.teacher_email',
+            'lessons.tutor_email',
+            'lessons.content',
+            'lessons.document_path',
         )
-        ->leftJoin('classrooms','classrooms.id','class_students.classroom_id')
+        ->join('classrooms','classrooms.id','class_students.classroom_id')
+        ->join('subjects','subjects.id','classrooms.subject_id')
         ->leftJoin('lessons','classrooms.id','lessons.classroom_id')
-        ->leftJoin('subjects','subjects.id','classrooms.subject_id')
         ->where('class_students.student_email', Auth::user()->email)
-        ->whereBetween('lessons.start_time', [$semester->start_time, $semester->end_time])
-        ->whereBetween('lessons.end_time', [$semester->start_time, $semester->end_time])
-        ->whereNotNull('lessons.id')
+        ->where('class_students.is_joined', true)
+        ->where('lessons.start_time', '>=', date('Y-m-d'))
         ->orderBy('lessons.start_time', 'ASC', 'lessons.end_time', 'ASC')
         ->get();
-        return $classStudent;
     }
 }

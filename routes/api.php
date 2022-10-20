@@ -2,15 +2,11 @@
 
 use App\Http\Controllers\Api\AttendanceController;
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\MajorController;
 use App\Http\Controllers\Api\SemesterController;
-use App\Http\Controllers\Api\SubjectController;
 use App\Http\Controllers\Api\ClassroomController;
 use App\Http\Controllers\Api\ClassStudentController;
 use App\Http\Controllers\Api\ExcelController;
 use App\Http\Controllers\Api\LessonController;
-use App\Http\Controllers\Api\UserController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -115,7 +111,9 @@ Route::prefix('attendance')->group(function () {
 
 // API FOR STUDENT
 
-Route::prefix('student')->middleware('CheckLoginUser')->group(function () {
+Route::prefix('student')->group(function () {
     // Route::get('semester/{semester_id}/classrooms', [ClassroomController::class, 'classroomsInUser'])->middleware('existSemester');
-    Route::get('lessons', [LessonController::class, 'lessonsInUser']);
+    Route::get('schedule', [LessonController::class, 'studentSchedule']);
+    Route::get('missing-classes', [ClassroomController::class, 'missingClasses']);
+    Route::put('join-class/{classroom_id}', [ClassroomController::class, 'joinClass'])->middleware('existClassroom');
 });

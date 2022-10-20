@@ -16,7 +16,6 @@ class Classroom extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
         'subject_id',
         'semester_id',
         'default_offline_class_location',

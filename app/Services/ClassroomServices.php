@@ -5,6 +5,7 @@ use App\Models\ClassStudent;
 use App\Models\Lesson;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use PhpParser\Node\Expr\Cast\String_;
 
 Class ClassroomServices
 {
@@ -12,7 +13,6 @@ Class ClassroomServices
     {
         return Classroom::select([
             'classrooms.id',
-            'classrooms.name',
             DB::raw('subjects.name as subject_name'),
             DB::raw('subjects.code as subject_code'),
             DB::raw('semesters.name as semester_name'),
@@ -27,7 +27,7 @@ Class ClassroomServices
         ->orderBy('subjects.code', 'asc')
         ->get();
     }
-    
+
     public function store($data){
         $data['default_teacher_email'] = Auth::user()->email;
         return Classroom::create($data);
@@ -51,23 +51,33 @@ Class ClassroomServices
         return false;
     }
 
-    // public function classroomsInUser($semester_id){
-    //     $classrooms = ClassStudent::select(
-    //         'classrooms.name as classroom_name',
-    //         'subjects.name as subject_name',
-    //         'subjects.code as subject_code',
-    //         'semesters.name as semester_name',
-    //         'classrooms.default_teacher_email as default_teacher_email',
-    //         'classrooms.default_tutor_email as default_tutor_email',
-    //         'semesters.start_time as semester_start_time',
-    //         'semesters.end_time as semester_end_time',
-    //     )
-    //     ->leftJoin('classrooms','class_students.classroom_id','classrooms.id')
-    //     ->leftJoin('subjects','classrooms.subject_id','subjects.id')
-    //     ->leftJoin('semesters', 'semesters.id', 'classrooms.semester_id')
-    //     ->where('class_students.student_email',Auth::user()->email)
-    //     ->where('classrooms.semester_id',$semester_id)
-    //     ->get();
-    //     return $classrooms;
-    // }
+    public function studentMissingClasses()
+    {
+        return Classroom::select(
+            'classrooms.id',
+            'subjects.name',
+            'subjects.code',
+        )
+        ->whereHas('classStudents', function ($q) {
+            return $q->where('student_email', Auth::user()->email)
+            ->where('is_joined', false);
+        })
+        ->join('subjects', 'subjects.id', 'classrooms.subject_id')
+        ->get();
+    }
+
+    public function joinClass($classroomId)
+    {
+        $classroom = ClassStudent::where('classroom_id', $classroomId)
+        ->where('student_email', Auth::user()->email)
+        ->first();
+
+        if (!$classroom) {
+            return false;
+        }
+        $classroom->is_joined = true;
+        $classroom->save();
+
+        return true;
+    }
 }

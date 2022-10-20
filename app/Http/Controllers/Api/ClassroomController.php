@@ -28,7 +28,7 @@ class ClassroomController extends Controller
     public function store(CreateClassroomRequest $request)
     {
         $classroom = $this->classroomServices->store($request->input());
-        
+
         if ($classroom) {
             return response([
                 'data' => $classroom,
@@ -45,7 +45,7 @@ class ClassroomController extends Controller
     public function update(UpdateClassroomRequest $request)
     {
         $classroom = $request->get('classroom');
-        
+
         $this->authorize('checkOwnership', $classroom);
 
         $classroom = $this->classroomServices->update($request->input(), $classroom);
@@ -66,7 +66,7 @@ class ClassroomController extends Controller
     public function destroy(Request $request)
     {
         $classroom = $request->get('classroom');
-        
+
         $this->authorize('checkOwnership', $classroom);
 
         $checkDeleteClassroom = $this->classroomServices->isStarted($classroom->id);
@@ -90,11 +90,21 @@ class ClassroomController extends Controller
         }
     }
 
-    // public function classroomsInUser($id){
-    //     $classroom = $this->classroomServices->classroomsInUser($id);
+    public function missingClasses()
+    {
+        $classrooms = $this->classroomServices->studentMissingClasses();
 
-    //     return response([
-    //         'data' => $classroom
-    //     ],200);
-    // }
+        return response([
+            'data' => $classrooms,
+        ],200);
+    }
+
+    public function joinClass(Request $request)
+    {
+        $joined = $this->classroomServices->joinClass($request->classroom_id);
+
+        return response([
+            'message' => $joined ? 'Tham gia lớp học thành công' : 'Bạn không có trong danh sách lớp này',
+        ],200);
+    }
 }

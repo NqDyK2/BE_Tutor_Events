@@ -6,15 +6,19 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Lesson\CreateLessonRequest;
 use App\Http\Requests\Lesson\UpdateLessonRequest;
 use App\Models\Classroom;
+use App\Services\ClassroomServices;
 use App\Services\LessonServices;
 use Illuminate\Http\Request;
 
 class LessonController extends Controller
 {
     private $lessonServices;
-    public function __construct(LessonServices $lessonServices)
+    private $classroomServices;
+
+    public function __construct(LessonServices $lessonServices, ClassroomServices $classroomServices)
     {
         $this->lessonServices = $lessonServices;
+        $this->classroomServices = $classroomServices;
     }
 
     public function lessonsInClassroom($classroom_id)
@@ -69,9 +73,9 @@ class LessonController extends Controller
         ],200);
     }
 
-    public function lessonsInUser()
+    public function studentSchedule()
     {
-        $lesson = $this->lessonServices->lessonsInUser();
+        $lesson = $this->lessonServices->studentSchedule();
         return response([
             'data' => $lesson,
         ],200);

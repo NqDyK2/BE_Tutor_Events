@@ -24,13 +24,12 @@ class CreateClassroomRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|unique:classrooms,name',
             'subject_id' => 'required|integer|exists:subjects,id',
             'semester_id' => 'required|integer|exists:semesters,id',
             'default_offline_class_location' => 'nullable|string|min:3|max:200',
             'default_online_class_location' => 'nullable|string|url',
-            'default_tutor_email' => 'nullable|email',   
-            'default_teacher_email' => 'nullable|email', 
+            'default_tutor_email' => 'nullable|email',
+            'default_teacher_email' => 'nullable|email',
         ];
     }
     public function messages()
@@ -53,7 +52,7 @@ class CreateClassroomRequest extends FormRequest
             'default_online_class_location.url' => 'Địa chỉ online phải là đường dẫn url',
 
             'default_tutor_email.email' => 'Email của tutor sai định dạng',
-            
+
             'default_teacher_email.email' => 'Email của giáo viên sai định dạng',
         ];
     }

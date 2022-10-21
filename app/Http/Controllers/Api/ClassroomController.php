@@ -27,67 +27,39 @@ class ClassroomController extends Controller
 
     public function store(CreateClassroomRequest $request)
     {
-        $classroom = $this->classroomServices->store($request->input());
+        $created = $this->classroomServices->store($request->input());
 
-        if ($classroom) {
+        if (!$created) {
             return response([
-                'data' => $classroom,
-                'message' => 'Tạo mới lớp học thành công'
-            ],201);
-        } else {
-            return response([
-                'data' => $classroom,
-                'message' => 'Tạo mới lớp học thất bại'
-            ],500);
+                'message' => 'Lớp học này đã tồn tại'
+            ],400);
         }
+
+        return response([
+            'message' => 'Tạo lớp học thành công'
+        ],201);
     }
 
     public function update(UpdateClassroomRequest $request)
     {
         $classroom = $request->get('classroom');
 
-        $this->authorize('checkOwnership', $classroom);
+        $updated = $this->classroomServices->update($request->input(), $classroom);
 
-        $classroom = $this->classroomServices->update($request->input(), $classroom);
-
-        if ($classroom) {
-            return response([
-                'data' => $classroom,
-                'message' => 'Cập nhật lớp học thành công'
-            ],200);
-        } else {
-            return response([
-                'data' => $classroom,
-                'message' => 'Cập nhật lớp học thất bại'
-            ],500);
-        }
+        return response([
+            'message' => 'Cập nhật lớp học thành công'
+        ],201);
     }
 
     public function destroy(Request $request)
     {
         $classroom = $request->get('classroom');
 
-        $this->authorize('checkOwnership', $classroom);
+        $this->authorize('teacherOfClass', $classroom);
 
-        $checkDeleteClassroom = $this->classroomServices->isStarted($classroom->id);
+        $response = $this->classroomServices->destroy($classroom->id);
 
-        if ($checkDeleteClassroom) {
-            return response([
-                'message' => 'Lớp học này đã bắt đầu bạn không thể xóa'
-            ],405);
-        }
-
-        $classroom = $this->classroomServices->destroy($classroom);
-
-        if ($classroom) {
-            return response([
-                'message' => 'Xóa lớp học thành công'
-            ],200);
-        } else {
-            return response([
-                'message' => 'Xóa lớp học thất bại'
-            ],500);
-        }
+        return $response;
     }
 
     public function missingClasses()

@@ -38,12 +38,12 @@ class SemesterServices
 
         if (!$canDelete) {
             return response([
-                'message' => 'Kỳ học đã diễn ra, không thể chỉnh sửa kỳ học này'
+                'message' => 'Kỳ học đã diễn ra, không thể xóa kỳ học này'
             ], 400);
         }
 
         Semester::where('id', $semesterId)->delete();
-        
+
         return response([
             'message' => 'Xóa kỳ học thành công'
         ], 200);

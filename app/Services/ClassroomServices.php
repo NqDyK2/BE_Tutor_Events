@@ -19,20 +19,23 @@ class ClassroomServices
             DB::raw('subjects.code as subject_code'),
             DB::raw('semesters.name as semester_name'),
             DB::raw('classrooms.default_teacher_email as default_teacher_email'),
-            DB::raw('classrooms.default_tutor_email as default_tutor_email'),
         ])
             ->join('subjects', 'subjects.id', '=', 'classrooms.subject_id')
             ->join('semesters', 'semesters.id', '=', 'classrooms.semester_id')
             ->where('semester_id', $semester_id)
-            ->withCount('classStudents')
-            ->withCount('lessons')
+            ->withCount(['classStudents', 'lessons'])
             ->orderBy('subjects.code', 'asc')
             ->get();
     }
 
     public function store($data)
     {
-        $data['default_teacher_email'] = Auth::user()->email;
+        $existsClassroom = Classroom::where('semester_id', $data['semester_id'])
+        ->where('subject_id', $data['subject_id'])
+        ->exists();
+
+        if ($existsClassroom) return false;
+
         return Classroom::create($data);
     }
 
@@ -41,32 +44,24 @@ class ClassroomServices
         return $classroom->update($data);
     }
 
-    public function destroy($classroom)
+    public function destroy($classroom_id)
     {
-        $classroom->delete();
-        return $classroom->trashed();
-    }
+        $canDelete = !Classroom::where('id', $classroom_id)
+        ->whereHas('lessons', function ($q) {
+            $q->where('attended', true);
+        })->exists();
 
-    public function isStarted($classroomId)
-    {
-        $lesson = Lesson::where('classroom_id', $classroomId)->where('start_time', '<', now())->first();
-        if ($lesson) {
-            return true;
+        if (!$canDelete) {
+            return response([
+                'message' => 'Lớp học đã diễn ra, không thể xóa lớp học này'
+            ], 400);
         }
-        return false;
-    }
 
-    public function canDestroy($classroomId)
-    {
-        return Lesson::where('classroom_id', $classroomId)->where('attended', true)->exists();
-    }
+        Classroom::where('id', $classroom_id)->delete();
 
-    public function nextLesson($classroomId)
-    {
-        return Lesson::where('classroom_id', $classroomId)
-            ->where('end_time', '>=', now())
-            ->orderBy('start_time', 'ASC')
-            ->first();
+        return response([
+            'message' => 'Xóa lớp học thành công'
+        ], 200);
     }
 
     public function studentMissingClasses()

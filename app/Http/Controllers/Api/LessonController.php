@@ -32,7 +32,7 @@ class LessonController extends Controller
     public function store(CreateLessonRequest $request)
     {
         $classroom = Classroom::find($request->classroom_id);
-        $this->authorize('checkOwnership', $classroom);
+        $this->authorize('teacherOfClass', $classroom);
         $lesson = $this->lessonServices->store($request->input());
         if ($lesson) {
             return response([
@@ -49,7 +49,7 @@ class LessonController extends Controller
     {
         $lesson = $request->get('lesson');
         $classroom = Classroom::find($request->classroom_id);
-        $this->authorize('checkOwnership', $classroom);
+        $this->authorize('teacherOfClass', $classroom);
         $lesson = $this->lessonServices->update($request->input(), $lesson);
         if ($lesson) {
             return response([
@@ -65,7 +65,7 @@ class LessonController extends Controller
     public function destroy(Request $request){
         $lesson = $request->get('lesson');
         $classroom = Classroom::find($lesson->classroom_id);
-        $this->authorize('checkOwnership', $classroom);
+        $this->authorize('teacherOfClass', $classroom);
         $lesson = $this->lessonServices->destroy($lesson);
         return response([
             'data' => $lesson,

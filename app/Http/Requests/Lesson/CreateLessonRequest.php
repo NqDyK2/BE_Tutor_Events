@@ -29,7 +29,6 @@ class CreateLessonRequest extends FormRequest
         return [
             'classroom_id' => [
                 'required',
-                'integer',
                 function ($attribute, $value, $fail) {
                     $classroom = Classroom::find($value);
                     if (!$classroom) {
@@ -37,41 +36,27 @@ class CreateLessonRequest extends FormRequest
                     }
                 },
             ],
-            'class_location_online' => [
-                'url',
+            'class_location' => [
                 function ($attribute, $value, $fail) {
-                    $isExistsAnother = Lesson::where('class_location_online', $value)
-                        ->where('classroom_id', '<>', $this->classroom_id)
-                        ->whereHas('classroom', function ($q) {
-                            $classroom = Classroom::find($this->classroom_id);
-                            return $q->where('semester_id', '=', $classroom->semester_id);
-                        })
-                        ->first();
-                    if ($isExistsAnother) {
-                        $fail('Link học đã có lớp khác đăng ký');
-                    }
-                },
-            ],
-            'class_location_offline' => [
-                function ($attribute, $value, $fail) {
-                    $isExistsAnother = Lesson::where('class_location_offline', $value)
+                    $isExistsAnother = Lesson::where('class_location', $value)
                         ->where(function ($q) {
-                            return $q->where('start_time', '<=', $this->start_time)
-                                ->where('end_time', '>=', $this->start_time)
-                                ->orWhere('start_time', '<=', $this->end_time)
-                                ->where('end_time', '>=', $this->end_time)
-                                ->orWhere('start_time', '>=', $this->start_time)
-                                ->where('end_time', '<=', $this->end_time);
+                            return $q->where('start_time', '<', $this->start_time)
+                                ->where('end_time', '>', $this->start_time)
+                                ->orWhere('start_time', '<', $this->end_time)
+                                ->where('end_time', '>', $this->end_time)
+                                ->orWhere('start_time', '>', $this->start_time)
+                                ->where('end_time', '<', $this->end_time);
                         })->first();
                     if ($isExistsAnother) {
                         $fail('Lớp học "' . $value . '" đã có lớp khác đăng ký từ ' . $isExistsAnother->start_time . ' đến ' .  $isExistsAnother->start_time);
                     }
                 },
             ],
-            'start_time' => 'required|date_format:Y-m-d H:i:s|before:end_time',
+            'start_time' => 'required|date|after:now',
             'end_time' => [
                 'required',
-                'date_format:Y-m-d H:i:s',
+                'date',
+                'after:start_time',
                 function ($attribute, $value, $fail) {
                     $semester = Semester::join('classrooms', 'classrooms.semester_id', '=', 'semesters.id')
                         ->where('classrooms.id', $this->classroom_id)
@@ -85,12 +70,12 @@ class CreateLessonRequest extends FormRequest
                 function ($attribute, $value, $fail) {
                     $isExistsAnother = Lesson::where('classroom_id', $this->classroom_id)
                         ->where(function ($q) {
-                            return $q->where('start_time', '<=', $this->start_time)
-                                ->where('end_time', '>=', $this->start_time)
-                                ->orWhere('start_time', '<=', $this->end_time)
-                                ->where('end_time', '>=', $this->end_time)
-                                ->orWhere('start_time', '>=', $this->start_time)
-                                ->where('end_time', '<=', $this->end_time);
+                            return $q->where('start_time', '<', $this->start_time)
+                                ->where('end_time', '>', $this->start_time)
+                                ->orWhere('start_time', '<', $this->end_time)
+                                ->where('end_time', '>', $this->end_time)
+                                ->orWhere('start_time', '>', $this->start_time)
+                                ->where('end_time', '<', $this->end_time);
                         })->first();
                     if ($isExistsAnother) {
                         $fail('Thời gian không được trùng với buổi học khác');
@@ -100,35 +85,32 @@ class CreateLessonRequest extends FormRequest
             'type' => 'required|boolean',
             'teacher_email' => 'required|email',
             'tutor_email' => 'email',
-            'document_path' => 'url',
+            'content' => 'string|max:200',
+            'note' => 'string',
         ];
     }
 
     public function messages()
     {
         return [
-            'classroom_id.required' => 'Id lớp học không được để trống',
-            'classroom_id.integer' => 'Id lớp học sai định dạng',
+            'classroom_id.required' => 'Lớp học không được để trống',
 
-            'class_location_online.required' => 'Link học online không được để trống',
-            'class_location_online.url' => 'Link học online sai định dạng',
-
-            'class_location_offline.required' => 'Lớp học không được để trống',
+            'class_location.required' => 'Lớp học không được để trống',
 
             'start_time.required' => 'Thời gian bắt đầu không được để trống',
             'start_time.date_format' => 'Thời gian bắt đầu không đúng định dạng',
-            'start_time.before' => 'Thời gian bắt đầu phải lớn hơn thời gian kết thúc',
+
+            'start_time.after' => 'Thời gian bắt đầu phải lớn hơn thời gian hiện tại',
 
             'end_time.required' => 'Thời gian kết thúc không được để trống',
             'end_time.date_format' => 'Thời gian kết thúc không đúng định dạng',
+            'end_time.after' => 'Thời gian kết thúc phải lớn hơn thời gian bắt đầu',
 
             'type.required' => 'Type không được để trống',
-            'type.integer' => 'Type không đúng định dạng',
+            'type.boolean' => 'Type không đúng định dạng',
 
-            'teacher_email.email' => 'Email giảng viên không đúng định dạng',
+            'teacher_email.required' => 'Email giảng viên không được để trống',
             'tutor_email.email' => 'Email tutor không đúng định dạng',
-
-            'document_path.url' => 'Link tài nguyên buổi học không đúng định dạng',
         ];
     }
 }

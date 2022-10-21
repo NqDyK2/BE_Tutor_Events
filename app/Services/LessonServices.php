@@ -50,10 +50,23 @@ class LessonServices
         return $lesson->update($data);
     }
 
-    public function destroy($lesson)
+    public function destroy($lesson_id)
     {
-        $lesson->delete();
-        return $lesson->trashed();
+        $extended = Lesson::where('id', $lesson_id)
+        ->where('attended', true)
+        ->exists();
+
+        if ($extended) {
+            return response([
+                'message' => 'Buổi học đã diễn ra, không thể xóa buổi học này'
+            ], 400);
+        }
+
+        Lesson::where('id', $lesson_id)->delete();
+
+        return response([
+            'message' => 'Xóa buổi học thành công'
+        ], 200);
     }
 
     public function studentSchedule()

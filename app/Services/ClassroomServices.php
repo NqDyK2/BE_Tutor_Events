@@ -46,12 +46,12 @@ class ClassroomServices
 
     public function destroy($classroom_id)
     {
-        $canDelete = !Classroom::where('id', $classroom_id)
+        $extended = Classroom::where('id', $classroom_id)
         ->whereHas('lessons', function ($q) {
             $q->where('attended', true);
         })->exists();
 
-        if (!$canDelete) {
+        if ($extended) {
             return response([
                 'message' => 'Lớp học đã diễn ra, không thể xóa lớp học này'
             ], 400);

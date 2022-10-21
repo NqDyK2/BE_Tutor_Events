@@ -27,50 +27,27 @@ class UpdateLessonRequest extends FormRequest
     public function rules()
     {
         return [
-            'classroom_id' => [
-                'integer',
+            'class_location' => [
                 function ($attribute, $value, $fail) {
-                    $classroom = Classroom::find($value);
-                    if (!$classroom) {
-                        $fail('Lớp học không tồn tại');
-                    }
-                },
-            ],
-            'class_location_online' => [
-                'url',
-                function ($attribute, $value, $fail) {
-                    $isExistsAnother = Lesson::where('class_location_online', $value)
-                        ->where('classroom_id', '<>', $this->classroom_id)
-                        ->whereHas('classroom', function ($q) {
-                            $classroom = Classroom::find($this->classroom_id);
-                            return $q->where('semester_id', '=', $classroom->semester_id);
-                        })
-                        ->first();
-                    if ($isExistsAnother) {
-                        $fail('Link học đã có lớp khác đăng ký');
-                    }
-                },
-            ],
-            'class_location_offline' => [
-                function ($attribute, $value, $fail) {
-                    $isExistsAnother = Lesson::where('class_location_offline', $value)
+                    $isExistsAnother = Lesson::where('class_location', $value)
                         ->where('id', '!=', $this->lesson_id)
                         ->where(function ($q) {
-                            return $q->where('start_time', '<=', $this->start_time)
-                                ->where('end_time', '>=', $this->start_time)
-                                ->orWhere('start_time', '<=', $this->end_time)
-                                ->where('end_time', '>=', $this->end_time)
-                                ->orWhere('start_time', '>=', $this->start_time)
-                                ->where('end_time', '<=', $this->end_time);
+                            return $q->where('start_time', '<', $this->start_time)
+                                ->where('end_time', '>', $this->start_time)
+                                ->orWhere('start_time', '<', $this->end_time)
+                                ->where('end_time', '>', $this->end_time)
+                                ->orWhere('start_time', '>', $this->start_time)
+                                ->where('end_time', '<', $this->end_time);
                         })->first();
                     if ($isExistsAnother) {
                         $fail('Lớp học "' . $value . '" đã có lớp khác đăng ký từ ' . $isExistsAnother->start_time . ' đến ' .  $isExistsAnother->start_time);
                     }
                 },
             ],
-            'start_time' => 'date_format:Y-m-d H:i:s|before:end_time',
+            'start_time' => 'date|after:now',
             'end_time' => [
-                'date_format:Y-m-d H:i:s',
+                'date',
+                'after:start_time',
                 function ($attribute, $value, $fail) {
                     $semester = Semester::join('classrooms', 'classrooms.semester_id', '=', 'semesters.id')
                         ->where('classrooms.id', $this->classroom_id)
@@ -85,12 +62,12 @@ class UpdateLessonRequest extends FormRequest
                     $isExistsAnother = Lesson::where('classroom_id', $this->classroom_id)
                         ->where('id', '!=', $this->lesson_id)
                         ->where(function ($q) {
-                            return $q->where('start_time', '<=', $this->start_time)
-                                ->where('end_time', '>=', $this->start_time)
-                                ->orWhere('start_time', '<=', $this->end_time)
-                                ->where('end_time', '>=', $this->end_time)
-                                ->orWhere('start_time', '>=', $this->start_time)
-                                ->where('end_time', '<=', $this->end_time);
+                            return $q->where('start_time', '<', $this->start_time)
+                                ->where('end_time', '>', $this->start_time)
+                                ->orWhere('start_time', '<', $this->end_time)
+                                ->where('end_time', '>', $this->end_time)
+                                ->orWhere('start_time', '>', $this->start_time)
+                                ->where('end_time', '<', $this->end_time);
                         })->first();
                     if ($isExistsAnother) {
                         $fail('Thời gian không được trùng với buổi học khác ( ' .$isExistsAnother->start_time. ' to ' . $isExistsAnother->end_time .' )' );
@@ -100,7 +77,8 @@ class UpdateLessonRequest extends FormRequest
             'type' => 'boolean',
             'teacher_email' => 'email',
             'tutor_email' => 'email',
-            'document_path' => 'url',
+            'content' => 'string|max:200',
+            'note' => 'string',
         ];
     }
 

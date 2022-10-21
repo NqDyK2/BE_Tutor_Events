@@ -66,9 +66,10 @@ Route::get('auth/user', [AuthController::class, 'getAuthDetail']);
 Route::prefix('semester')->group(function () {
     Route::get('get-all', [SemesterController::class, 'index']);
     Route::post('store', [SemesterController::class, 'store'])->middleware('admin');
-    Route::middleware('existSemester')->group(function () {
-        Route::post('{semester_id}/import', [ExcelController::class, 'import'])->middleware('admin');
-        Route::put('{semester_id}/update', [SemesterController::class, 'update'])->middleware('admin');
+    Route::middleware(['existSemester', 'admin'])->group(function () {
+        Route::put('{semester_id}/update', [SemesterController::class, 'update']);
+        Route::delete('{semester_id}/delete', [SemesterController::class, 'destroy']);
+        Route::post('{semester_id}/import', [ExcelController::class, 'import']);
 
         Route::get('{semester_id}/classrooms', [ClassroomController::class, 'classroomsInSemester']);
     });
@@ -98,7 +99,7 @@ Route::prefix('lesson')->middleware('checkRoleTeacherOrAdmin')->group(function (
 Route::prefix('attendance')->group(function () {
     Route::get('classrooms', [AttendanceController::class, 'getListClass']);
     Route::get('classroom/{classroom_id}/lessons', [LessonController::class, 'lessonsInClassroom']);
-    
+
     Route::middleware('existLesson')->group(function () {
         Route::get('lesson/{lesson_id}', [AttendanceController::class, 'attendanceDetail']);
         Route::put('lesson/{lesson_id}', [AttendanceController::class, 'update']);

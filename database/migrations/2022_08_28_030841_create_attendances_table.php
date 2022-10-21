@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('student_email');
             $table->unsignedBigInteger('lesson_id');
             $table->string('note')->nullable();
-            $table->integer('status')->default(0);
+            $table->boolean('status')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

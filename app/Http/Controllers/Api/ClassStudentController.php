@@ -19,9 +19,9 @@ class ClassStudentController extends Controller
         $this->classroomServices = $classroomServices;
     }
 
-    public function studentsInClassroom($classroom_id)
-    {   
-        $students = $this->classStudentServices->classStudentsInClassroom($classroom_id);
+    public function studentsInClassroom($classroomId)
+    {
+        $students = $this->classStudentServices->classStudentsInClassroom($classroomId);
         return response([
             'data' => $students
         ],200);

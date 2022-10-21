@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\ClassroomController;
 use App\Http\Controllers\Api\ClassStudentController;
 use App\Http\Controllers\Api\ExcelController;
 use App\Http\Controllers\Api\LessonController;
+use App\Models\Attendance;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,12 +20,6 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-// Route::get('auth/user', function (Request $request) {
-//     return response()->json([
-//         'data' => $request->user(),
-//     ], 200);
-// });
 
 Route::get('auth/user', [AuthController::class, 'getAuthDetail']);
 
@@ -66,8 +61,8 @@ Route::get('auth/user', [AuthController::class, 'getAuthDetail']);
 //     }));
 // });
 
-// API FOR MANAGE
 
+// API FOR MANAGE
 Route::prefix('semester')->group(function () {
     Route::get('get-all', [SemesterController::class, 'index']);
     Route::post('store', [SemesterController::class, 'store'])->middleware('admin');
@@ -100,19 +95,18 @@ Route::prefix('lesson')->middleware('checkRoleTeacherOrAdmin')->group(function (
 
 
 // API FOR ATTENDANCE
-
 Route::prefix('attendance')->group(function () {
     Route::get('classrooms', [AttendanceController::class, 'getListClass']);
-    Route::middleware('existClassroom')->group(function () {
-        Route::get('{classroom_id}/students', [AttendanceController::class, 'getListAttendance']);
-        Route::put('{classroom_id}/update', [AttendanceController::class, 'update']);
+    Route::get('classroom/{classroom_id}/lessons', [LessonController::class, 'lessonsInClassroom']);
+    
+    Route::middleware('existLesson')->group(function () {
+        Route::get('lesson/{lesson_id}', [AttendanceController::class, 'attendanceDetail']);
+        Route::put('lesson/{lesson_id}', [AttendanceController::class, 'update']);
     });
 });
 
 // API FOR STUDENT
-
 Route::prefix('student')->group(function () {
-    // Route::get('semester/{semester_id}/classrooms', [ClassroomController::class, 'classroomsInUser'])->middleware('existSemester');
     Route::get('schedule', [LessonController::class, 'studentSchedule']);
     Route::get('missing-classes', [ClassroomController::class, 'missingClasses']);
     Route::put('join-class/{classroom_id}', [ClassroomController::class, 'joinClass'])->middleware('existClassroom');

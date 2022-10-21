@@ -4,98 +4,101 @@ namespace App\Services;
 
 use App\Models\Attendance;
 use App\Models\Classroom;
+use App\Models\ClassStudent;
 use App\Models\Lesson;
-use App\Models\Semester;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class AttendanceServices
 {
-  public function getListClass()
-  {
-    $classrooms = Classroom::select(
-      'classrooms.id',
-      DB::raw('subjects.name as subject_name'),
-      DB::raw('subjects.code as subject_code'),
-    )
-      ->whereHas('semester', function ($q) {
-        return $q->where('end_time', '>', now())
-          ->where('start_time', '<', now());
-      })
-      ->join('subjects', 'subjects.id', '=', 'classrooms.subject_id')
-      ->with('lessons', function ($q) {
-        return $q->select(
-          'start_time',
-          'end_time',
-          'teacher_email',
-          'tutor_email',
-          'classroom_id',
+    public function getListClass()
+    {
+        $classrooms = Classroom::select(
+            'classrooms.id',
+            DB::raw('subjects.name as subject_name'),
+            DB::raw('subjects.code as subject_code'),
         )
-          ->where('end_time', '>', now())
-          ->orderBy('start_time', 'ASC');
-      })
-      ->get();
+            ->whereHas('semester', function ($q) {
+                return $q->where('end_time', '>', now())
+                    ->where('start_time', '<', now());
+            })
+            ->whereHas('lessons', function ($q) {
+                return $q->where('teacher_email', Auth::user()->email)
+                    ->orWhere('tutor_email', Auth::user()->email);
+            })
+            ->join('subjects', 'subjects.id', '=', 'classrooms.subject_id')
+            ->withCount('classStudents')
+            ->withCount('lessons')
+            ->get();
 
-      $classrooms = $classrooms->toArray();
-
-      if (!$classrooms) return [];
-
-      $classrooms = array_map(function ($x) {
-        $x['start_time'] = data_get(data_get($x['lessons'], 0), 'start_time');
-        $x['end_time'] = data_get(data_get($x['lessons'], 0), 'end_time');
-        $x['teacher_email'] = data_get(data_get($x['lessons'], 0), 'teacher_email');
-        $x['tutor_email'] = data_get(data_get($x['lessons'], 0), 'tutor_email');
-
-        unset($x['lessons']);
-        return $x;
-      }, $classrooms);
-
-    return ($classrooms);
-  }
-
-  public function getListAttendance($classroom_id)
-  {
-    $getListStudent = Attendance::select(
-      'attendances.id',
-      'attendances.status',
-      'attendances.student_email',
-      DB::raw('users.name as user_name'),
-      DB::raw('users.code as user_code'),
-      'attendances.note',
-    )
-      ->whereHas('lesson', function ($q) use ($classroom_id) {
-        return $q->where('classroom_id', $classroom_id)
-          ->where('start_time', '<', now())
-          ->where('end_time', '>', now());
-      })
-
-      ->leftJoin('users', 'users.email', '=', 'attendances.student_email')
-      ->get();
-    return $getListStudent;
-  }
-
-  public function update($classroom_id, $data)
-  {
-    $lesson = Lesson::where('classroom_id', $classroom_id)
-    ->where('start_time', '<', now())
-    ->where('end_time', '>', now())
-    ->with('attendances', function ($q) {
-      return $q->select('id', 'lesson_id');
-    })
-    ->first();
-
-    if (!$lesson) {
-      return false;
+        return ($classrooms);
     }
 
-    $ids = array_map(fn ($x) => $x['id'],$lesson->attendances->toArray());
+    public function getDataByLesson(Lesson $lesson)
+    {
+        $attendHistoryMap = [];
 
-    $presentIds = array_filter(array_map(fn ($x) => $x['status'] == ATTENDANCE_STATUS_PRESENT && in_array($x['id'], $ids) ? $x['id'] : null, $data));
-    $absentIds = array_filter(array_map(fn ($x) => $x['status'] == ATTENDANCE_STATUS_ABSENT && in_array($x['id'], $ids) ? $x['id'] : null, $data));
+        $students = ClassStudent::select(
+            DB::raw('users.name as student_name'),
+            DB::raw('users.code as student_code'),
+            'class_students.student_email',
+            'class_students.is_joined'
+        )
+            ->where('classroom_id', $lesson->classroom_id)
+            ->leftJoin('users', 'users.email', 'class_students.student_email')
+            ->get();
 
-    Attendance::whereIn('id', $absentIds)->update(["status" => false]);
-    Attendance::whereIn('id', $presentIds)->update(["status" => true]);
+        if ($lesson && $lesson->attended) {
+            $attendHistory = Attendance::where('lesson_id', $lesson->id)->get();
+            foreach ($attendHistory as $i => $x) {
+                $attendHistoryMap[$x->student_email] = $x->toArray();
+            }
+        }
 
-    return true;
-  }
+        foreach ($students as $i => $student) {
+            $checkAttended = $lesson && $lesson->attended && array_key_exists($student->student_email, $attendHistoryMap);
+            $student->status = $checkAttended ? $attendHistoryMap[$student->student_email]['status'] : false;
+            $student->note = $checkAttended ? $attendHistoryMap[$student->student_email]['note'] : '';
+            $students[$i] = $student;
+        }
+
+        return $students;
+    }
+
+    public function update($lessonId, $data)
+    {
+        $lesson = Lesson::where('id', $lessonId)
+            ->where('start_time', '<=', now())
+            ->where('end_time', '>=', now())
+            ->first();
+
+        if (!$lesson) return false;
+
+        $emails = array_map(fn ($x) => $x['student_email'], $data);
+
+        $presentEmails = array_filter(array_map(fn ($x) => $x['status'] == ATTENDANCE_STATUS_PRESENT && in_array($x['student_email'], $emails) ? $x['student_email'] : null, $data));
+        $absentEmails = array_filter(array_map(fn ($x) => $x['status'] == ATTENDANCE_STATUS_ABSENT && in_array($x['student_email'], $emails) ? $x['student_email'] : null, $data));
+
+        if (!$lesson->attended) {
+            $array_attendances = [];
+
+            $studentsInClass = ClassStudent::where('classroom_id', $lesson->classroom_id)->get();
+            $studentsEmails = array_map(fn ($x) => $x['student_email'], $studentsInClass->toArray());
+
+            foreach ($studentsEmails as $email) {
+                $array_attendances[] = [
+                    'lesson_id' => $lesson->id,
+                    'student_email' => $email,
+                ];
+            }
+            Attendance::insert($array_attendances);
+        }
+
+        $cc = Attendance::whereIn('student_email', $presentEmails)->update(["status" => true]);
+        Attendance::whereIn('student_email', $absentEmails)->update(["status" => false]);
+        $lesson->attended = true;
+        $lesson->save();
+
+        return true;
+    }
 }

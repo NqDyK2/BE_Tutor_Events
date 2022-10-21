@@ -56,6 +56,11 @@ class ClassroomServices
         return false;
     }
 
+    public function canDestroy($classroomId)
+    {
+        return Lesson::where('classroom_id', $classroomId)->where('attended', true)->exists();
+    }
+
     public function nextLesson($classroomId)
     {
         return Lesson::where('classroom_id', $classroomId)

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Classroom;
 use App\Models\Semester;
 
 class SemesterServices
@@ -28,10 +29,22 @@ class SemesterServices
         return $Semester->update($data);
     }
 
-    public function destroy($id)
+    public function destroy($semesterId)
     {
-        $Semester = Semester::find($id);
-        $Semester->delete();
-        return $Semester->trashed();
+        $canDelete = !Classroom::where('semester_id', $semesterId)
+        ->whereHas('lessons', function ($q) {
+            $q->where('attended', true);
+        })->exists();
+
+        if (!$canDelete) {
+            return response([
+                'message' => 'Kỳ học đã diễn ra, không thể chỉnh sửa kỳ học này'
+            ], 400);
+        }
+
+        Semester::where('id', $semesterId)->delete();
+        return response([
+            'message' => 'Xóa kỳ học thành công'
+        ], 200);
     }
 }

@@ -78,8 +78,8 @@ Route::prefix('semester')->group(function () {
 Route::prefix('classroom')->middleware('checkRoleTeacherOrAdmin')->group(function () {
     Route::post('store', [ClassroomController::class, 'store']);
     Route::middleware('existClassroom')->group(function () {
-        Route::put('{classroom_id}/update', [ClassroomController::class, 'update']);
-        Route::delete('{classroom_id}/destroy', [ClassroomController::class, 'destroy']);
+        Route::put('{classroom_id}/update', [ClassroomController::class, 'update'])->middleware('admin');
+        Route::delete('{classroom_id}/delete', [ClassroomController::class, 'destroy']);
 
         Route::get('{classroom_id}/lessons', [LessonController::class, 'lessonsInClassroom']);
         Route::get('{classroom_id}/students', [ClassStudentController::class, 'studentsInClassroom']);
@@ -90,7 +90,7 @@ Route::prefix('lesson')->middleware('checkRoleTeacherOrAdmin')->group(function (
     Route::post('store', [LessonController::class, 'store']);
     Route::middleware('existLesson')->group(function () {
         Route::put('{lesson_id}/update', [LessonController::class, 'update']);
-        Route::delete('{lesson_id}/destroy', [LessonController::class, 'destroy']);
+        Route::delete('{lesson_id}/delete', [LessonController::class, 'destroy']);
     });
 });
 

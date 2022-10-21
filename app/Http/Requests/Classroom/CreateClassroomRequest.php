@@ -24,36 +24,22 @@ class CreateClassroomRequest extends FormRequest
     public function rules()
     {
         return [
-            'subject_id' => 'required|integer|exists:subjects,id',
-            'semester_id' => 'required|integer|exists:semesters,id',
-            'default_offline_class_location' => 'nullable|string|min:3|max:200',
-            'default_online_class_location' => 'nullable|string|url',
-            'default_tutor_email' => 'nullable|email',
-            'default_teacher_email' => 'nullable|email',
+            'subject_id' => 'required|exists:subjects,id',
+            'semester_id' => 'required|exists:semesters,id',
+            'default_teacher_email' => 'email',
         ];
     }
+
     public function messages()
     {
         return [
-            'name.required' => 'Bạn chưa điền trường tên lớp',
-            'name.unique' => 'Tên lớp này đã tồn tại',
+            'subject_id.required' => 'Môn học không được để trống',
+            'subject_id.exists' => 'Môn học không tồn tại',
 
-            'subject_id.required' => 'Bạn chưa chọn môn học',
-            'subject_id.integer' => 'ID môn học phải là số',
-            'subject_id.exists' => 'Môn học này không tồn tại',
+            'semester_id.required' => 'Kỳ học không được để trống',
+            'semester_id.exists' => 'Kì học không tồn tại',
 
-            'semester_id.required' => 'Bạn chưa chọn kì học',
-            'semester_id.integer' => 'ID kì học phải là số',
-            'semester_id.exists' => 'Kì học này không tồn tại',
-
-            'default_offline_class_location.min' => 'Địa chỉ offline quá ngắn',
-            'default_offline_class_location.max' => 'Địa chỉ offline quá dài',
-
-            'default_online_class_location.url' => 'Địa chỉ online phải là đường dẫn url',
-
-            'default_tutor_email.email' => 'Email của tutor sai định dạng',
-
-            'default_teacher_email.email' => 'Email của giáo viên sai định dạng',
+            'default_teacher_email.email' => 'Email sai định dạng',
         ];
     }
 }

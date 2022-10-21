@@ -2,7 +2,6 @@
 
 namespace App\Observers;
 
-use App\Models\Attendance;
 use App\Models\Lesson;
 
 class LessonObserver
@@ -15,20 +14,6 @@ class LessonObserver
      */
     public function created(Lesson $lesson)
     {
-        // $array_attendances = [];
-        // $listIdUser = $lesson->select('class_students.student_email', 'lessons.classroom_id', 'class_students.classroom_id')
-        //     ->join('classrooms', 'classrooms.id', '=', 'lessons.classroom_id')
-        //     ->join('class_students', 'class_students.classroom_id', '=', 'classrooms.id')
-        //     ->where('lessons.id', $lesson->id)
-        //     ->get();
-
-        // foreach ($listIdUser as $user) {
-        //     $array_attendances[] = [
-        //         'lesson_id' => $lesson->id,
-        //         'student_email' => $user->student_email,
-        //     ];
-        // }
-        // Attendance::insert($array_attendances);
     }
 
     /**
@@ -43,14 +28,14 @@ class LessonObserver
     }
 
     /**
-     * Handle the Lesson "deleted" event.
+     * Handle the Lesson "trashed" event.
      *
      * @param  \App\Models\Lesson  $lesson
      * @return void
      */
-    public function deleted(Lesson $lesson)
+    public function trashed(Lesson $lesson)
     {
-        // $lesson->attendances()->delete();
+        $lesson->attendances()->delete();
     }
 
     /**

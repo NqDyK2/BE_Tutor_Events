@@ -43,6 +43,7 @@ class SemesterServices
         }
 
         Semester::where('id', $semesterId)->delete();
+        
         return response([
             'message' => 'Xóa kỳ học thành công'
         ], 200);

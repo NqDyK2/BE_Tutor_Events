@@ -65,12 +65,12 @@ class LessonController extends Controller
     public function destroy(Request $request){
         $lesson = $request->get('lesson');
         $classroom = Classroom::find($lesson->classroom_id);
+
         $this->authorize('teacherOfClass', $classroom);
-        $lesson = $this->lessonServices->destroy($lesson);
-        return response([
-            'data' => $lesson,
-            'message' => 'Delete lesson successfully'
-        ],200);
+
+        $response = $this->lessonServices->destroy($lesson->id);
+
+        return $response;
     }
 
     public function studentSchedule()

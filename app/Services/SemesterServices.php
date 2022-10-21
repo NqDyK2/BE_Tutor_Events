@@ -31,12 +31,12 @@ class SemesterServices
 
     public function destroy($semesterId)
     {
-        $canDelete = !Classroom::where('semester_id', $semesterId)
+        $extended = Classroom::where('semester_id', $semesterId)
         ->whereHas('lessons', function ($q) {
             $q->where('attended', true);
         })->exists();
 
-        if (!$canDelete) {
+        if ($extended) {
             return response([
                 'message' => 'Kỳ học đã diễn ra, không thể xóa kỳ học này'
             ], 400);

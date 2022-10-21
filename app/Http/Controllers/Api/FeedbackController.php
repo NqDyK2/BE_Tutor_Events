@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\FeedBack\StoreFeedbackRequest;
+use App\Models\Attendance;
 use App\Models\Feedback;
-use App\Http\Requests\StoreFeedbackRequest;
-use App\Http\Requests\UpdateFeedbackRequest;
+use App\Models\User;
 use App\Services\FeedbackServices;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,22 +22,22 @@ class FeedbackController extends Controller
 
     public function store(StoreFeedbackRequest $request)
     {
-        $feedBack = Feedback::where('lesson_id',$request->lesson_id)->where('user_id',Auth::id())->first();
-        if($feedBack == null){
-            $feedBackNew = $this->feedbackServices->store($request->input());
-            if($feedBackNew) {
-                return response([
-                    'message' => 'Create feedback successfully',
-                ],201);
-            }else{
-                return response([
-                    'message' => 'Create feedback failed'
-                ],500);
-            }
+        $user = User::find(Auth::id());
+        $attendances = Attendance::where('lesson_id',$request->lesson_id)->where('student_email',$user->email)->first();
+        if($attendances == null) {
+            return response([
+                'message' => 'Sinh viên không có trong buổi học'
+            ],400); 
+        }
+        $feedBackNew = $this->feedbackServices->store($request->input());
+        if($feedBackNew) {
+            return response([
+                'message' => 'Create feedback successfully',
+            ],201);
         }else{
             return response([
-                'message' => 'Sinh viên đã FEED BACK'
-            ],500);
+                'message' => 'Sinh viên đã Feed Back'
+            ],400);
         }
     }
 

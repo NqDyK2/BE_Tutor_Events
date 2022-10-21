@@ -17,14 +17,15 @@ class Lesson extends Model
      */
     protected $fillable = [
         'classroom_id',
-        'type',
-        'content',
-        'teacher_email',
-        'tutor_email',
         'start_time',
         'end_time',
-        'class_location_online',
-        'class_location_offline',
+        'type',
+        'class_location',
+        'teacher_email',
+        'tutor_email',
+        'content',
+        'note',
+        'attended',
     ];
 
     public function teacher()

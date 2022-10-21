@@ -18,10 +18,7 @@ class Classroom extends Model
     protected $fillable = [
         'subject_id',
         'semester_id',
-        'default_offline_class_location',
-        'default_online_class_location',
         'default_teacher_email',
-        'default_tutor_email'
     ];
 
     public function classStudents()

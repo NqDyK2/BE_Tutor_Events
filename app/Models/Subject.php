@@ -36,4 +36,9 @@ class Subject extends Model
             ]
         ];
     }
+
+    public function major()
+    {
+        return $this->belongsTo(Major::class, 'major_id');
+    }
 }

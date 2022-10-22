@@ -24,7 +24,7 @@ class MajorController extends Controller
         $majors = $this->majorServices->getAll();
 
         return response([
-            'major' => $majors
+            'data' => $majors
         ],200);
     }
 
@@ -32,16 +32,22 @@ class MajorController extends Controller
     {
         $majors = $this->majorServices->create($request->input());
 
-        return response([
-            'massage' => 'Major created successfully',
-        ],201);
+        if ($majors){
+            return response([
+                'massage' => 'Tạo mới chuyên ngành thành công',
+            ],201);
+        }else{
+            return response([
+                'massage' => 'Tạo mới chuyên ngành thất bại'
+            ],400);
+        }
     }
 
     public function show(Request $request)
     {
-        $majorShow = $request->get('major');
+        $major = $request->get('major');
         return response([
-            'data' => $majorShow
+            'data' => $major
         ],200);
     }
 
@@ -53,11 +59,11 @@ class MajorController extends Controller
 
         if ($majors){
             return response([
-                'massage' => 'Major update successfully',
+                'massage' => 'Cập nhật chuyên ngành thành công',
             ],201);
         }else{
             return response([
-                'massage' => 'update Subject failed'
+                'massage' => 'Cập nhật chuyên ngành thất bại'
             ],400);
         }
     }

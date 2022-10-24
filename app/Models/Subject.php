@@ -41,4 +41,9 @@ class Subject extends Model
     {
         return $this->belongsTo(Major::class, 'major_id');
     }
+
+    public function classrooms()
+    {
+        return $this->hasMany(Classroom::class, 'subject_id');
+    }
 }

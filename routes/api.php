@@ -25,44 +25,30 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('auth/user', [AuthController::class, 'getAuthDetail']);
 
+
+// API FOR MANAGE
 Route::prefix('major')->group(function () {
     Route::get('get-all', [MajorController::class, 'index']);
-    Route::post('store', 'MajorController@store')->middleware('admin');
-    Route::middleware('existMajor')->group(function (){
-        Route::get('show/{id}', [MajorController::class, 'show']);
-        Route::middleware('admin')->group(function () {
-            Route::put('update/{id}', [MajorController::class, 'update']);
+    Route::middleware('admin')->group(function () {
+        Route::post('store', [MajorController::class, 'store'])->middleware('admin');
+        Route::middleware('existMajor')->group(function () {
+            Route::put('{major_id}/update', [MajorController::class, 'update']);
+            Route::delete('{major_id}/delete', [MajorController::class, 'destroy']);
         });
     });
 });
-// Route::prefix('user')->group(function () {
-//     Route::get('get', [UserController::class, 'get']);
-//     Route::middleware('existUser')->group((function () {
-//         Route::get('show/{id}', [UserController::class, 'show']);
-//         Route::put('update/{id}', [UserController::class, 'update']);
-//     }));
-// });
+
 Route::name('subject')->prefix('subject')->group(function () {
-    Route::get('get-all',[SubjectController::class, 'index']);
-        Route::middleware('admin')->group(function (){
-            Route::post('store',[SubjectController::class, 'store']);
-            Route::middleware('existSubject')->group(function (){
-                Route::put('update/{id}',[SubjectController::class, 'update']);
-                Route::get('show/{id}',[SubjectController::class, 'show']);
-            });
-            // Route::delete('destroy/{id}',[SubjectController::class, 'destroy']);
+    Route::get('get-all', [SubjectController::class, 'index']);
+    Route::middleware('admin')->group(function () {
+        Route::post('store', [SubjectController::class, 'store']);
+        Route::middleware('existSubject')->group(function () {
+            Route::put('update/{id}', [SubjectController::class, 'update']);
+            Route::get('show/{id}', [SubjectController::class, 'show']);
         });
+    });
 });
-// Route::prefix('class-student')->group(function () {
-//     Route::get('in-classroom/{id}', [ClassStudentController::class, 'classStudentsInClassroom'])->middleware('existClassroom');
-//     Route::post('store', [ClassStudentController::class, 'store']);
-//     Route::middleware('existClassStudent')->group((function () {
-//         Route::delete('update/{id}', [ClassStudentController::class, 'update']);
-//     }));
-// });
 
-
-// API FOR MANAGE
 Route::prefix('semester')->group(function () {
     Route::get('get-all', [SemesterController::class, 'index']);
     Route::post('store', [SemesterController::class, 'store'])->middleware('admin');

@@ -24,26 +24,20 @@ class CreateMajorRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|unique:majors,name',
-            'teacher_email' => 'required|email',
-            'slug' => 'required|string|unique:majors,slug'
+            'name' => 'required|min:3|max:100|unique:majors,name',
+            'teacher_email' => 'email',
         ];
     }
 
     public function messages()
     {
         return [
-            'name.required' => 'không được để trống trường tên',
-            'name.string' => 'Tên trường phải là chuỗi',
-            'name.unique' => 'Tên trường này đã tồn tại',
+            'name.required' => 'Tên chuyên ngành không được để trống',
+            'name.min' => 'Tên chuyên ngành phải lớn hơn 3 ký tự',
+            'name.max' => 'Tên chuyên ngành phải nhỏ hơn 100 ký tự',
+            'name.unique' => 'Chuyên ngành đã tồn tại',
 
-            'teacher_email.required' => 'không được để trống trường email giáo viên',
-            'teacher_email.string' => 'email giáo viên không đúng định dạng',
-
-
-            'slug.required' => 'không được để trống trường Slug',
-            'slug.string' => 'Slug trường phải là chuỗi',
-            'slug.unique' => 'Slug trường này đã tồn tại',
+            'teacher_email.string' => 'Email giáo viên không đúng định dạng',
         ];
     }
 }

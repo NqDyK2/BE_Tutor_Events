@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\ClassStudentController;
 use App\Http\Controllers\Api\ExcelController;
 use App\Http\Controllers\Api\LessonController;
 use App\Http\Controllers\Api\SubjectController;
+use App\Http\Controllers\Api\MajorController;
 use App\Models\Attendance;
 use Illuminate\Support\Facades\Route;
 
@@ -24,16 +25,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('auth/user', [AuthController::class, 'getAuthDetail']);
 
-// Route::prefix('major')->group(function () {
-//     Route::get('get-all', [MajorController::class, 'index']);
-//     Route::post('store', 'MajorController@store')->middleware('admin');
-//     Route::middleware('existMajor')->group(function (){
-//         Route::get('show/{id}', [MajorController::class, 'show']);
-//         Route::middleware('admin')->group(function () {
-//             Route::put('update/{id}', [MajorController::class, 'update']);
-//         });
-//     });
-// });
+Route::prefix('major')->group(function () {
+    Route::get('get-all', [MajorController::class, 'index']);
+    Route::middleware('admin')->group(function (){
+        Route::post('store', [MajorController::class, 'store']);
+        Route::middleware('existMajor')->group(function (){
+            Route::get('show/{id}', [MajorController::class, 'show']);
+            Route::put('update/{id}', [MajorController::class, 'update']);
+        });
+    });
+});
 // Route::prefix('user')->group(function () {
 //     Route::get('get', [UserController::class, 'get']);
 //     Route::middleware('existUser')->group((function () {

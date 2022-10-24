@@ -24,7 +24,26 @@ class UpdateMajorRequests extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|unique:majors,name,'.$this->id
+            'name' => 'required|string|unique:majors,name,'.$this->id,
+            'teacher_email' => 'required|email',
+            'slug' => 'required|string|unique:majors,slug,'.$this->id
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'name.required' => 'không được để trống trường tên',
+            'name.string' => 'Tên trường phải là chuỗi',
+            'name.unique' => 'Tên trường này đã tồn tại',
+
+            'teacher_email.required' => 'không được để trống trường email giáo viên',
+            'teacher_email.string' => 'email giáo viên không đúng định dạng',
+
+
+            'slug.required' => 'không được để trống trường Slug',
+            'slug.string' => 'Slug trường phải là chuỗi',
+            'slug.unique' => 'Slug trường này đã tồn tại',
         ];
     }
 }

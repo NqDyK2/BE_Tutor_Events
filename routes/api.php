@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\ClassroomController;
 use App\Http\Controllers\Api\ClassStudentController;
 use App\Http\Controllers\Api\ExcelController;
 use App\Http\Controllers\Api\LessonController;
+use App\Http\Controllers\Api\SubjectController;
 use App\Http\Controllers\Api\MajorController;
 use App\Models\Attendance;
 use Illuminate\Support\Facades\Route;
@@ -41,19 +42,17 @@ Route::prefix('major')->group(function () {
 //         Route::put('update/{id}', [UserController::class, 'update']);
 //     }));
 // });
-// Route::name('subject')->prefix('subject')->group(function () {
-//     Route::get('get-all',[SubjectController::class, 'index']);
-//     Route::middleware('existSubject')->group(function (){
-//         Route::get('show/{id}',[SubjectController::class, 'show']);
-//         Route::middleware('admin')->group(function (){
-//             Route::put('update/{id}',[SubjectController::class, 'update']);
-//             // Route::delete('destroy/{id}',[SubjectController::class, 'destroy']);
-//         });
-//     });
-//     Route::middleware('admin')->group(function (){
-//         Route::post('store',[SubjectController::class, 'store']);
-//     });
-// });
+Route::name('subject')->prefix('subject')->group(function () {
+    Route::get('get-all',[SubjectController::class, 'index']);
+        Route::middleware('admin')->group(function (){
+            Route::post('store',[SubjectController::class, 'store']);
+            Route::middleware('existSubject')->group(function (){
+                Route::put('update/{id}',[SubjectController::class, 'update']);
+                Route::get('show/{id}',[SubjectController::class, 'show']);
+            });
+            // Route::delete('destroy/{id}',[SubjectController::class, 'destroy']);
+        });
+});
 // Route::prefix('class-student')->group(function () {
 //     Route::get('in-classroom/{id}', [ClassStudentController::class, 'classStudentsInClassroom'])->middleware('existClassroom');
 //     Route::post('store', [ClassStudentController::class, 'store']);

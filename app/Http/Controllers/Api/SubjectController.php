@@ -32,9 +32,16 @@ class SubjectController extends Controller
     {
         $subject = $this->subjectServices->create($request->input());
 
-        return response([
-            'massage' => 'Subject create Successfully',
-        ],201);
+        if($subject)
+        {
+            return response([
+                'massage' => 'Tạo mới môn học thành công',
+            ],201);
+        }else {
+            return response([
+                'massage' => 'Tạo mới môn học thất bại'
+            ],400);
+        }
     }
 
     public function show(Request $request)
@@ -53,11 +60,11 @@ class SubjectController extends Controller
         if($subject)
         {
             return response([
-                'massage' => 'Subject Update Successfully',
+                'massage' => 'Cập nhật môn học thành công',
             ],201);
         }else {
             return response([
-                'massage' => 'Update Subject False'
+                'massage' => 'Cập nhật môn học thất bại'
             ],400);
         }
     }

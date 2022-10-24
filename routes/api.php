@@ -27,10 +27,10 @@ Route::get('auth/user', [AuthController::class, 'getAuthDetail']);
 
 Route::prefix('major')->group(function () {
     Route::get('get-all', [MajorController::class, 'index']);
-    Route::middleware('admin')->group(function (){
-        Route::post('store', [MajorController::class, 'store']);
-        Route::middleware('existMajor')->group(function (){
-            Route::get('show/{id}', [MajorController::class, 'show']);
+    Route::post('store', 'MajorController@store')->middleware('admin');
+    Route::middleware('existMajor')->group(function (){
+        Route::get('show/{id}', [MajorController::class, 'show']);
+        Route::middleware('admin')->group(function () {
             Route::put('update/{id}', [MajorController::class, 'update']);
         });
     });

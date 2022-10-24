@@ -8,7 +8,7 @@ class MajorServices
 {
     public function getAll()
     {
-        return Major::paginate(DEFAULT_PAGINATE);
+        return Major::with('subjects')->paginate(DEFAULT_PAGINATE);
     }
 
     public function show($id)

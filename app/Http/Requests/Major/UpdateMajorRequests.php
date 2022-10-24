@@ -24,7 +24,7 @@ class UpdateMajorRequests extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'string|unique:majors,name,'.$this->id,
+            'name' => 'string|unique:majors,name,'.$this->major_id,
             'teacher_email' => 'email',
         ];
     }

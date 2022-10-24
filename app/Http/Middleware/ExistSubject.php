@@ -17,7 +17,7 @@ class ExistSubject
      */
     public function handle(Request $request, Closure $next)
     {
-        $subject = Subject::find($request->id);
+        $subject = Subject::find($request->subject_id);
 
         if ($subject === null) {
             return response([

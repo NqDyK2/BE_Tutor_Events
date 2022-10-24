@@ -24,31 +24,28 @@ class CreateSubjectRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|unique:subjects,name',
-            'code' => 'required|string|unique:subjects,code',
+            'name' => 'required|min:3|max:100|unique:subjects,name',
+            'code' => 'required|min:3|max:100|unique:subjects,code',
             'major_id' => 'required|integer|exists:majors,id',
-            'slug' => 'required|string|unique:subjects,slug', 
         ];
     }
 
     public function messages()
     {
         return [
-            'name.required' => 'Không được để trống trường tên môn học',
-            'name.string' => 'Tên môn học phải là chuỗi ký tự',
-            'name.unique' => 'Tên môn học này đã tồn tại',
+            'name.required' => 'Tên môn học không được để trống',
+            'name.min' => 'Tên môn học phải lớn hơn 3 ký tự',
+            'name.max' => 'Tên môn học phải nhỏ hơn 100 ký tự',
+            'name.unique' => 'Tên môn học đã tồn tại',
 
-            'code.required' => 'Không được để trống trường mã môn học',
-            'code.string' => 'Mã môn học phải là chuỗi ký tự',
-            'code.unique' => 'Mã môn học này đã tồn tại',
+            'code.required' => 'Mã môn học không được để trống',
+            'name.min' => 'Tên môn học phải lớn hơn 3 ký tự',
+            'name.max' => 'Tên môn học phải nhỏ hơn 100 ký tự',
+            'code.unique' => 'Mã môn học đã tồn tại',
 
             'major_id.required' => 'không được để trống trường chuyên ngành',
             'major_id.integer' => 'ID chuyên ngành phải là số',
-            'major_id.exists' => 'Chuyên ngành này không tồn tại',
-
-            'slug.required' => 'Không được để trống trường Slug môn học',
-            'slug.string' => 'Slug môn học phải là chuỗi ký tự',
-            'slug.unique' => 'Slug môn học này đã tồn tại',
+            'major_id.exists' => 'Chuyên ngành không tồn tại',
         ];
     }
 }

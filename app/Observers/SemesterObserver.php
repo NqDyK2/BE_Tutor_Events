@@ -25,7 +25,7 @@ class SemesterObserver
      */
     public function updated(Semester $semester)
     {
-        dd('up ok');
+        //
     }
 
     /**
@@ -36,17 +36,14 @@ class SemesterObserver
      */
     public function deleting(Semester $semester)
     {
-        dd($semester->classrooms);
         $semester->classrooms->delete();
     }
     public function deleted(Semester $semester)
     {
-        dd($semester->classrooms);
         $semester->classrooms->delete();
     }
     public function trashed(Semester $semester)
     {
-        dd($semester->classrooms);
         $semester->classrooms->delete();
     }
 

@@ -120,7 +120,7 @@ class ExcelServices
         ->get();
 
         foreach ($classroomsSelected as $cs) {
-            $classrooms[$cs->code] = $cs->id;
+            $classrooms[Str::slug($cs->code)] = $cs->id;
         }
 
         return $classrooms;

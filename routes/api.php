@@ -97,8 +97,8 @@ Route::prefix('classroom')->middleware('checkRoleTeacherOrAdmin')->group(functio
 
 Route::prefix('lesson')->middleware('checkRoleTeacherOrAdmin')->group(function () {
     Route::post('store', [LessonController::class, 'store']);
-    Route::get('{lesson_id}/feedback', [FeedbackController::class, 'feedbackInLesson']);
     Route::middleware('existLesson')->group(function () {
+        Route::get('{lesson_id}/feedback', [FeedbackController::class, 'feedbackInLesson']);
         Route::put('{lesson_id}/update', [LessonController::class, 'update']);
         Route::delete('{lesson_id}/destroy', [LessonController::class, 'destroy']);
     });

@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Models\Feedback;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -13,7 +14,7 @@ Class FeedbackServices
             $data['user_id'] = Auth::id();
             return Feedback::create($data);
         }
-        else{
+        if(!$feedBack){
             return False;
         }
     }

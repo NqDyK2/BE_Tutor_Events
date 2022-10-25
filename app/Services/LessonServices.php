@@ -77,12 +77,11 @@ class LessonServices
             'lessons.start_time',
             'lessons.end_time',
             'lessons.type',
-            'lessons.class_location_offline',
-            'lessons.class_location_online',
+            'lessons.class_location',
             'lessons.teacher_email',
             'lessons.tutor_email',
             'lessons.content',
-            'lessons.document_path',
+            'lessons.note',
         )
             ->join('classrooms', 'classrooms.id', 'class_students.classroom_id')
             ->join('subjects', 'subjects.id', 'classrooms.subject_id')

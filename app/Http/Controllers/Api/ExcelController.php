@@ -19,16 +19,18 @@ class ExcelController extends Controller
 
     public function import(Request $request)
     {
+        $count = 0;
         $classrooms = $this->excelServices->getListRequireClassroom($request->semester_id, $request->data);
 
         foreach ($request->data as $x) {
             if (array_key_exists(Str::slug($x['subject']), $classrooms)) {
+                ++$count;
                 InsertUserFromExcelJob::dispatch($x, $classrooms);
             }
         }
 
         return response([
-            'message' => 'Cập nhật danh sách sinh viên thành công'
+            'message' => 'Cập nhật thành công ' . $count . ' bản ghi'
         ], 200);
     }
 }

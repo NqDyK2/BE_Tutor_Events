@@ -115,12 +115,11 @@ Route::prefix('attendance')->group(function () {
     });
 });
 
-Route::prefix('feedback')->group(function () {
-    Route::post('store', [FeedbackController::class, 'store']);
-});
 // API FOR STUDENT
 
 Route::prefix('student')->middleware('CheckLoginUser')->group(function () {
     // Route::get('semester/{semester_id}/classrooms', [ClassroomController::class, 'classroomsInUser'])->middleware('existSemester');
     Route::get('lessons', [LessonController::class, 'lessonsInUser']);
+    Route::post('feedback/store', [FeedbackController::class, 'store']);
+
 });

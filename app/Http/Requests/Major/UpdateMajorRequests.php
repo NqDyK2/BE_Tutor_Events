@@ -24,7 +24,19 @@ class UpdateMajorRequests extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|unique:majors,name,'.$this->id
+            'name' => 'string|unique:majors,name,'.$this->major_id,
+            'teacher_email' => 'email',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'name.min' => 'Tên chuyên ngành phải lớn hơn 3 ký tự',
+            'name.max' => 'Tên chuyên ngành phải nhỏ hơn 100 ký tự',
+            'name.unique' => 'Chuyên ngành đã tồn tại',
+
+            'teacher_email.string' => 'Email giáo viên không đúng định dạng',
         ];
     }
 }

@@ -36,4 +36,14 @@ class Subject extends Model
             ]
         ];
     }
+
+    public function major()
+    {
+        return $this->belongsTo(Major::class, 'major_id');
+    }
+
+    public function classrooms()
+    {
+        return $this->hasMany(Classroom::class, 'subject_id');
+    }
 }

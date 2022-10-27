@@ -4,13 +4,17 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Services\AttendanceServices;
+use App\Services\ClassroomServices;
+use App\Services\LessonServices;
 use Illuminate\Http\Request;
 
 class AttendanceController extends Controller
 {
     private $attendanceServices;
 
-    public function __construct(AttendanceServices $attendanceServices)
+    public function __construct(
+        AttendanceServices $attendanceServices,
+    )
     {
         $this->attendanceServices = $attendanceServices;
     }
@@ -23,31 +27,27 @@ class AttendanceController extends Controller
         ]);
     }
 
-    public function getListAttendance(Request $request)
+    public function attendanceDetail(request $request)
     {
-        $attendances = $this->attendanceServices->getListAttendance($request->classroom_id);
-
-        if (count($attendances) == 0) {
-            return response ([
-                'message' => 'Chưa đến thời gian điểm danh'
-            ], 400);
-        }
+        $lesson = $request->get('lesson');
+        $attendances = $this->attendanceServices->getDataByLesson($lesson);
 
         return response([
-            'data' => $attendances
+            'data' => $attendances,
+            'lesson' => $lesson
         ], 200);
     }
 
     public function update(Request $request)
     {
-        $updated = $this->attendanceServices->update($request->classroom_id, $request->data);
+        $updated = $this->attendanceServices->update($request->lesson_id, $request->data);
 
         if (!$updated) {
             return response([
                 'message' => 'Chưa đến thời gian điểm danh'
             ], 400);
         }
-        
+
         return response([
             'message' => 'Cập nhật điểm danh thành công'
         ], 200);

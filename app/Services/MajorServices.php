@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Services;
 
@@ -8,12 +8,7 @@ class MajorServices
 {
     public function getAll()
     {
-        return Major::paginate(DEFAULT_PAGINATE);
-    }
-
-    public function show($id)
-    {
-        return Major::find($id);
+        return Major::with('subjects')->get();
     }
 
     public function create($data)
@@ -21,15 +16,27 @@ class MajorServices
         return Major::create($data);
     }
 
-    public function update($data,$major)
+    public function update($data, $major)
     {
         return $major->update($data);
     }
 
-    public function destroy($id)
+    public function destroy($major_id)
     {
-        $major = Major::find($id);
+        $major = Major::where('id', $major_id)
+            ->withCount('subjects')
+            ->first();
+
+        if ($major->subject_count != 0) {
+            return response([
+                'message' => 'Chuyên ngành này đã có môn học, hãy xóa các môn học trong chuyên ngành trước'
+            ], 400);
+        }
+
         $major->delete();
-        return $major->trashed();
+
+        return response([
+            'message' => 'Xóa chuyên ngành thành công'
+        ], 200);
     }
 }

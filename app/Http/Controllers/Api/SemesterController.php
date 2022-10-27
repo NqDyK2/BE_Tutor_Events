@@ -37,43 +37,20 @@ class SemesterController extends Controller
         ],201);
     }
 
-    public function show(Request $request)
-    {
-        $semester = $request->get('semester');
-        return response([
-            'data' => $semester
-        ],201);
-    }
-    
     public function update(UpdateSemesterRequest $request)
     {
         $semester = $request->get('semester');
-        $semesterUpdate = $this->semesterServices->update($request->input(),$semester);
-        if($semesterUpdate)
-        {
-            return response([
-                'massage' => 'Cập nhật kỳ học thành công',
-            ],201);
-        }else {
-            return response([
-                'massage' => 'Cập nhật kỳ học thất bại'
-            ],400);
-        }
+        $this->semesterServices->update($request->input(),$semester);
+
+        return response([
+            'massage' => 'Cập nhật kỳ học thành công',
+        ],200);
     }
 
     public function destroy(Request $request)
     {
-        $semester = $request->get('semester');
-        $semesterDestroy = $this->semesterServices->destroy($semester);
+        $response = $this->semesterServices->destroy($request->semester_id);
 
-        if($semesterDestroy){
-            return response([
-                'massage' => 'Semester Delete Successfully'
-            ],201);
-        }else {
-            return response([
-                'massage' => 'Delete false'
-            ]);
-        }
+        return $response;
     }
 }

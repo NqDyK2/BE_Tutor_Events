@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class CheckLoginUser
+class CheckAdmin
 {
     /**
      * Handle an incoming request.
@@ -17,18 +17,11 @@ class CheckLoginUser
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::check()) {
-            if (Auth::user()->status == 2) {
-                return response([
-                    'message' => 'Tài khoản của bạn đã bị khóa !'
-                ], 404);
-            }
-            return $next($request);
-        }else {
+        if(Auth::user()->role_id != USER_ROLE_ADMIN){
             return response([
-                'message' => 'Bạn chưa đăng nhập !'
-            ], 404);
+                'message' => 'Bạn không có quyền thực hiện tác vụ này'
+            ], 403);
         }
-
+        return $next($request);
     }
 }

@@ -21,9 +21,9 @@ class ClassroomPolicy
         }
     }
 
-    public function checkOwnership($auth, $classroom)
+    public function teacherOfClass($auth, $classroom)
     {
-        if ($auth->email == $classroom->default_teacher_email && $auth->role_id == USER_ROLE_TEACHER) {
+        if ($auth->email == $classroom->default_teacher_email) {
             return true;
         }
         return false;

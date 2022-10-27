@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Jobs\InsertExcel\InsertUserFromExcelJob;
 use App\Services\ExcelServices;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class ExcelController extends Controller
 {
@@ -16,20 +17,20 @@ class ExcelController extends Controller
         $this->excelServices = $excelServices;
     }
 
-    public function import(Request $request) 
+    public function import(Request $request)
     {
-        $subject = $this->excelServices->requireSubjectImport($request->data);
-        $classrooms = $this->excelServices->requireClassroomsImport($subject, $request->semester_id);
+        $count = 0;
+        $classrooms = $this->excelServices->getListRequireClassroom($request->semester_id, $request->data);
 
         foreach ($request->data as $x) {
-            InsertUserFromExcelJob::dispatch($this->excelServices, [
-                "data" => $x,
-                "classrooms" => $classrooms,
-            ]);
+            if (array_key_exists(Str::slug($x['subject']), $classrooms)) {
+                ++$count;
+                InsertUserFromExcelJob::dispatch($x, $classrooms);
+            }
         }
 
         return response([
-            'message' => 'Import successfully'
+            'message' => 'Cập nhật thành công ' . $count . ' bản ghi'
         ], 200);
     }
 }

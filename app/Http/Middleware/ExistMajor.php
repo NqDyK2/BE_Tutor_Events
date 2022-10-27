@@ -17,7 +17,7 @@ class ExistMajor
      */
     public function handle(Request $request, Closure $next)
     {
-        $major = Major::find($request->id);
+        $major = Major::find($request->major_id);
 
         if($major === null) {
             return response([

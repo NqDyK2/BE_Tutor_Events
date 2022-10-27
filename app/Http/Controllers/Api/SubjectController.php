@@ -17,65 +17,32 @@ class SubjectController extends Controller
     public function __construct(SubjectServices $subjectServices)
     {
         $this->subjectServices = $subjectServices;
-
-    }
-
-    public function index()
-    {
-        $subject = $this->subjectServices->getAll();
-        return response([
-            'subject' => $subject
-        ],200);
     }
 
     public function store(CreateSubjectRequest $request)
     {
-        $subject = $this->subjectServices->create($request->input());
+        $this->subjectServices->create($request->input());
 
         return response([
-            'massage' => 'Subject create Successfully',
-        ],201);
-    }
-
-    public function show(Request $request)
-    {
-        $subject = $request->get('subject');
-
-        return response([
-            'data' => $subject
-        ],201);
+            'massage' => 'Tạo mới môn học thành công',
+        ], 201);
     }
 
     public function update(UpdateSubjectRequest $request)
     {
-        $sub = $request->get('subject');
-        $subject = $this->subjectServices->update($request->input(),$sub);
-        if($subject)
-        {
-            return response([
-                'massage' => 'Subject Update Successfully',
-            ],201);
-        }else {
-            return response([
-                'massage' => 'Update Subject False'
-            ],400);
-        }
+        $subject  = $request->get('subject');
+
+        $this->subjectServices->update($request->input(), $subject);
+
+        return response([
+            'massage' => 'Cập nhật môn học thành công',
+        ], 201);
     }
 
     public function destroy(Request $request)
     {
-        $sub = $request->get('subject');
-        $subject = $this->subjectServices->destroy($sub);
+        $response = $this->subjectServices->destroy($request->subject_id);
 
-        if($subject){
-            return response([
-                'massage' => 'Subject Delete Successfully'
-            ],201);
-        }else {
-            return response([
-                'massage' => 'Delete false'
-            ]);
-        }
-
+        return $response;
     }
 }

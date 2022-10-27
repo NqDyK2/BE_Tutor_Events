@@ -6,11 +6,6 @@ use App\Models\Subject;
 
 class SubjectServices
 {
-    public function getAll()
-    {
-        return Subject::paginate(DEFAULT_PAGINATE);
-    }
-
     public function create($data)
     {
         return Subject::create($data);
@@ -21,10 +16,22 @@ class SubjectServices
         return $subject->update($data);
     }
 
-    public function destroy($id)
+    public function destroy($subject_id)
     {
-        $subject = Subject::find($id);
-        $subject->delete();
-        return $subject->trashed();
+        $major = Subject::where('id', $subject_id)
+            ->withCount('classrooms')
+            ->first();
+
+        if ($major->classrooms_count != 0) {
+            return response([
+                'message' => 'Môn học này đã có lớp học, không thể xóa môn'
+            ], 400);
+        }
+
+        $major->delete();
+
+        return response([
+            'message' => 'Xóa môn học thành công'
+        ], 200);
     }
 }

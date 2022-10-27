@@ -94,8 +94,8 @@ class AttendanceServices
             Attendance::insert($array_attendances);
         }
 
-        $cc = Attendance::whereIn('student_email', $presentEmails)->update(["status" => true]);
-        Attendance::whereIn('student_email', $absentEmails)->update(["status" => false]);
+        $cc = Attendance::where('lesson_id', $lessonId)->whereIn('student_email', $presentEmails)->update(["status" => true]);
+        Attendance::where('lesson_id', $lessonId)->whereIn('student_email', $absentEmails)->update(["status" => false]);
         $lesson->attended = true;
         $lesson->save();
 

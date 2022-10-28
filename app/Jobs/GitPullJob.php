@@ -9,7 +9,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Symfony\Component\Process\Process;
-use Symfony\Component\Process\Exception\ProcessFailedException; 
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class GitPullJob implements ShouldQueue
 {
@@ -32,30 +32,6 @@ class GitPullJob implements ShouldQueue
      */
     public function handle()
     {
-        // $process = new Process(['git',  'pull'], '/home/ldt/Projects/BE_Tutor_Events'); 
-        // // $process->setWorkingDirectory('/home/ldt/Projects/BE_Tutor_Events');
-
-        // $process->run(); // executes after the command finishes 
-        
-        // if (!$process->isSuccessful()) { 
-        //     throw new ProcessFailedException($process); 
-        // } 
-        
-        // if (!$process->isSuccessful()) { 
-        //     throw new ProcessFailedException($process); 
-        // } 
-
-        // // $process->setCommandLine('sudo reboot -f'); //Set a new Command to the current process
-        // // $process->run();                            //Run this process again
-
-        // // if (!$process->isSuccessful()) {            //Executes after the command finishes
-        // //     throw new ProcessFailedException($process);
-        // // }
-
-        // echo $process->getOutput();
-        // die;
-
-
         $cmd = 'git pull';
         $cwd = base_path();
         $process = Process::fromShellCommandline($cmd, $cwd);
@@ -69,6 +45,6 @@ class GitPullJob implements ShouldQueue
         $process->setTimeout(null)
             ->run($captureOutput);
 
-            echo ($processOutput);
+        echo ($processOutput);
     }
 }

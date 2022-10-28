@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
-use App\Jobs\GitPullJob;
 use GuzzleHttp\Psr7\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,9 +20,3 @@ Route::get('add-token', [AuthController::class, 'storeToken']);
 Route::get('auth/get-url', [AuthController::class, 'index']);
 Route::get('auth/redirect', [AuthController::class, 'getUrl'])->name('getUrl');
 Route::get('auth/checkpoint', [AuthController::class, 'checkpoint']);
-
-Route::get('system/update', function ()
-{
-    $x = GitPullJob::dispatchSync();
-})->name('updateGit');
-

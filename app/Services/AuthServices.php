@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Classroom;
 use App\Models\Lesson;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -41,15 +42,17 @@ class AuthServices
         ]);
         if ($auth['role_id'] == 1) return $auth;
 
-        $isTeacher = Lesson::join('classrooms', 'classrooms.id', 'lessons.classroom_id')
-            ->join('semesters', 'semesters.id', 'classrooms.semester_id')
+        $isTeacher = Classroom::join('semesters', 'semesters.id', 'classrooms.semester_id')
             ->where('semesters.start_time', '<=', now())->where('semesters.end_time', '>=', now())
-            ->where('lessons.teacher_email', $auth['email'])
+            ->where('classrooms.default_teacher_email', $auth['email'])
             ->exists();
 
 
         if ($isTeacher) {
             $auth['role_id'] = 2;
+            Auth::user()->update([
+                'role_id' => 2
+            ]);
             return $auth;
         }
 
@@ -61,8 +64,15 @@ class AuthServices
 
         if ($isTutor) {
             $auth['role_id'] = 4;
+            Auth::user()->update([
+                'role_id' => 2
+            ]);
             return $auth;
         }
+
+        Auth::user()->update([
+            'role_id' => 3
+        ]);
 
         return $auth;
     }

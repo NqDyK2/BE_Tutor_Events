@@ -55,9 +55,9 @@ Route::prefix('semester')->group(function () {
         Route::put('{semester_id}/update', [SemesterController::class, 'update']);
         Route::delete('{semester_id}/delete', [SemesterController::class, 'destroy']);
         Route::post('{semester_id}/import', [ExcelController::class, 'import']);
-
-        Route::get('{semester_id}/classrooms', [ClassroomController::class, 'classroomsInSemester']);
     });
+
+    Route::get('{semester_id}/classrooms', [ClassroomController::class, 'classroomsInSemester'])->middleware(['existSemester']);
 });
 
 Route::prefix('classroom')->middleware('checkRoleTeacherOrAdmin')->group(function () {

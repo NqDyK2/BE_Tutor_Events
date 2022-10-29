@@ -12,17 +12,18 @@ class ClassroomController extends Controller
 {
     private $classroomServices;
 
-    public function __construct(ClassroomServices $classroomServices){
+    public function __construct(ClassroomServices $classroomServices)
+    {
         $this->classroomServices = $classroomServices;
     }
 
-    public function classroomsInSemester($id)
-{
-        $classroom = $this->classroomServices->classroomsInSemester($id);
+    public function classroomsInSemester($semester_id)
+    {
+        $classroom = $this->classroomServices->classroomsInSemester($semester_id);
 
         return response([
             'data' => $classroom
-        ],200);
+        ], 200);
     }
 
     public function store(CreateClassroomRequest $request)
@@ -32,12 +33,12 @@ class ClassroomController extends Controller
         if (!$created) {
             return response([
                 'message' => 'Lớp học này đã tồn tại'
-            ],400);
+            ], 400);
         }
 
         return response([
             'message' => 'Tạo lớp học thành công'
-        ],201);
+        ], 201);
     }
 
     public function update(UpdateClassroomRequest $request)
@@ -48,7 +49,7 @@ class ClassroomController extends Controller
 
         return response([
             'message' => 'Cập nhật lớp học thành công'
-        ],201);
+        ], 201);
     }
 
     public function destroy(Request $request)
@@ -68,7 +69,7 @@ class ClassroomController extends Controller
 
         return response([
             'data' => $classrooms,
-        ],200);
+        ], 200);
     }
 
     public function joinClass(Request $request)
@@ -77,6 +78,6 @@ class ClassroomController extends Controller
 
         return response([
             'message' => $joined ? 'Tham gia lớp học thành công' : 'Bạn không có trong danh sách lớp này',
-        ],200);
+        ], 200);
     }
 }

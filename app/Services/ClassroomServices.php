@@ -7,32 +7,36 @@ use App\Models\ClassStudent;
 use App\Models\Lesson;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use PhpParser\Node\Expr\Cast\String_;
 
 class ClassroomServices
 {
     public function classroomsInSemester($semester_id)
     {
-        return Classroom::select([
+        $auth = Auth::user();
+        $q =  Classroom::select([
             'classrooms.id',
             DB::raw('subjects.name as subject_name'),
             DB::raw('subjects.code as subject_code'),
             DB::raw('semesters.name as semester_name'),
-            DB::raw('classrooms.default_teacher_email as default_teacher_email'),
+            'classrooms.default_teacher_email',
         ])
             ->join('subjects', 'subjects.id', '=', 'classrooms.subject_id')
             ->join('semesters', 'semesters.id', '=', 'classrooms.semester_id')
             ->where('semester_id', $semester_id)
             ->withCount(['classStudents', 'lessons'])
-            ->orderBy('subjects.code', 'asc')
-            ->get();
+            ->orderBy('subjects.code', 'asc');
+
+        if ($auth->role_id != 1) {
+            $q->where('classrooms.default_teacher_email', $auth->email);
+        }
+        return $q->get();
     }
 
     public function store($data)
     {
         $existsClassroom = Classroom::where('semester_id', $data['semester_id'])
-        ->where('subject_id', $data['subject_id'])
-        ->exists();
+            ->where('subject_id', $data['subject_id'])
+            ->exists();
 
         if ($existsClassroom) return false;
 
@@ -41,15 +45,18 @@ class ClassroomServices
 
     public function update($data, $classroom)
     {
+        Lesson::where('classroom_id', $classroom->id)
+        ->where('attended', false)
+        ->update(['teacher_email' => $data['default_teacher_email']]);
         return $classroom->update($data);
     }
 
     public function destroy($classroom_id)
     {
         $extended = Classroom::where('id', $classroom_id)
-        ->whereHas('lessons', function ($q) {
-            $q->where('attended', true);
-        })->exists();
+            ->whereHas('lessons', function ($q) {
+                $q->where('attended', true);
+            })->exists();
 
         if ($extended) {
             return response([

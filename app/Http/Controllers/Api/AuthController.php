@@ -19,10 +19,9 @@ class AuthController extends Controller
 
     public function index()
     {
-        $tokens = DevTokens::all();
-        return view('auth.login', [
-            'tokens' => $tokens
-        ]);
+        return response([
+            "message" => "Mò vào tận đây thì bạn cũng đỉnh đấy!"
+        ], 200);
     }
 
     public function getAuthDetail()
@@ -34,17 +33,9 @@ class AuthController extends Controller
         ], 200);
     }
 
-    public function storeToken(Request $request)
-    {
-        DevTokens::create([
-            'token' => $request->token,
-            'desc' => $request->desc
-        ]);
-    }
-
     public function getUrl()
     {
-        return Socialite::driver('google')->redirect();
+        return Socialite::driver('google')->redirect()->getTargetUrl();
     }
 
     public function checkpoint()
@@ -53,10 +44,9 @@ class AuthController extends Controller
             $googleUser = Socialite::driver('google')->user();
 
             $token = $this->authServices->loginGoogle($googleUser);
-            return view('auth.redirect', [
+            return response([
                 'token' => $token
             ]);
-            // return redirect("http://localhost:3000/checkpoint?token=" . $token);
         }
         catch (\Exception $error) {
             return response([

@@ -35,7 +35,9 @@ class AuthController extends Controller
 
     public function getUrl()
     {
-        return Socialite::driver('google')->redirect()->getTargetUrl();
+        return response([
+            'url' => Socialite::driver('google')->redirect()->getTargetUrl()
+        ]);
     }
 
     public function checkpoint()
@@ -46,7 +48,7 @@ class AuthController extends Controller
             $token = $this->authServices->loginGoogle($googleUser);
             return response([
                 'token' => $token
-            ]);
+            ], 200);
         }
         catch (\Exception $error) {
             return response([

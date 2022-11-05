@@ -95,22 +95,21 @@ class CreateLessonRequest extends FormRequest
         return [
             'classroom_id.required' => 'Lớp học không được để trống',
 
-            'class_location.required' => 'Lớp học không được để trống',
-
             'start_time.required' => 'Thời gian bắt đầu không được để trống',
-            'start_time.date_format' => 'Thời gian bắt đầu không đúng định dạng',
-
+            'start_time.date' => 'Thời gian bắt đầu không đúng định dạng',
             'start_time.after' => 'Thời gian bắt đầu phải lớn hơn thời gian hiện tại',
 
             'end_time.required' => 'Thời gian kết thúc không được để trống',
-            'end_time.date_format' => 'Thời gian kết thúc không đúng định dạng',
+            'end_time.date' => 'Thời gian kết thúc không đúng định dạng',
             'end_time.after' => 'Thời gian kết thúc phải lớn hơn thời gian bắt đầu',
 
             'type.required' => 'Type không được để trống',
             'type.boolean' => 'Type không đúng định dạng',
 
-            'teacher_email.required' => 'Email giảng viên không được để trống',
+            'teacher_email.email' => 'Email giảng viên không được để trống',
             'tutor_email.email' => 'Email tutor không đúng định dạng',
+
+            'content.max' => 'Nội dung không được quá 200 ký tự',
         ];
     }
 }

@@ -85,28 +85,18 @@ class UpdateLessonRequest extends FormRequest
     public function messages()
     {
         return [
-            'classroom_id.required' => 'Id lớp học không được để trống',
-            'classroom_id.integer' => 'Id lớp học sai định dạng',
+            'start_time.date' => 'Thời gian bắt đầu không đúng định dạng',
+            'start_time.after' => 'Thời gian bắt đầu phải lớn hơn thời gian hiện tại',
 
-            'class_location_online.required' => 'Link học online không được để trống',
-            'class_location_online.url' => 'Link học online sai định dạng',
+            'end_time.date' => 'Thời gian kết thúc không đúng định dạng',
+            'start_time.after' => 'Thời gian ekest thúc phải lớn hơn thời gian bắt đầu',
 
-            'class_location_offline.required' => 'Lớp học không được để trống',
-
-            'start_time.required' => 'Thời gian bắt đầu không được để trống',
-            'start_time.date_format' => 'Thời gian bắt đầu không đúng định dạng',
-            'start_time.before' => 'Thời gian bắt đầu phải lớn hơn thời gian kết thúc',
-
-            'end_time.required' => 'Thời gian kết thúc không được để trống',
-            'end_time.date_format' => 'Thời gian kết thúc không đúng định dạng',
-
-            'type.required' => 'Type không được để trống',
-            'type.integer' => 'Type không đúng định dạng',
+            'type.boolean' => 'Type không đúng định dạng',
 
             'teacher_email.email' => 'Email giảng viên không đúng định dạng',
             'tutor_email.email' => 'Email tutor không đúng định dạng',
 
-            'document_path.url' => 'Link tài nguyên buổi học không đúng định dạng',
+            'content.max' => 'Nội dung không được quá 200 ký tự',
         ];
     }
 }

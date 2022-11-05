@@ -24,7 +24,7 @@ class CreateMajorRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|min:3|max:100|unique:majors,name',
+            'name' => 'required|min:3|max:100|unique:majors,name,NULL,id,deleted_at,NULL',
             'teacher_email' => 'email',
         ];
     }
@@ -37,7 +37,7 @@ class CreateMajorRequest extends FormRequest
             'name.max' => 'Tên chuyên ngành phải nhỏ hơn 100 ký tự',
             'name.unique' => 'Chuyên ngành đã tồn tại',
 
-            'teacher_email.string' => 'Email giáo viên không đúng định dạng',
+            'teacher_email.email' => 'Email giáo viên không đúng định dạng',
         ];
     }
 }

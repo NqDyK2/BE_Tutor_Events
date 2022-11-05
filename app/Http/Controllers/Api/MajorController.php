@@ -31,7 +31,7 @@ class MajorController extends Controller
         $this->majorServices->create($request->input());
 
         return response([
-            'massage' => 'Tạo mới chuyên ngành thành công',
+            'message' => 'Tạo mới chuyên ngành thành công',
         ], 201);
     }
 
@@ -42,7 +42,7 @@ class MajorController extends Controller
         $this->majorServices->update($request->input(), $major);
 
         return response([
-            'massage' => 'Cập nhật chuyên ngành thành công',
+            'message' => 'Cập nhật chuyên ngành thành công',
         ], 201);
     }
 

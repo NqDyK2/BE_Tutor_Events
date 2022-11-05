@@ -43,7 +43,7 @@ class SemesterController extends Controller
         $this->semesterServices->update($request->input(),$semester);
 
         return response([
-            'massage' => 'Cập nhật kỳ học thành công',
+            'message' => 'Cập nhật kỳ học thành công',
         ],200);
     }
 

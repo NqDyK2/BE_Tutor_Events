@@ -33,16 +33,10 @@ class LessonController extends Controller
     {
         $classroom = Classroom::find($request->classroom_id);
         $this->authorize('teacherOfClass', $classroom);
-        $lesson = $this->lessonServices->store($request->input());
-        if ($lesson) {
-            return response([
-                'message' => 'Create lesson successfully'
-            ],201);
-        }else{
-            return response([
-                'message' => 'Create lesson failed'
-            ],500);
-        }
+        $this->lessonServices->store($request->input());
+        return response([
+            'message' => 'Tạo buổi học thành công'
+        ],201);
     }
 
     public function update(UpdateLessonRequest $request)
@@ -50,16 +44,10 @@ class LessonController extends Controller
         $lesson = $request->get('lesson');
         $classroom = Classroom::find($request->classroom_id);
         $this->authorize('teacherOfClass', $classroom);
-        $lesson = $this->lessonServices->update($request->input(), $lesson);
-        if ($lesson) {
-            return response([
-                'message' => 'Update lesson successfully'
-            ],200);
-        }else{
-            return response([
-                'message' => 'Update lesson failed'
-            ],500);
-        }
+        $this->lessonServices->update($request->input(), $lesson);
+        return response([
+            'message' => 'Update lesson successfully'
+        ],200);
     }
 
     public function destroy(Request $request){

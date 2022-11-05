@@ -11,6 +11,11 @@ use Illuminate\Support\Facades\DB;
 
 class LessonServices
 {
+    private $mailService;
+    public function __construct(MailServices $mailService) {
+        $this->mailService = $mailService;
+    }
+
     public function lessonsInClassroom($classroomId)
     {
         $lesson = Lesson::select(
@@ -47,7 +52,18 @@ class LessonServices
 
     public function update($data, $lesson)
     {
-        return $lesson->update($data);
+        $students = $lesson->classroom->classStudents;
+        $content = 1;
+        $lesson->update($data);
+        foreach ($students as $key => $student) {
+            $this->mailService->sendEmail(
+                $student['student_email'],
+                $content,
+                'Lịch học đã được thay đổi',
+                'mail.change_lesson'
+            );
+        }
+        return true;
     }
 
     public function destroy($lesson_id)

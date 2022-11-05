@@ -20,14 +20,6 @@ class MailServices
     public function sendEmail($mailTo, $content, $subject, $view)
     {
         Mail::to($mailTo)->send(new SendMail($subject, $content, $view));
-        // if (count(Mail::failures()) > 0) {
-        //     foreach (Mail::failures() as $emailAddress) {
-        //         Log::error(__METHOD__ . ' - ' . __LINE__ . ' - Mail error: ' . $emailAddress);
-        //     }
-        //     return _error(null, __('message.mailFail'), HTTP_BAD_REQUEST);
-        // } else {
-        //     return _success(null, __('message.mailSuccess'), HTTP_SUCCESS);
-        // }
     }
 
 }

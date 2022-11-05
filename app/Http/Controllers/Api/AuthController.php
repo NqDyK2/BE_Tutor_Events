@@ -60,8 +60,8 @@ class AuthController extends Controller
         }
         catch (\Exception $error) {
             return response([
-                'message' => 'Login Error',
-            ], 500);
+                'message' => 'Đăng nhập thất bại là mẹ thành công',
+            ], 401);
         }
     }
 }

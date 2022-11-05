@@ -44,7 +44,7 @@ class UserController extends Controller
         $updated = $this->userServices->update($user, $request->all());
 
         return response([
-            'message' => $updated ? 'Update user successfully' : 'Update failled'
+            'message' => $updated ? 'Cập nhật tài khoản thành công' : 'Cập nhật tài khoản thất bại'
         ], $updated ? 200 : 409);
 
     }

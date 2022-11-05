@@ -42,7 +42,7 @@ class ClassStudentController extends Controller
     {
         $classStudent = $this->classStudentServices->store($request->input());
         return response([
-            'message' => 'Create Classroom successfully',
+            'message' => 'Thêm sinh viên thành công',
         ],201);
     }
 }

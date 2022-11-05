@@ -24,7 +24,7 @@ class SubjectController extends Controller
         $this->subjectServices->create($request->input());
 
         return response([
-            'massage' => 'Tạo mới môn học thành công',
+            'message' => 'Tạo mới môn học thành công',
         ], 201);
     }
 
@@ -35,7 +35,7 @@ class SubjectController extends Controller
         $this->subjectServices->update($request->input(), $subject);
 
         return response([
-            'massage' => 'Cập nhật môn học thành công',
+            'message' => 'Cập nhật môn học thành công',
         ], 201);
     }
 

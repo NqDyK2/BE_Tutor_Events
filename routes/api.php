@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\ClassroomController;
 use App\Http\Controllers\Api\ClassStudentController;
 use App\Http\Controllers\Api\ExcelController;
 use App\Http\Controllers\Api\LessonController;
+use App\Http\Controllers\Api\MailController;
 use App\Http\Controllers\Api\SubjectController;
 use App\Http\Controllers\Api\MajorController;
 use App\Models\Attendance;
@@ -96,4 +97,9 @@ Route::prefix('student')->group(function () {
     Route::get('schedule', [LessonController::class, 'studentSchedule']);
     Route::get('missing-classes', [ClassroomController::class, 'missingClasses']);
     Route::put('join-class/{classroom_id}', [ClassroomController::class, 'joinClass'])->middleware('existClassroom');
+});
+
+// Mail Api
+Route::prefix('mail')->group(function () {
+    Route::post('invite-class', [MailController::class, 'sendMailInvite']);
 });

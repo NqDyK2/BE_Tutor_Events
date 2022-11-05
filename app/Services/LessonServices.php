@@ -52,16 +52,37 @@ class LessonServices
 
     public function update($data, $lesson)
     {
-        $students = $lesson->classroom->classStudents;
-        $content = 1;
+        $checkTime = false;
+        if ($lesson->start_time != $data['start_time'] || $lesson->end_time != $data['end_time'] || $lesson->class_location != $data['class_location']) {
+            $user = Auth::user();
+            $content = [
+                'before_location' => $lesson->class_location,
+                'after_location' => $data['class_location'],
+
+                'before_date' => date('d-m-Y',strtotime($lesson->start_time)),
+                'before_start_time' => date('H:i',strtotime($lesson->start_time)),
+                'before_end_time' => date('H:i',strtotime($lesson->end_time)),
+
+                'after_date' => date('d-m-Y',strtotime($data['start_time'])),
+                'after_start_time' => date('H:i',strtotime($data['start_time'])),
+                'after_end_time' => date('H:i',strtotime($data['end_time'])),
+
+                'teacher_name' => $user->name,
+                'teacher_email' => $user->email
+            ];
+            $checkTime = true;
+        }
         $lesson->update($data);
-        foreach ($students as $key => $student) {
-            $this->mailService->sendEmail(
-                $student['student_email'],
-                $content,
-                'Lịch học đã được thay đổi',
-                'mail.change_lesson'
-            );
+        if ($checkTime) {
+            $students = $lesson->classroom->classStudents;
+            foreach ($students as $key => $student) {
+                $this->mailService->sendEmail(
+                    $student['student_email'],
+                    $content,
+                    'Lịch học đã được thay đổi',
+                    'mail.change_lesson'
+                );
+            }
         }
         return true;
     }

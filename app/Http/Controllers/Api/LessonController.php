@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Lesson\CreateLessonRequest;
 use App\Http\Requests\Lesson\UpdateLessonRequest;
 use App\Models\Classroom;
+use App\Services\BreadcrumbServices;
 use App\Services\ClassroomServices;
 use App\Services\LessonServices;
 use Illuminate\Http\Request;
@@ -13,20 +14,27 @@ use Illuminate\Http\Request;
 class LessonController extends Controller
 {
     private $lessonServices;
-    private $classroomServices;
+    private $breadcrumbServices;
 
-    public function __construct(LessonServices $lessonServices, ClassroomServices $classroomServices)
-    {
+    public function __construct(
+        LessonServices $lessonServices,
+        BreadcrumbServices $breadcrumbServices
+    ) {
         $this->lessonServices = $lessonServices;
-        $this->classroomServices = $classroomServices;
+        $this->breadcrumbServices = $breadcrumbServices;
     }
 
-    public function lessonsInClassroom($classroomId)
+    public function lessonsInClassroom(Request $request)
     {
+        $classroomId = $request->classroom_id;
+
         $lesson = $this->lessonServices->lessonsInClassroom($classroomId);
+        $tree = $this->breadcrumbServices->getByClassroom($classroomId);
+
         return response([
             'data' => $lesson,
-        ],200);
+            'tree' => $tree
+        ], 200);
     }
 
     public function store(CreateLessonRequest $request)
@@ -50,7 +58,8 @@ class LessonController extends Controller
         ],200);
     }
 
-    public function destroy(Request $request){
+    public function destroy(Request $request)
+    {
         $lesson = $request->get('lesson');
         $classroom = Classroom::find($lesson->classroom_id);
 
@@ -66,6 +75,6 @@ class LessonController extends Controller
         $lesson = $this->lessonServices->studentSchedule();
         return response([
             'data' => $lesson,
-        ],200);
+        ], 200);
     }
 }

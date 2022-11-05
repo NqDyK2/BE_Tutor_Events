@@ -4,17 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Services\AttendanceServices;
-use App\Services\ClassroomServices;
-use App\Services\LessonServices;
 use Illuminate\Http\Request;
 
 class AttendanceController extends Controller
 {
     private $attendanceServices;
 
-    public function __construct(
-        AttendanceServices $attendanceServices,
-    )
+    public function __construct(AttendanceServices $attendanceServices)
     {
         $this->attendanceServices = $attendanceServices;
     }

@@ -5,24 +5,29 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Classroom\CreateClassroomRequest;
 use App\Http\Requests\Classroom\UpdateClassroomRequest;
+use App\Services\BreadcrumbServices;
 use App\Services\ClassroomServices;
 use Illuminate\Http\Request;
 
 class ClassroomController extends Controller
 {
     private $classroomServices;
+    private $breadcrumbServices;
 
-    public function __construct(ClassroomServices $classroomServices)
+    public function __construct(ClassroomServices $classroomServices, BreadcrumbServices $breadcrumbServices)
     {
         $this->classroomServices = $classroomServices;
+        $this->breadcrumbServices = $breadcrumbServices;
     }
 
-    public function classroomsInSemester($semester_id)
+    public function classroomsInSemester(Request $request)
     {
-        $classroom = $this->classroomServices->classroomsInSemester($semester_id);
+        $semester = $request->get('semester');
+        $classroom = $this->classroomServices->classroomsInSemester($request->semester_id);
 
         return response([
-            'data' => $classroom
+            'data' => $classroom,
+            'tree' => $semester
         ], 200);
     }
 

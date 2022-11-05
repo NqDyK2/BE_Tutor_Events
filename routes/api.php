@@ -26,7 +26,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('auth/user', [AuthController::class, 'getAuthDetail']);
 
-
 // API FOR MANAGE
 Route::prefix('major')->group(function () {
     Route::get('get-all', [MajorController::class, 'index']);

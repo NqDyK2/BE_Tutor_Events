@@ -44,8 +44,9 @@ class UpdateLessonRequest extends FormRequest
                     }
                 },
             ],
-            'start_time' => 'date|after:now',
+            'start_time' => 'required|date|after:now',
             'end_time' => [
+                'required',
                 'date',
                 'after:start_time',
                 function ($attribute, $value, $fail) {
@@ -74,8 +75,8 @@ class UpdateLessonRequest extends FormRequest
                     }
                 },
             ],
-            'type' => 'boolean',
-            'teacher_email' => 'email',
+            'type' => 'required|boolean',
+            'teacher_email' => 'required|email',
             'tutor_email' => 'email',
             'content' => 'string|max:200',
             'note' => 'string',

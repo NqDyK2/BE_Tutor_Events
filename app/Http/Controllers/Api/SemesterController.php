@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Semester\CreateSemesterRequest;
 use App\Http\Requests\Semester\UpdateSemesterRequest;
+use App\Services\BreadcrumbServices;
 use App\Services\ExcelServices;
 use App\Services\SemesterServices;
 use Illuminate\Http\Request;
@@ -16,7 +17,7 @@ class SemesterController extends Controller
 {
     private $semesterServices;
 
-    public function __construct(SemesterServices $semesterServices,)
+    public function __construct(SemesterServices $semesterServices)
     {
         $this->semesterServices = $semesterServices;
     }

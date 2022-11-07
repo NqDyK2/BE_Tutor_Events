@@ -22,12 +22,12 @@ class ClassroomController extends Controller
 
     public function classroomsInSemester(Request $request)
     {
+        $semester = $request->get('semester');
         $classroom = $this->classroomServices->classroomsInSemester($request->semester_id);
-        $tree = $this->breadcrumbServices->getByClassroom($request->semester_id);
 
         return response([
             'data' => $classroom,
-            'tree' => $tree
+            'tree' => [$semester]
         ], 200);
     }
 

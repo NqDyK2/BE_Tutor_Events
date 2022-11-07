@@ -24,8 +24,8 @@ class CreateSubjectRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|min:3|max:100|unique:subjects,name,NULL,id,deleted_at,NULL',
-            'code' => 'required|min:3|max:100|unique:subjects,code,NULL,id,deleted_at,NULL',
+            'name' => 'required|min:3|max:100|unique:subjects,name',
+            'code' => 'required|min:3|max:100|unique:subjects,code',
             'major_id' => 'required|integer|exists:majors,id',
         ];
     }

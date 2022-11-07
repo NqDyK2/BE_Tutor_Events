@@ -90,7 +90,7 @@ class UpdateLessonRequest extends FormRequest
             'start_time.after' => 'Thời gian bắt đầu phải lớn hơn thời gian hiện tại',
 
             'end_time.date' => 'Thời gian kết thúc không đúng định dạng',
-            'start_time.after' => 'Thời gian ekest thúc phải lớn hơn thời gian bắt đầu',
+            'end_time.after' => 'Thời gian kết thúc phải lớn hơn thời gian bắt đầu',
 
             'type.boolean' => 'Type không đúng định dạng',
 

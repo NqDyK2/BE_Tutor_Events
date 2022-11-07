@@ -15,16 +15,19 @@ class BreadcrumbServices
             'id',
             'name',
         )
-        ->whereHas('classrooms', function($q) use ($classroomId) {
-            $q->where('id', $classroomId);
-        })
-        ->first();
+            ->whereHas('classrooms', function ($q) use ($classroomId) {
+                $q->where('id', $classroomId);
+            })
+            ->first();
         $tree[] = Classroom::select(
-            'id',
-            'name',
+            'classrooms.id',
+            DB::raw('subjects.name as name'),
+            'subjects.code',
+            DB::raw('subjects.id as subject_id'),
         )
-        ->where('id', $classroomId)
-        ->first();
+            ->join('subjects', 'subjects.id', '=', 'classrooms.subject_id')
+            ->where('classrooms.id', $classroomId)
+            ->first();
 
         return $tree;
     }
@@ -38,19 +41,24 @@ class BreadcrumbServices
             'id',
             'name',
         )
-        ->whereHas('lessons', function($q) use ($lessonId) {
-            $q->where('id', $lessonId);
-        })
-        ->first();
+            ->whereHas('lessons', function ($q) use ($lessonId) {
+                $q->where('id', $lessonId);
+            })
+            ->first();
 
         $tree[] = Classroom::select(
-            'id',
-            'name',
+            DB::raw('subjects.id as subject_id'),
+
+            DB::raw('subjects.name as name'),
+            'subjects.code',
+            'classrooms.id',
+            'classrooms.subject_id',
         )
-        ->whereHas('lessons', function($q) use ($lessonId) {
-            $q->where('id', $lessonId);
-        })
-        ->first();
+            ->join('subjects', 'subjects.id', '=', 'classrooms.subject_id')
+            ->whereHas('lessons', function ($q) use ($lessonId) {
+                $q->where('id', $lessonId);
+            })
+            ->first();
 
         $tree[] = $lesson->only(
             'id',

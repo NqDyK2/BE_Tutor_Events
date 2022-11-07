@@ -24,8 +24,8 @@ class UpdateSubjectRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'min:3|max:100|unique:subjects,name,' . $this->subject_id . ',id,deleted_at,NULL',
-            'code' => 'min:3|max:100|unique:subjects,code,' . $this->subject_id . ',id,deleted_at,NULL',
+            'name' => 'min:3|max:100|unique:subjects,name,' . $this->subject_id,
+            'code' => 'min:3|max:100|unique:subjects,code,' . $this->subject_id,
             'major_id' => 'integer|exists:majors,id',
         ];
     }

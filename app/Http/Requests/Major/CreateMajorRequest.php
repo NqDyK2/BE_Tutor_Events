@@ -24,7 +24,7 @@ class CreateMajorRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|min:3|max:100|unique:majors,name,NULL,id,deleted_at,NULL',
+            'name' => 'required|min:3|max:100|unique:majors,name',
             'teacher_email' => 'email',
         ];
     }

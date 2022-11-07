@@ -25,7 +25,7 @@ class UpdateSemesterRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'min:5|max:100|unique:semesters,name,' . $this->semester_id . ',id,deleted_at,NULL',
+            'name' => 'min:5|max:100|unique:semesters,name,' . $this->semester_id,
             'start_time' => 'date|before:end_time',
             'end_time' => [
                 'date',

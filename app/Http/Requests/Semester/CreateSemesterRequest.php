@@ -25,7 +25,7 @@ class CreateSemesterRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|min:5|max:100|unique:semesters|NULL,id,deleted_at,NULL',
+            'name' => 'required|min:5|max:100|unique:semesters',
             'start_time' => 'required|date|before:end_time',
             'end_time' => [
                 'required',

@@ -102,3 +102,7 @@ Route::prefix('student')->group(function () {
 Route::prefix('mail')->group(function () {
     Route::post('invite-class', [MailController::class, 'sendMailInvite']);
 });
+
+Route::prefix('teacher-tutor')->group(function () {
+    Route::get('schedule', [LessonController::class, 'teacherTutorSchedule']);
+});

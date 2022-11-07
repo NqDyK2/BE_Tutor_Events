@@ -130,6 +130,30 @@ class LessonServices
             ->get();
     }
 
+    public function teacherTutorSchedule()
+    {
+        $user = Auth::user();
+        return Lesson::select(
+            'subjects.name as subject_name',
+            'subjects.code as subject_code',
+            'lessons.start_time',
+            'lessons.end_time',
+            'lessons.type',
+            'lessons.class_location',
+            'lessons.teacher_email',
+            'lessons.tutor_email',
+            'lessons.content',
+            'lessons.note',
+        )
+        ->join('classrooms', 'classrooms.id', 'lessons.classroom_id')
+        ->join('subjects', 'subjects.id', 'classrooms.subject_id')
+        ->where('lessons.teacher_email', $user->email)
+        ->orWhere('lessons.tutor_email', $user->email)
+        ->where('lessons.start_time', '>=', date('Y-m-d'))
+        ->orderBy('lessons.start_time', 'ASC', 'lessons.end_time', 'ASC')
+        ->get();
+    }
+
     public function getAttendanceDetail($lessonId)
     {
         $lesson = Lesson::select()

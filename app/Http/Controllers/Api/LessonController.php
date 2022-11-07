@@ -77,4 +77,12 @@ class LessonController extends Controller
             'data' => $lesson,
         ], 200);
     }
+
+    public function teacherTutorSchedule()
+    {
+        $lesson = $this->lessonServices->teacherTutorSchedule();
+        return response([
+            'data' => $lesson,
+        ], 200);
+    }
 }

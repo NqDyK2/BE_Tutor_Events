@@ -29,7 +29,7 @@ class BreadcrumbServices
             ->where('classrooms.id', $classroomId)
             ->join('subjects', 'subjects.id', '=', 'classrooms.subject_id');
         })
-        ->get();
+        ->first();
     }
 
     public function getByLesson($lesson)

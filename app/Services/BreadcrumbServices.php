@@ -10,7 +10,7 @@ class BreadcrumbServices
 {
     public function getByClassroom($classroomId)
     {
-        return Semester::select(
+        $tree = Semester::select(
             'id',
             'name',
         )
@@ -30,6 +30,9 @@ class BreadcrumbServices
             ->join('subjects', 'subjects.id', '=', 'classrooms.subject_id');
         })
         ->first();
+
+        $tree->classrooms = $tree->classrooms[0];
+        return $tree;
     }
 
     public function getByLesson($lesson)
@@ -60,7 +63,9 @@ class BreadcrumbServices
             ->join('subjects', 'subjects.id', '=', 'classrooms.subject_id');
         })
         ->first();
-        $tree->classrooms[0]->lessons[0] = $lesson;
+        $tree->classrooms = $tree->classrooms[0];
+
+        $tree->classrooms->lessons[0] = $lesson;
         return $tree;
     }
 }

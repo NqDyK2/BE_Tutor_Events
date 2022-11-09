@@ -15,13 +15,9 @@ return new class extends Migration
     {
         Schema::create('classrooms', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
             $table->unsignedBigInteger('subject_id');
             $table->unsignedBigInteger('semester_id');
-            $table->string('default_offline_class_location')->nullable();
-            $table->string('default_online_class_location')->nullable();
             $table->string('default_teacher_email')->nullable();
-            $table->string('default_tutor_email')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

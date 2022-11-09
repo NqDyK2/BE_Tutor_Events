@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('', [AuthController::class, 'index']);
 Route::get('add-token', [AuthController::class, 'storeToken']);
-Route::get('auth/get-url', [AuthController::class, 'index']);
+Route::get('auth/get-url', [AuthController::class, 'getUrl']);
 Route::get('auth/redirect', [AuthController::class, 'getUrl'])->name('getUrl');
 Route::get('auth/checkpoint', [AuthController::class, 'checkpoint']);
 

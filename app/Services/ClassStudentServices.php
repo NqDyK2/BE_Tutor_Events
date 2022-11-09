@@ -32,16 +32,6 @@ Class ClassStudentServices
 
     public function store($data){
         $classroom = Classroom::find($data['classroom_id']);
-        $content = [
-            'classroom' => $classroom,
-            'teacher' => $classroom->user
-        ];
-        $this->mailService->sendEmail(
-            $data['user_email'],
-            $content,
-            'Thông báo siêu khẩn cấp',
-            'mail.contact'
-        );
         return ClassStudent::create($data);
     }
 

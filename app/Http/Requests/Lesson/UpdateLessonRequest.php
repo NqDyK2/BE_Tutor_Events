@@ -44,9 +44,8 @@ class UpdateLessonRequest extends FormRequest
                     }
                 },
             ],
-            'start_time' => 'required|date|after:now',
+            'start_time' => 'date|after:now',
             'end_time' => [
-                'required',
                 'date',
                 'after:start_time',
                 function ($attribute, $value, $fail) {

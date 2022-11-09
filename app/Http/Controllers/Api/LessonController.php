@@ -54,7 +54,7 @@ class LessonController extends Controller
         $this->authorize('teacherOfClass', $classroom);
         $this->lessonServices->update($request->input(), $lesson);
         return response([
-            'message' => 'Update lesson successfully'
+            'message' => 'Cập nhật buổi học thành công'
         ],200);
     }
 

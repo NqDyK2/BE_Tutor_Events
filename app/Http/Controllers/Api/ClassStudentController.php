@@ -19,7 +19,7 @@ class ClassStudentController extends Controller
         ClassStudentServices $classStudentServices,
         ClassroomServices $classroomServices,
         BreadcrumbServices $breadcrumbServices
-    ){
+    ) {
         $this->classStudentServices = $classStudentServices;
         $this->classroomServices = $classroomServices;
         $this->breadcrumbServices = $breadcrumbServices;
@@ -35,7 +35,7 @@ class ClassStudentController extends Controller
         return response([
             'data' => $students,
             'tree' => $tree
-        ],200);
+        ], 200);
     }
 
     public function update(ClassStudentRequest $request)
@@ -43,6 +43,6 @@ class ClassStudentController extends Controller
         $classStudent = $this->classStudentServices->store($request->input());
         return response([
             'message' => 'Thêm sinh viên thành công',
-        ],201);
+        ], 201);
     }
 }

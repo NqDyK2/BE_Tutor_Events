@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('student_email');
             $table->string('reason')->nullable();
             $table->boolean('final_result')->nullable();
+            $table->boolean('is_joined')->default(false);
             $table->timestamps();
         });
     }

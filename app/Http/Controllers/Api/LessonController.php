@@ -44,7 +44,7 @@ class LessonController extends Controller
         $this->lessonServices->store($request->input());
         return response([
             'message' => 'Tạo buổi học thành công'
-        ],201);
+        ], 201);
     }
 
     public function update(UpdateLessonRequest $request)
@@ -54,8 +54,8 @@ class LessonController extends Controller
         $this->authorize('teacherOfClass', $classroom);
         $this->lessonServices->update($request->input(), $lesson);
         return response([
-            'message' => 'Update lesson successfully'
-        ],200);
+            'message' => 'Cập nhật buổi học thành công'
+        ], 200);
     }
 
     public function destroy(Request $request)

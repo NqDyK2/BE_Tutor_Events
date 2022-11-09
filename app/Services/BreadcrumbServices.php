@@ -11,13 +11,9 @@ class BreadcrumbServices
     public function getByClassroom($classroomId)
     {
         $tree = [];
-        $tree[] = Semester::select(
-            'id',
-            'name',
-        )
-            ->whereHas('classrooms', function ($q) use ($classroomId) {
-                $q->where('id', $classroomId);
-            })
+        $tree[] = Semester::whereHas('classrooms', function ($q) use ($classroomId) {
+            $q->where('id', $classroomId);
+        })
             ->first();
         $tree[] = Classroom::select(
             'classrooms.id',
@@ -37,13 +33,9 @@ class BreadcrumbServices
         $lessonId = $lesson->id;
         $tree = [];
 
-        $tree[] = Semester::select(
-            'id',
-            'name',
-        )
-            ->whereHas('lessons', function ($q) use ($lessonId) {
-                $q->where('id', $lessonId);
-            })
+        $tree[] = Semester::whereHas('lessons', function ($q) use ($lessonId) {
+            $q->where('id', $lessonId);
+        })
             ->first();
 
         $tree[] = Classroom::select(

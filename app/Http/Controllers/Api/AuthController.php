@@ -19,6 +19,10 @@ class AuthController extends Controller
 
     public function index()
     {
+        return response([
+            "message" => "Working..."
+        ], 200);
+
         $tokens = DevTokens::all();
         return view('auth.login', [
             'tokens' => $tokens
@@ -52,13 +56,13 @@ class AuthController extends Controller
         try {
             $googleUser = Socialite::driver('google')->user();
 
+            return redirect(env('FRONTEND_URL') . "/checkpoint?token=" . $token);
+
             $token = $this->authServices->loginGoogle($googleUser);
             return view('auth.redirect', [
                 'token' => $token
             ]);
-            // return redirect("http://localhost:3000/checkpoint?token=" . $token);
-        }
-        catch (\Exception $error) {
+        } catch (\Exception $error) {
             return response([
                 'message' => 'Đăng nhập thất bại là mẹ thành công',
             ], 401);

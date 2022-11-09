@@ -27,7 +27,7 @@ class MajorServices
             ->withCount('subjects')
             ->first();
 
-        if ($major->subject_count != 0) {
+        if ($major->subjects_count != 0) {
             return response([
                 'message' => 'Chuyên ngành này đã có môn học, hãy xóa các môn học trong chuyên ngành trước'
             ], 400);

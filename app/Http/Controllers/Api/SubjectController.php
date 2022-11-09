@@ -24,7 +24,7 @@ class SubjectController extends Controller
         $this->subjectServices->create($request->input());
 
         return response([
-            'message' => 'Tạo mới môn học thành công',
+            'message' => 'Tạo môn học thành công',
         ], 201);
     }
 

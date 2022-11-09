@@ -16,14 +16,15 @@ return new class extends Migration
         Schema::create('lessons', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('classroom_id');
-            $table->integer('type')->default('1');
             $table->string('content')->nullable();
             $table->string('teacher_email')->nullable();
             $table->string('tutor_email')->nullable();
             $table->dateTime('start_time')->nullable();
             $table->dateTime('end_time')->nullable();
-            $table->string('class_location_offline')->nullable();
-            $table->string('class_location_online')->nullable();
+            $table->integer('type')->default('1');
+            $table->string('class_location')->nullable();
+            $table->text('note')->nullable();
+            $table->boolean('attended')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

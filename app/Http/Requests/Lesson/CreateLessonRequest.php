@@ -83,7 +83,7 @@ class CreateLessonRequest extends FormRequest
                 },
             ],
             'type' => 'required|boolean',
-            'teacher_email' => 'required|email',
+            'teacher_email' => 'email',
             'tutor_email' => 'email',
             'content' => 'string|max:200',
             'note' => 'string',

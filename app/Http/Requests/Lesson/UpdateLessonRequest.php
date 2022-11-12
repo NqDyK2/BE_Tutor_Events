@@ -27,6 +27,7 @@ class UpdateLessonRequest extends FormRequest
     public function rules()
     {
         return [
+            'nullable',
             'class_location' => [
                 function ($attribute, $value, $fail) {
                     $isExistsAnother = Lesson::where('class_location', $value)
@@ -44,8 +45,9 @@ class UpdateLessonRequest extends FormRequest
                     }
                 },
             ],
-            'start_time' => 'date|after:now',
+            'start_time' => 'nullable|date|after:now',
             'end_time' => [
+                'nullable',
                 'date',
                 'after:start_time',
                 function ($attribute, $value, $fail) {
@@ -76,9 +78,9 @@ class UpdateLessonRequest extends FormRequest
             ],
             'type' => 'required|boolean',
             'teacher_email' => 'required|email',
-            'tutor_email' => 'email',
-            'content' => 'string|max:200',
-            'note' => 'string',
+            'tutor_email' => 'nullable|email',
+            'content' => 'nullable|max:200',
+            'note' => 'nullable',
         ];
     }
 

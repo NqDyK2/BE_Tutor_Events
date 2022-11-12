@@ -26,7 +26,7 @@ class CreateClassroomRequest extends FormRequest
         return [
             'subject_id' => 'required|exists:subjects,id',
             'semester_id' => 'required|exists:semesters,id',
-            'default_teacher_email' => 'email',
+            'default_teacher_email' => 'nullable|email',
         ];
     }
 

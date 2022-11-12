@@ -25,7 +25,7 @@ class UpdateMajorRequests extends FormRequest
     {
         return [
             'name' => 'min:3|max:100|unique:majors,name,' . $this->major_id,
-            'teacher_email' => 'email',
+            'teacher_email' => 'nullable|email',
         ];
     }
 

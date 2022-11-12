@@ -24,7 +24,7 @@ class UpdateClassroomRequest extends FormRequest
     public function rules()
     {
         return [
-            'default_teacher_email' => 'email',
+            'default_teacher_email' => 'nullable|email',
         ];
     }
 

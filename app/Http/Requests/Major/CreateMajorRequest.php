@@ -25,7 +25,7 @@ class CreateMajorRequest extends FormRequest
     {
         return [
             'name' => 'required|min:3|max:100|unique:majors,name',
-            'teacher_email' => 'email',
+            'teacher_email' => 'nullable|email',
         ];
     }
 

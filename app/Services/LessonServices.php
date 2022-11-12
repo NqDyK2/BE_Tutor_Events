@@ -125,8 +125,8 @@ class LessonServices
             ->leftJoin('lessons', 'classrooms.id', 'lessons.classroom_id')
             ->where('class_students.student_email', Auth::user()->email)
             ->where('class_students.is_joined', true)
-            ->where('lessons.start_time', '>=', date('Y-m-d'))
-            ->orderBy('lessons.start_time', 'ASC', 'lessons.end_time', 'ASC')
+            ->where('lessons.end_time', '>=', date('Y-m-d'))
+            ->orderBy('lessons.end_time', 'ASC', 'lessons.end_time', 'ASC')
             ->get();
     }
 
@@ -149,8 +149,8 @@ class LessonServices
         ->join('subjects', 'subjects.id', 'classrooms.subject_id')
         ->where('lessons.teacher_email', $user->email)
         ->orWhere('lessons.tutor_email', $user->email)
-        ->where('lessons.start_time', '>=', date('Y-m-d'))
-        ->orderBy('lessons.start_time', 'ASC', 'lessons.end_time', 'ASC')
+        ->where('lessons.end_time', '>=', date('Y-m-d'))
+        ->orderBy('lessons.end_time', 'ASC', 'lessons.end_time', 'ASC')
         ->get();
     }
 

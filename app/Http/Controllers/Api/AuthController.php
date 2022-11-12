@@ -56,9 +56,9 @@ class AuthController extends Controller
         try {
             $googleUser = Socialite::driver('google')->user();
 
-            return redirect(env('FRONTEND_URL') . "/checkpoint?token=" . $token);
-
             $token = $this->authServices->loginGoogle($googleUser);
+
+            return redirect(env('FRONTEND_URL') . "/checkpoint?token=" . $token);
             return view('auth.redirect', [
                 'token' => $token
             ]);

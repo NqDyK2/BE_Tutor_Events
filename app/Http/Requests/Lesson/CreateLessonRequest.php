@@ -37,6 +37,7 @@ class CreateLessonRequest extends FormRequest
                 },
             ],
             'class_location' => [
+                'nullable',
                 function ($attribute, $value, $fail) {
                     $isExistsAnother = Lesson::where('class_location', $value)
                         ->where(function ($q) {
@@ -83,10 +84,10 @@ class CreateLessonRequest extends FormRequest
                 },
             ],
             'type' => 'required|boolean',
-            'teacher_email' => 'email',
-            'tutor_email' => 'email',
-            'content' => 'string|max:200',
-            'note' => 'string',
+            'teacher_email' => 'nullable|email',
+            'tutor_email' => 'nullable|email',
+            'content' => 'nullable|max:200',
+            'note' => 'nullable',
         ];
     }
 

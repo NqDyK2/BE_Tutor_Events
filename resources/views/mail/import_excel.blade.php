@@ -7,8 +7,8 @@
     <title>Change Lesson</title>
 </head>
 <body>
-    <h2>Bạn vừa vừa được giáo viên {{$content['teacher']}} thêm lớp phụ đạo</h2>
-    <table border="1">
+    <p>Bạn vừa được giáo viên {{$content['teacher']}} thêm lớp phụ đạo, hãy truy cập vào <a href="https://tutor.fpoly.tech/">https://tutor.fpoly.tech/</a> để theo dõi lịch học</p>
+    {{-- <table border="1">
         <thead>
             <tr>
                 <th colspan="5">Chi tiết lớp học</th>
@@ -30,6 +30,6 @@
                 <td>{{$content['start_time_semester']}} đến {{$content['end_time_semester']}}</td>
             </tr>
         </tbody>
-    </table>
+    </table> --}}
 </body>
 </html>

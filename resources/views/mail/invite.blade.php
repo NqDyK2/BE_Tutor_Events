@@ -5,20 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-    <link rel="stylesheet" href="{{ asset('mail.css') }}">
 </head>
 <body>
     <h2>Hiện tại bạn đang vắng mặt buổi học này, mời bạn tham buổi học <br><br>
         Giảng viên: {{$content['teacher_email']}} <br><br>
         Trợ giảng: {{$content['tutor_email']}}</h2>
-    <table class="container">
+    <table border="1">
         <thead>
             <tr>
                 <th></th>
-                <th><h1>Nội dung</h1></th>
-                <th><h1>Hình thức</h1></th>
-                <th><h1>Thời gian</h1></th>
-                <th><h1>Phòng học</h1></th>
+                <th>Nội dung</th>
+                <th>Hình thức</th>
+                <th>Thời gian</th>
+                <th>Phòng học</th>
             </tr>
         </thead>
         <tbody>

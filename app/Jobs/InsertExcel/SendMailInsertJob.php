@@ -37,26 +37,26 @@ class SendMailInsertJob implements ShouldQueue
      */
     public function handle()
     {
-        $subject = Subject::where('code', $this->x['subject'])->first();
-        $major = Major::where('id', $subject->major_id)->first();
-        $classrooms = $subject->classrooms;
-        foreach ($classrooms as $key => $classroom) {
-            $semester_id = $classroom->semester_id;
-        }
-        $semester = Semester::where('id', $semester_id)->first();
+        // $subject = Subject::where('code', $this->x['subject'])->first();
+        // $major = Major::where('id', $subject->major_id)->first();
+        // $classrooms = $subject->classrooms;
+        // foreach ($classrooms as $key => $classroom) {
+        //     $semester_id = $classroom->semester_id;
+        // }
+        // $semester = Semester::where('id', $semester_id)->first();
         $content = [
             'teacher' => Auth::user()->name,
-            'name_subject' => $subject->name,
-            'code_subject' => $subject->code,
-            'name_semester' => $semester->name,
-            'name_major' => $major->name,
-            'start_time_semester' => date('d-m-Y',strtotime($semester->start_time)),
-            'end_time_semester' => date('d-m-Y',strtotime($semester->end_time)),
+            // 'name_subject' => $subject->name,
+            // 'code_subject' => $subject->code,
+            // 'name_semester' => $semester->name,
+            // 'name_major' => $major->name,
+            // 'start_time_semester' => date('d-m-Y',strtotime($semester->start_time)),
+            // 'end_time_semester' => date('d-m-Y',strtotime($semester->end_time)),
         ];
         $this->mailService->sendEmail(
             $this->x['student_email'],
             $content,
-            'Thông báo về lớp học',
+            'Bạn vừa được thêm vào lớp học',
             'mail.import_excel'
         );
     }

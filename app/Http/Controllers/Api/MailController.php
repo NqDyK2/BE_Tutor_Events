@@ -50,7 +50,7 @@ class MailController extends Controller
         ]));
 
         return response([
-            "message" => "Đã gửi mail tới " . $request->only(['student_email'])
+            "message" => "Đã gửi mail tới " . $request->student_email
         ], 200);
     }
 }

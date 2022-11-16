@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Jobs\InsertExcel\InsertUserFromExcelJob;
 use App\Jobs\InsertExcel\SendMailInsertJob;
+use App\Models\ClassStudent;
 use App\Services\ExcelServices;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -29,8 +30,13 @@ class ExcelController extends Controller
         foreach ($request->data as $x) {
             if (array_key_exists(Str::slug($x['subject']), $classrooms)) {
                 ++$count;
+                $classStudent = ClassStudent::where('student_email',$x['student_email'])
+                ->where('classroom_id',$classrooms[Str::slug($x['subject'])])
+                ->exists();
                 InsertUserFromExcelJob::dispatch($x, $classrooms);
-                SendMailInsertJob::dispatch($x, $this->mailService);
+                if (!$classStudent) {
+                    SendMailInsertJob::dispatch($x, $this->mailService);
+                }
             }
         }
 

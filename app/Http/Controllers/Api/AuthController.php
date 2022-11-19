@@ -48,7 +48,10 @@ class AuthController extends Controller
 
     public function getUrl()
     {
-        return Socialite::driver('google')->redirect();
+        $url =  Socialite::driver('google')->redirect()->getTargetUrl();
+        return response([
+            "url" => $url
+        ], 200);
     }
 
     public function checkpoint()
@@ -58,13 +61,13 @@ class AuthController extends Controller
 
             $token = $this->authServices->loginGoogle($googleUser);
 
-            return redirect(env('FRONTEND_URL') . "/checkpoint?token=" . $token);
-            return view('auth.redirect', [
+            return response([
                 'token' => $token
-            ]);
+            ], 200);
+
         } catch (\Exception $error) {
             return response([
-                'message' => 'Đăng nhập thất bại là mẹ thành công',
+                'message' => 'Đăng nhập thất bại, thử lại sau ít phút',
             ], 401);
         }
     }

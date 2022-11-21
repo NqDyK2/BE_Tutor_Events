@@ -22,16 +22,16 @@ class ClassroomServices
         ])
             ->join('subjects', 'subjects.id', '=', 'classrooms.subject_id')
             ->join('semesters', 'semesters.id', '=', 'classrooms.semester_id')
-            ->join('lessons', 'lessons.classroom_id', '=', 'classrooms.id')
             ->where('semester_id', $semester_id)
             ->withCount(['classStudents', 'lessons'])
             ->orderBy('subjects.code', 'asc');
 
         if ($auth->role_id != 1) {
             $q->where('classrooms.default_teacher_email', $auth->email)
+                ->leftJoin('lessons', 'lessons.classroom_id', '=', 'classrooms.id')
                 ->orWhere('lessons.teacher_email', $auth->email);
         }
-        return $q->get();
+        return $q->distinct()->get();
     }
 
     public function store($data)
@@ -48,8 +48,8 @@ class ClassroomServices
     public function update($data, $classroom)
     {
         Lesson::where('classroom_id', $classroom->id)
-            ->where('attended', false)
-            ->update(['teacher_email' => $data['default_teacher_email']]);
+        ->where('attended', false)
+        ->update(['teacher_email' => $data['default_teacher_email']]);
         return $classroom->update($data);
     }
 

@@ -5,7 +5,9 @@ namespace App\Services;
 use App\Jobs\Mail\SendMailAddTeacherJob;
 use App\Models\Classroom;
 use App\Models\ClassStudent;
+use App\Models\Feedback;
 use App\Models\Lesson;
+use App\Models\Semester;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -93,6 +95,46 @@ class ClassroomServices
 
         return response([
             'message' => 'Xóa lớp học thành công'
+        ], 200);
+    }
+
+    public function storeFeedback($data, $classroom)
+    {
+        $user = Auth::user();
+        $classStudent = ClassStudent::where('student_email', $user->email)
+            ->where('classroom_id', $classroom->id)
+            ->first();
+
+        if (!$classStudent) {
+            return response([
+                'message' => 'Sinh viên không có trong lớp học'
+            ], 400);
+        }
+
+        $feedback = Feedback::where('user_id', $user->id)->where('classroom_id', $classroom->id)->exists();
+        if ($feedback) {
+            return response([
+                'message' => 'Bạn đã đánh giá lớp học này'
+            ], 400);
+        }
+
+        $checkSemester = Semester::where('start_time', '<=', date('Y-m-d'))
+            ->where('id', $classroom->semester_id)
+            ->where('end_time', '>=', date('Y-m-d'))
+            ->exists();
+
+        if (!$checkSemester) {
+            return response([
+                'message' => 'Lớp học này không nằm trong kì học hiện tại'
+            ], 400);
+        }
+
+        $data['user_id'] = $user->id;
+        $data['classroom_id'] = $classroom->id;
+        Feedback::create($data);
+
+        return response([
+            'message' => 'Đánh giá lớp học thành công'
         ], 200);
     }
 }

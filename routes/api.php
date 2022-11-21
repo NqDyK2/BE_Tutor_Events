@@ -96,6 +96,7 @@ Route::prefix('student')->group(function () {
     Route::get('schedule', [ScheduleController::class, 'studentSchedule']);
     Route::get('history/{semester_id?}', [ScheduleController::class, 'studentScheduleHistory']);
     Route::get('missing-classes', [ScheduleController::class, 'missingClasses']);
+    Route::post('feedback/{classroom_id}', [ClassroomController::class, 'storeFeedback'])->middleware('existClassroom');
     Route::put('join-class/{classroom_id}', [ScheduleController::class, 'joinClass'])->middleware('existClassroom');
 });
 

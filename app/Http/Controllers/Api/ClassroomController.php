@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Classroom\CreateClassroomRequest;
 use App\Http\Requests\Classroom\UpdateClassroomRequest;
+use App\Http\Requests\Feedback\StoreFeedbackRequest;
+use App\Http\Requests\FeedbackClassroomRequest;
 use App\Services\BreadcrumbServices;
 use App\Services\ClassroomServices;
 use Illuminate\Http\Request;
@@ -64,6 +66,14 @@ class ClassroomController extends Controller
         $this->authorize('teacherOfClass', $classroom);
 
         $response = $this->classroomServices->destroy($classroom->id);
+
+        return $response;
+    }
+
+    public function storeFeedback(StoreFeedbackRequest $request)
+    {
+        $classroom = $request->get('classroom');
+        $response = $this->classroomServices->storeFeedback($request->input(), $classroom);
 
         return $response;
     }

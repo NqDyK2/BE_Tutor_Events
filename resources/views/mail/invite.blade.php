@@ -7,32 +7,25 @@
     <title>Document</title>
 </head>
 <body>
-    <h2>Hiện tại bạn đang vắng mặt buổi học này, mời bạn tham buổi học <br><br>
-        Giảng viên: {{$content['teacher_email']}} <br><br>
-        Trợ giảng: {{$content['tutor_email']}}</h2>
-    <table border="1">
-        <thead>
-            <tr>
-                <th></th>
-                <th>Nội dung</th>
-                <th>Hình thức</th>
-                <th>Thời gian</th>
-                <th>Phòng học</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Chi tiết thời gian buổi học</td>
-                <td>{{$content['content']}}</td>
-                <td>{{$content['type'] === 0 ? 'Online' : 'Offline'}}</td>
-                <td>{{$content['start_time']}} đến {{$content['end_time']}}</td>
-                <td>@if ($content['type'] === 0)
-                    <a href="{{$content['class_location']}}">Tại đây</a>
-                @else
-                    {{$content['class_location']}}
-                @endif</td>
-            </tr>
-        </tbody>
-    </table>
+    <b>Hệ thống Tutor FPT Polytechnic thông báo :</b><br>
+    
+    <p>Lớp học phụ đạo <b>{{ $mailData['subject']['name']}}</b> đang diễn ra. Hiện tại bạn đang vắng mặt buổi học này.</p>
+
+    <ul>
+        <li>Môn học: {{ $mailData['subject']['name']}}</li>
+        <li>Thời gian: {{  substr($mailData['lesson']['start_time'], 11, -3) }} đến {{  substr($mailData['lesson']['end_time'], 11, -3) }} ngày {{  date_format(date_create($mailData['lesson']['start_time']), "d/m/Y") }}</li>
+        <li>
+            Phòng học:
+            @if ($mailData['lesson']['type'] == 0)
+                <a href="{{ $mailData['lesson']['class_location'] }}">{{ $mailData['lesson']['class_location'] }}</a>
+            @else
+                {{ $mailData['lesson']['class_location'] }}
+            @endif
+        </li>
+    </ul>
+
+    <span>Vui lòng truy cập <a href="{{ env('FRONT_END_URL') }}">{{ env('FRONT_END_URL') }}</a> để theo dõi lịch học.</span>
+    <br>
+    <p>Trân trọng.</p>
 </body>
 </html>

@@ -7,30 +7,25 @@
     <title>Change Lesson</title>
 </head>
 <body>
-    <h2>Người chỉnh sửa buổi học: <a href="{{$content['teacher_email']}}">{{$content['teacher_name']}}</a></h2>
-    <table border="1">
-        <thead>
-            <tr>
-                <th></th>
-                <th>Ngày</th>
-                <th>Phòng học</th>
-                <th>Thời gian buổi học</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Chi tiết thời gian buổi học cũ</td>
-                <td>{{$content['before_date']}}</td>
-                <td>{{$content['before_location']}}</td>
-                <td>{{$content['before_start_time']}} đến {{$content['before_end_time']}}</td>
-            </tr>
-            <tr>
-                <td>Chi tiết thời gian buổi học mới</td>
-                <td>{{$content['after_date']}}</td>
-                <td>{{$content['after_location']}}</td>
-                <td>{{$content['after_start_time']}} đến {{$content['after_end_time']}}</td>
-            </tr>
-        </tbody>
-    </table>
+    <b>Hệ thống Tutor FPT Polytechnic thông báo :</b><br>
+    
+    <p>Lịch học phụ đạo môn <b>{{ $mailData['subject']['name']}}</b> đã được thay đổi. Thời gian buổi học mới:</p>
+
+    <ul>
+        <li>Môn học: {{ $mailData['subject']['name'] }}</li>
+        <li>Thời gian: {{ substr($mailData['lesson']['start_time'], 11, -3) }} đến {{ substr($mailData['lesson']['end_time'], 11, -3) }} ngày {{ date_format(date_create($mailData['lesson']['start_time']), "d/m/Y") }}</li>
+        <li>
+            Phòng học:
+            @if ($mailData['lesson']['type'] == 0)
+                <a href="{{ $mailData['lesson']['class_location'] }}">{{ $mailData['lesson']['class_location'] }}</a>
+            @else
+                {{ $mailData['lesson']['class_location'] }}
+            @endif
+        </li>
+    </ul>
+
+    <span>Vui lòng truy cập <a href="{{ env('FRONT_END_URL') }}">{{ env('FRONT_END_URL') }}</a> để theo dõi lịch học.</span>
+    <br>
+    <p>Trân trọng.</p>
 </body>
 </html>

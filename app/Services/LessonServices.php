@@ -12,7 +12,8 @@ use Illuminate\Support\Facades\DB;
 class LessonServices
 {
     private $mailService;
-    public function __construct(MailServices $mailService) {
+    public function __construct(MailServices $mailService)
+    {
         $this->mailService = $mailService;
     }
 
@@ -40,7 +41,8 @@ class LessonServices
                 'attendances as total_student',
                 'attendances as attended_count' => function ($query) {
                     $query->where('status', true);
-                }])
+                }
+            ])
             ->orderBy('lessons.start_time', 'ASC', 'lessons.end_time', 'ASC')->get();
         return $lesson;
     }
@@ -52,46 +54,43 @@ class LessonServices
 
     public function update($data, $lesson)
     {
-        $checkTime = false;
-        if ($lesson->start_time != $data['start_time'] || $lesson->end_time != $data['end_time'] || $lesson->class_location != $data['class_location']) {
-            $user = Auth::user();
-            $content = [
-                'before_location' => $lesson->class_location,
-                'after_location' => $data['class_location'],
+        $needSendMail = false;
 
-                'before_date' => date('d-m-Y',strtotime($lesson->start_time)),
-                'before_start_time' => date('H:i',strtotime($lesson->start_time)),
-                'before_end_time' => date('H:i',strtotime($lesson->end_time)),
-
-                'after_date' => date('d-m-Y',strtotime($data['start_time'])),
-                'after_start_time' => date('H:i',strtotime($data['start_time'])),
-                'after_end_time' => date('H:i',strtotime($data['end_time'])),
-
-                'teacher_name' => $user->name,
-                'teacher_email' => $user->email
-            ];
-            $checkTime = true;
+        if (
+            $lesson->start_time != $data['start_time']
+            || $lesson->end_time != $data['end_time']
+            || $lesson->class_location != $data['class_location']
+        ) {
+            $needSendMail = true;
         }
+
         $lesson->update($data);
-        if ($checkTime) {
+
+        if ($needSendMail) {
             $students = $lesson->classroom->classStudents;
-            foreach ($students as $key => $student) {
+            $subject = $lesson->classroom->subject;
+
+            foreach ($students as $student) {
                 $this->mailService->sendEmail(
                     $student['student_email'],
-                    $content,
                     'Lịch học đã được thay đổi',
-                    'mail.change_lesson'
+                    [
+                        'lesson' => $lesson->toArray(),
+                        'subject' => $subject->toArray(),
+                    ],
+                    'mail.change_lesson',
                 );
             }
         }
+
         return true;
     }
 
     public function destroy($lesson_id)
     {
         $extended = Lesson::where('id', $lesson_id)
-        ->where('attended', true)
-        ->exists();
+            ->where('attended', true)
+            ->exists();
 
         if ($extended) {
             return response([
@@ -145,19 +144,19 @@ class LessonServices
             'lessons.content',
             'lessons.note',
         )
-        ->join('classrooms', 'classrooms.id', 'lessons.classroom_id')
-        ->join('subjects', 'subjects.id', 'classrooms.subject_id')
-        ->where('lessons.teacher_email', $user->email)
-        ->orWhere('lessons.tutor_email', $user->email)
-        ->where('lessons.end_time', '>=', date('Y-m-d'))
-        ->orderBy('lessons.end_time', 'ASC', 'lessons.end_time', 'ASC')
-        ->get();
+            ->join('classrooms', 'classrooms.id', 'lessons.classroom_id')
+            ->join('subjects', 'subjects.id', 'classrooms.subject_id')
+            ->where('lessons.teacher_email', $user->email)
+            ->orWhere('lessons.tutor_email', $user->email)
+            ->where('lessons.end_time', '>=', date('Y-m-d'))
+            ->orderBy('lessons.end_time', 'ASC', 'lessons.end_time', 'ASC')
+            ->get();
     }
 
     public function getAttendanceDetail($lessonId)
     {
         $lesson = Lesson::select()
-        ->where()
-        ->with;
+            ->where()
+            ->with;
     }
 }

@@ -22,32 +22,26 @@ class MailController extends Controller
 
         if ($isSent) {
             return response([
-                "message" => "Đã gửi mail cho sinh viên này"
+                "message" => "Không được gửi mail 2 lần"
             ], 400);
         }
 
         $lesson = Lesson::where('id', $request->lesson_id)->first();
-        $content = [
-            'type' => $lesson->type,
-            'content' => $lesson->content,
-            'teacher_email' => $lesson->teacher_email,
-            'tutor_email' => $lesson->tutor_email,
-            'start_time' => date('H:i',strtotime($lesson->start_time)),
-            'end_time' => date('H:i',strtotime($lesson->end_time)),
-            'class_location' => $lesson->class_location,
+        $subject = $lesson->classroom->subject;
+
+        $mailData = [
+            'lesson' => $lesson->toArray(),
+            'subject' => $subject->toArray(),
         ];
 
         $this->mailService->sendEmail(
             $request->student_email,
-            $content,
-            'Thông báo buổi học ngày '. date('d-m-Y',strtotime($lesson->start_time)),
-            'mail.invite'
+            'Thông báo buổi học Tutor đang diễn ra',
+            $mailData,
+            'mail.invite',
         );
 
-        InvitedMail::create($request->only([
-            'student_email',
-            'lesson_id'
-        ]));
+        InvitedMail::create($request->input());
 
         return response([
             "message" => "Đã gửi mail tới " . $request->student_email

@@ -45,4 +45,9 @@ class Classroom extends Model
     {
         return $this->belongsTo(Semester::class, 'semester_id');
     }
+
+    public function subject()
+    {
+        return $this->belongsTo(Subject::class, 'subject_id');
+    }
 }

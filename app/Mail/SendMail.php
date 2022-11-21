@@ -11,7 +11,7 @@ class SendMail extends Mailable
 {
     use Queueable, SerializesModels;
     public $subject;
-    public $content;
+    public $mailData;
     public $view;
 
     /**
@@ -19,10 +19,10 @@ class SendMail extends Mailable
      *
      * @return void
      */
-    public function __construct($subject, $content, $view)
+    public function __construct($subject, $mailData, $view)
     {
         $this->subject = $subject;
-        $this->content = $content;
+        $this->mailData = $mailData;
         $this->view = $view;
     }
 

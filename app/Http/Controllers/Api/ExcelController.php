@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\InsertExcel\InsertUserFromExcelJob;
-use App\Jobs\InsertExcel\SendMailInsertJob;
+use App\Jobs\InsertExcel\SendMailImportJob;
 use App\Models\ClassStudent;
 use App\Services\ExcelServices;
 use Illuminate\Http\Request;
@@ -29,13 +29,15 @@ class ExcelController extends Controller
 
         foreach ($request->data as $x) {
             if (array_key_exists(Str::slug($x['subject']), $classrooms)) {
-                ++$count;
-                $classStudent = ClassStudent::where('student_email',$x['student_email'])
-                ->where('classroom_id',$classrooms[Str::slug($x['subject'])])
-                ->exists();
+                $count++;
+                $classStudent = ClassStudent::where('student_email', $x['student_email'])
+                    ->where('classroom_id', $classrooms[Str::slug($x['subject'])])
+                    ->exists();
+
                 InsertUserFromExcelJob::dispatch($x, $classrooms);
+
                 if (!$classStudent) {
-                    SendMailInsertJob::dispatch($x, $this->mailService);
+                    SendMailImportJob::dispatch($x, $this->mailService);
                 }
             }
         }

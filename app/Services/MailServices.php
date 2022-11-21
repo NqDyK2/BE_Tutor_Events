@@ -17,9 +17,9 @@ class MailServices
      * @param $subject - Subject of mail
      * @param $view - Name view template of mail
      */
-    public function sendEmail($mailTo, $content, $subject, $view)
+    public function sendEmail($mailTo, $subject, $data, $view)
     {
-        Mail::to($mailTo)->send(new SendMail($subject, $content, $view));
+        Mail::to($mailTo)->send(new SendMail($subject, $data, $view));
     }
 
 }

@@ -39,8 +39,8 @@ class InsertUserFromExcelJob implements ShouldQueue
     {
         $user = User::updateOrCreate([
             'email' => $this->user['student_email'],
-            'code' => $this->user['student_code'],
         ], [
+            'code' => $this->user['student_code'],
             'name' => $this->user['student_name'],
             'phone_number' => $this->user['student_phone'],
         ]);

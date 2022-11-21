@@ -27,9 +27,11 @@ class ClassroomServices
             ->orderBy('subjects.code', 'asc');
 
         if ($auth->role_id != 1) {
-            $q->where('classrooms.default_teacher_email', $auth->email);
+            $q->where('classrooms.default_teacher_email', $auth->email)
+                ->leftJoin('lessons', 'lessons.classroom_id', '=', 'classrooms.id')
+                ->orWhere('lessons.teacher_email', $auth->email);
         }
-        return $q->get();
+        return $q->distinct()->get();
     }
 
     public function store($data)

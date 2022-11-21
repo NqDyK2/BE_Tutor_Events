@@ -54,7 +54,7 @@ class ClassroomController extends Controller
 
         return response([
             'message' => 'Cập nhật lớp học thành công'
-        ], 201);
+        ], 200);
     }
 
     public function destroy(Request $request)

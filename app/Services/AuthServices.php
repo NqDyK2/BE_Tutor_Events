@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Classroom;
 use App\Models\Lesson;
+use App\Models\Semester;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
@@ -46,6 +47,15 @@ class AuthServices
             ->where('semesters.end_time', '>=', now())
             ->where('classrooms.default_teacher_email', $auth['email'])
             ->exists();
+
+        if (!$isTeacher) {
+            $isTeacher = Semester::
+            where('semesters.end_time', '>=', now())
+            ->whereHas('lessons', function ($q) {
+                return $q->where('teacher_email', Auth::user()->email);
+            })
+            ->exists();
+        }
 
         if ($isTeacher) {
             $auth['role_id'] = 2;

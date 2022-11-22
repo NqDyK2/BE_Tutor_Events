@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Jobs\InsertExcel;
+namespace App\Jobs\Mail;
 
 use App\Models\Lesson;
 use App\Models\Major;
 use App\Models\Semester;
 use App\Models\Subject;
 use App\Models\User;
+use App\Services\MailServices;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -21,16 +22,18 @@ class SendMailImportJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * Create a new job instance.
+     *  Send mail to student when they have been added to classroom.
+     *
+     * @param String $mailTo
+     *
+     * @param Array $dataImport
      *
      * @return void
      */
     private $dataImport;
-    private $mailService;
-    public function __construct($dataImport, $mailService)
+    public function __construct($dataImport)
     {
         $this->dataImport = $dataImport;
-        $this->mailService = $mailService;
     }
 
     /**
@@ -42,14 +45,13 @@ class SendMailImportJob implements ShouldQueue
     {
         try {
             $student = User::where('email', $this->dataImport['student_email'])->first();
-            $subject = Subject::where('code', strtoupper($this->dataImport['subject']))->first()->toArray();
-
+            $subject = Subject::where('code', strtoupper($this->dataImport['subject']))->first();
             $mailData = [
                 'student' => $student->toArray(),
                 'subject' => $subject->toArray(),
             ];
 
-            $this->mailService->sendEmail(
+            MailServices::sendEmail(
                 $this->dataImport['student_email'],
                 'Bạn vừa được thêm vào lớp Tutor',
                 $mailData,

@@ -24,7 +24,7 @@
         </li>
     </ul>
 
-    <span>Vui lòng truy cập <a href="{{ env('FRONT_END_URL') }}">{{ env('FRONT_END_URL') }}</a> để theo dõi lịch học.</span>
+    <span>Vui lòng truy cập <a href="{{ env('FRONT_END_URL') }}">{{ substr(env('FRONT_END_URL'), 8) }}</a> để theo dõi lịch học.</span>
     <br>
     <p>Trân trọng.</p>
 </body>

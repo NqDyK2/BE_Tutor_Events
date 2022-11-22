@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Mail\SendMailInviteRequest;
+use App\Jobs\Mail\SendMailInviteLesson;
 use App\Models\InvitedMail;
 use App\Models\Lesson;
 use App\Services\MailServices;
@@ -12,7 +13,8 @@ use Illuminate\Http\Request;
 class MailController extends Controller
 {
     private $mailService;
-    public function __construct(MailServices $mailService) {
+    public function __construct(MailServices $mailService)
+    {
         $this->mailService = $mailService;
     }
 
@@ -28,17 +30,12 @@ class MailController extends Controller
 
         $lesson = Lesson::where('id', $request->lesson_id)->first();
         $subject = $lesson->classroom->subject;
-
-        $mailData = [
-            'lesson' => $lesson->toArray(),
-            'subject' => $subject->toArray(),
-        ];
-
-        $this->mailService->sendEmail(
+        SendMailInviteLesson::dispatch(
             $request->student_email,
-            'Thông báo buổi học Tutor đang diễn ra',
-            $mailData,
-            'mail.invite',
+            [
+                'lesson' => $lesson->toArray(),
+                'subject' => $subject->toArray(),
+            ]
         );
 
         InvitedMail::create($request->input());

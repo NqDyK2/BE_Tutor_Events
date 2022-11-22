@@ -9,7 +9,7 @@
 <body>
     <b>Hệ thống Tutor FPT Polytechnic thông báo :</b><br>
 
-    <span>Bạn vừa được thêm làm giảng viên lớp phụ đạo <b>{{ $mailData['subject']['name'] }}</b>. Vui lòng truy cập <a href="{{ env('FRONT_END_URL') }}">{{ env('FRONT_END_URL') }}</a> để quản lý lớp học.</span>
+    <span>Bạn vừa được thêm làm giảng viên lớp phụ đạo <b>{{ $mailData['subject']['name'] }}</b>. Vui lòng truy cập <a href="{{ env('FRONT_END_URL') }}">{{ substr(env('FRONT_END_URL'), 8) }}</a> để quản lý lớp học.</span>
     <br>
     <p>Trân trọng.</p>
 </body>

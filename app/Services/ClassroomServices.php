@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Jobs\Mail\SendMailAddTeacherJob;
 use App\Models\Classroom;
 use App\Models\ClassStudent;
 use App\Models\Lesson;
@@ -50,17 +51,14 @@ class ClassroomServices
         if ($classroom) return false;
 
         $classroom = Classroom::create($data);
+        $subject = $classroom->subject;
 
         if (!empty($data['default_teacher_email'])) {
-            $subject = $classroom->subject;
-
-            $this->mailService->sendEmail(
+            SendMailAddTeacherJob::dispatch(
                 $data['default_teacher_email'],
-                'Bạn vừa được thêm làm giảng viên lớp Tutor',
                 [
                     'subject' => $subject,
-                ],
-                'mail.add_teacher_class'
+                ]
             );
         }
 
@@ -70,15 +68,11 @@ class ClassroomServices
     public function update($data, $classroom)
     {
         if (!empty($data['default_teacher_email']) && $data['default_teacher_email'] != $classroom->default_teacher_email) {
-            $subject = $classroom->subject;
-
-            $this->mailService->sendEmail(
+            SendMailAddTeacherJob::dispatch(
                 $data['default_teacher_email'],
-                'Bạn vừa được thêm làm giảng viên lớp Tutor',
                 [
-                    'subject' => $subject,
-                ],
-                'mail.add_teacher_class'
+                    'subject' => $classroom->subject,
+                ]
             );
         }
 

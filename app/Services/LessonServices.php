@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Jobs\Mail\SendMailChangeLessonJob;
 use App\Models\ClassStudent;
 use App\Models\Lesson;
 use App\Models\Semester;
@@ -71,14 +72,12 @@ class LessonServices
             $subject = $lesson->classroom->subject;
 
             foreach ($students as $student) {
-                $this->mailService->sendEmail(
+                SendMailChangeLessonJob::dispatch(
                     $student['student_email'],
-                    'Lịch học đã được thay đổi',
                     [
                         'lesson' => $lesson->toArray(),
                         'subject' => $subject->toArray(),
-                    ],
-                    'mail.change_lesson',
+                    ]
                 );
             }
         }

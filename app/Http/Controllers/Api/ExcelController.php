@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\InsertExcel\InsertUserFromExcelJob;
-use App\Jobs\InsertExcel\SendMailImportJob;
+use App\Jobs\Mail\SendMailImportJob as MailSendMailImportJob;
 use App\Models\ClassStudent;
 use App\Services\ExcelServices;
 use Illuminate\Http\Request;
@@ -26,6 +26,7 @@ class ExcelController extends Controller
     {
         $count = 0;
         $classrooms = $this->excelServices->getListRequireClassroom($request->semester_id, $request->data);
+        $userNotInClass = [];
 
         foreach ($request->data as $x) {
             if (array_key_exists(Str::slug($x['subject']), $classrooms)) {
@@ -34,16 +35,20 @@ class ExcelController extends Controller
                     ->where('classroom_id', $classrooms[Str::slug($x['subject'])])
                     ->exists();
 
-                InsertUserFromExcelJob::dispatch($x, $classrooms);
-
                 if (!$classStudent) {
-                    SendMailImportJob::dispatch($x, $this->mailService);
+                    $userNotInClass[] = $x;
                 }
+
+                InsertUserFromExcelJob::dispatch($x, $classrooms);
             }
         }
 
+        foreach ($userNotInClass as $x) {
+            MailSendMailImportJob::dispatch($x);
+        }
+
         return response([
-            'message' => 'Cập nhật thành công ' . $count . ' bản ghi'
+            'message' => $userNotInClass
         ], 200);
     }
 }

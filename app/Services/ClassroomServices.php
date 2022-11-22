@@ -10,6 +10,13 @@ use Illuminate\Support\Facades\DB;
 
 class ClassroomServices
 {
+    private $mailService;
+
+    public function __construct(MailServices $mailService)
+    {
+        $this->mailService = $mailService;
+    }
+
     public function classroomsInSemester($semester_id)
     {
         $auth = Auth::user();
@@ -36,20 +43,49 @@ class ClassroomServices
 
     public function store($data)
     {
-        $existsClassroom = Classroom::where('semester_id', $data['semester_id'])
+        $classroom = Classroom::where('semester_id', $data['semester_id'])
             ->where('subject_id', $data['subject_id'])
-            ->exists();
+            ->first();
 
-        if ($existsClassroom) return false;
+        if ($classroom) return false;
 
-        return Classroom::create($data);
+        $classroom = Classroom::create($data);
+
+        if (!empty($data['default_teacher_email'])) {
+            $subject = $classroom->subject;
+
+            $this->mailService->sendEmail(
+                $data['default_teacher_email'],
+                'Bạn vừa được thêm làm giảng viên lớp Tutor',
+                [
+                    'subject' => $subject,
+                ],
+                'mail.add_teacher_class'
+            );
+        }
+
+        return true;
     }
 
     public function update($data, $classroom)
     {
+        if (!empty($data['default_teacher_email']) && $data['default_teacher_email'] != $classroom->default_teacher_email) {
+            $subject = $classroom->subject;
+
+            $this->mailService->sendEmail(
+                $data['default_teacher_email'],
+                'Bạn vừa được thêm làm giảng viên lớp Tutor',
+                [
+                    'subject' => $subject,
+                ],
+                'mail.add_teacher_class'
+            );
+        }
+
         Lesson::where('classroom_id', $classroom->id)
-        ->where('attended', false)
-        ->update(['teacher_email' => $data['default_teacher_email']]);
+            ->where('attended', 0)
+            ->update(['teacher_email' => $data['default_teacher_email']]);
+
         return $classroom->update($data);
     }
 

@@ -49,13 +49,20 @@ class LessonServices
     {
         $needSendMail = false;
 
-        if (
-            $lesson->start_time != $data['start_time']
-            || $lesson->end_time != $data['end_time']
-            || $lesson->class_location != $data['class_location']
-        ) {
-            $needSendMail = true;
+        if ($lesson->attended) {
+            $data = array(
+                "content" => data_get($data, 'content')
+            );
+        } else {
+            if (
+                $lesson->start_time != $data['start_time']
+                || $lesson->end_time != $data['end_time']
+                || $lesson->class_location != $data['class_location']
+            ) {
+                $needSendMail = true;
+            }
         }
+
 
         $lesson->update($data);
 

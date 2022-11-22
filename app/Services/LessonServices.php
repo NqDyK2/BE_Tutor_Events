@@ -24,7 +24,6 @@ class LessonServices
             DB::raw('lessons.teacher_email as teacher_email'),
             DB::raw('lessons.tutor_email as tutor_email'),
             'lessons.content',
-            'lessons.note',
             'lessons.attended',
         )
             ->leftJoin('classrooms', 'classrooms.id', 'lessons.classroom_id')
@@ -115,7 +114,6 @@ class LessonServices
             'lessons.teacher_email',
             'lessons.tutor_email',
             'lessons.content',
-            'lessons.note',
         )
             ->join('classrooms', 'classrooms.id', 'class_students.classroom_id')
             ->join('subjects', 'subjects.id', 'classrooms.subject_id')
@@ -140,7 +138,6 @@ class LessonServices
             'lessons.teacher_email',
             'lessons.tutor_email',
             'lessons.content',
-            'lessons.note',
         )
             ->join('classrooms', 'classrooms.id', 'lessons.classroom_id')
             ->join('subjects', 'subjects.id', 'classrooms.subject_id')
@@ -149,12 +146,5 @@ class LessonServices
             ->where('lessons.end_time', '>=', date('Y-m-d'))
             ->orderBy('lessons.end_time', 'ASC', 'lessons.end_time', 'ASC')
             ->get();
-    }
-
-    public function getAttendanceDetail($lessonId)
-    {
-        $lesson = Lesson::select()
-            ->where()
-            ->with;
     }
 }

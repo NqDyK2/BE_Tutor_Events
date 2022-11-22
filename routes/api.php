@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\LessonController;
 use App\Http\Controllers\Api\MailController;
 use App\Http\Controllers\Api\SubjectController;
 use App\Http\Controllers\Api\MajorController;
+use App\Http\Controllers\Api\ScheduleController;
 use App\Models\Attendance;
 use Illuminate\Support\Facades\Route;
 
@@ -79,7 +80,6 @@ Route::prefix('lesson')->middleware('checkRoleTeacherOrAdmin')->group(function (
     });
 });
 
-
 // API FOR ATTENDANCE
 Route::prefix('attendance')->group(function () {
     Route::get('classrooms', [AttendanceController::class, 'getListClass']);
@@ -93,16 +93,16 @@ Route::prefix('attendance')->group(function () {
 
 // API FOR STUDENT
 Route::prefix('student')->group(function () {
-    Route::get('schedule', [LessonController::class, 'studentSchedule']);
-    Route::get('missing-classes', [ClassroomController::class, 'missingClasses']);
-    Route::put('join-class/{classroom_id}', [ClassroomController::class, 'joinClass'])->middleware('existClassroom');
+    Route::get('schedule', [ScheduleController::class, 'studentSchedule']);
+    Route::get('history/{semester_id?}', [ScheduleController::class, 'studentScheduleHistory']);
+    Route::get('missing-classes', [ScheduleController::class, 'missingClasses']);
+    Route::put('join-class/{classroom_id}', [ScheduleController::class, 'joinClass'])->middleware('existClassroom');
 });
 
-// Mail Api
-Route::prefix('mail')->group(function () {
-    Route::post('invite-class', [MailController::class, 'sendMailInvite']);
-});
-
+// API FOR TEACHER
 Route::prefix('teacher-tutor')->group(function () {
-    Route::get('schedule', [LessonController::class, 'teacherTutorSchedule']);
+    Route::get('schedule', [ScheduleController::class, 'teacherTutorSchedule']);
 });
+
+// API MAIL
+Route::post('mail/invite-class', [MailController::class, 'sendMailInvite'])->middleware('checkRoleTeacherOrAdmin');

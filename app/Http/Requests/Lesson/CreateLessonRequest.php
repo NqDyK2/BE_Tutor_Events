@@ -86,8 +86,7 @@ class CreateLessonRequest extends FormRequest
             'type' => 'required|boolean',
             'teacher_email' => 'nullable|email',
             'tutor_email' => 'nullable|email',
-            'content' => 'nullable|max:200',
-            'note' => 'nullable',
+            'content' => 'nullable|max:2000',
         ];
     }
 

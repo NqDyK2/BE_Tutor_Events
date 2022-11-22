@@ -6,8 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Subject\CreateSubjectRequest;
 use App\Http\Requests\Subject\UpdateSubjectRequest;
 use App\Services\SubjectServices;
-use App\Http\Controllers\Api\MajorController;
-use App\Services\MajorServices;
 use Illuminate\Http\Request;
 
 class SubjectController extends Controller

@@ -2,11 +2,8 @@
 
 namespace App\Services;
 
-use Illuminate\Http\Request;
 use App\Mail\SendMail;
 use Illuminate\Support\Facades\Mail;
-use Exception;
-use Illuminate\Support\Facades\Log;
 
 class MailServices
 {

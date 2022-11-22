@@ -18,17 +18,17 @@ class SubjectServices
 
     public function destroy($subject_id)
     {
-        $major = Subject::where('id', $subject_id)
+        $subject = Subject::where('id', $subject_id)
             ->withCount('classrooms')
             ->first();
 
-        if ($major->classrooms_count != 0) {
+        if ($subject->classrooms_count != 0) {
             return response([
-                'message' => 'Môn học này đã có lớp học, không thể xóa môn'
+                'message' => 'Môn học này đã có lớp học, hãy xóa các lớp trước'
             ], 400);
         }
 
-        $major->delete();
+        $subject->delete();
 
         return response([
             'message' => 'Xóa môn học thành công'

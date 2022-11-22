@@ -3,12 +3,8 @@
 namespace App\Services;
 
 use App\Models\Classroom;
-use App\Models\ClassStudent;
 use App\Models\Major;
-use App\Models\SchoolTeacher;
 use App\Models\Subject;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class ExcelServices

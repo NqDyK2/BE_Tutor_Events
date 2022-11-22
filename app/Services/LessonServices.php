@@ -5,19 +5,11 @@ namespace App\Services;
 use App\Jobs\Mail\SendMailChangeLessonJob;
 use App\Models\ClassStudent;
 use App\Models\Lesson;
-use App\Models\Semester;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 
 class LessonServices
 {
-    private $mailService;
-    public function __construct(MailServices $mailService)
-    {
-        $this->mailService = $mailService;
-    }
-
     public function lessonsInClassroom($classroomId)
     {
         $lesson = Lesson::select(
@@ -97,7 +89,7 @@ class LessonServices
             ], 400);
         }
 
-        Lesson::where('id', $lesson_id)->delete();
+        Lesson::findOrFail($lesson_id)->delete();
 
         return response([
             'message' => 'Xóa buổi học thành công'

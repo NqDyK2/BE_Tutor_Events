@@ -29,15 +29,22 @@ class ClassroomObserver
     }
 
     /**
-     * Handle the Classroom "trashed" event.
+     * Handle the Classroom "deleted" event.
      *
      * @param  \App\Models\Classroom  $classroom
      * @return void
      */
-    public function trashed(Classroom $classroom)
+    public function deleted(Classroom $classroom)
     {
-        $classroom->lessons()->delete();
-        $classroom->classStudents()->delete();
+        $lessons = $classroom->lessons;
+        foreach ($lessons as $lesson) {
+            $lesson->delete();
+        }
+
+        $students = $classroom->students;
+        foreach ($students as $student) {
+            $student->delete();
+        }
     }
 
     /**

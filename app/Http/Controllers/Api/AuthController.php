@@ -3,9 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\DevTokens;
 use App\Services\AuthServices;
-use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
@@ -22,11 +20,6 @@ class AuthController extends Controller
         return response([
             "message" => "Working..."
         ], 200);
-
-        $tokens = DevTokens::all();
-        return view('auth.login', [
-            'tokens' => $tokens
-        ]);
     }
 
     public function getAuthDetail()
@@ -36,14 +29,6 @@ class AuthController extends Controller
         return response([
             'data' => $user
         ], 200);
-    }
-
-    public function storeToken(Request $request)
-    {
-        DevTokens::create([
-            'token' => $request->token,
-            'desc' => $request->desc
-        ]);
     }
 
     public function getUrl()

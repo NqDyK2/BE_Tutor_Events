@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Lesson;
 
-use App\Models\Classroom;
 use App\Models\Lesson;
 use App\Models\Semester;
 use Illuminate\Foundation\Http\FormRequest;

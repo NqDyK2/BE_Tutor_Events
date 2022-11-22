@@ -96,7 +96,7 @@ class ClassroomServices
             ], 400);
         }
 
-        Classroom::where('id', $classroom_id)->delete();
+        Classroom::findOrFail($classroom_id)->delete();
 
         return response([
             'message' => 'Xóa lớp học thành công'

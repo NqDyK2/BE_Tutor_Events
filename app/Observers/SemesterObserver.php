@@ -29,22 +29,17 @@ class SemesterObserver
     }
 
     /**
-     * Handle the Semester "trashed" event.
+     * Handle the Semester "deleted" event.
      *
      * @param  \App\Models\Semester  $semester
      * @return void
      */
-    public function deleting(Semester $semester)
-    {
-        $semester->classrooms->delete();
-    }
     public function deleted(Semester $semester)
     {
-        $semester->classrooms->delete();
-    }
-    public function trashed(Semester $semester)
-    {
-        $semester->classrooms->delete();
+        $classrooms = $semester->classrooms;
+        foreach ($classrooms as $classroom) {
+            $classroom->delete();
+        }
     }
 
     /**

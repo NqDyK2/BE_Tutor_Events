@@ -5,12 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Semester\CreateSemesterRequest;
 use App\Http\Requests\Semester\UpdateSemesterRequest;
-use App\Services\BreadcrumbServices;
-use App\Services\ExcelServices;
 use App\Services\SemesterServices;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 
 class SemesterController extends Controller

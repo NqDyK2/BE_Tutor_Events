@@ -42,7 +42,7 @@ class SemesterServices
             ], 400);
         }
 
-        Semester::where('id', $semesterId)->delete();
+        Semester::findOrFail($semesterId)->delete();
 
         return response([
             'message' => 'Xóa kỳ học thành công'

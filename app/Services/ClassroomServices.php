@@ -11,13 +11,6 @@ use Illuminate\Support\Facades\DB;
 
 class ClassroomServices
 {
-    private $mailService;
-
-    public function __construct(MailServices $mailService)
-    {
-        $this->mailService = $mailService;
-    }
-
     public function classroomsInSemester($semester_id)
     {
         $auth = Auth::user();
@@ -101,35 +94,5 @@ class ClassroomServices
         return response([
             'message' => 'Xóa lớp học thành công'
         ], 200);
-    }
-
-    public function studentMissingClasses()
-    {
-        return Classroom::select(
-            'classrooms.id',
-            'subjects.name',
-            'subjects.code',
-        )
-            ->whereHas('classStudents', function ($q) {
-                return $q->where('student_email', Auth::user()->email)
-                    ->where('is_joined', false);
-            })
-            ->join('subjects', 'subjects.id', 'classrooms.subject_id')
-            ->get();
-    }
-
-    public function joinClass($classroomId)
-    {
-        $classroom = ClassStudent::where('classroom_id', $classroomId)
-            ->where('student_email', Auth::user()->email)
-            ->first();
-
-        if (!$classroom) {
-            return false;
-        }
-        $classroom->is_joined = true;
-        $classroom->save();
-
-        return true;
     }
 }

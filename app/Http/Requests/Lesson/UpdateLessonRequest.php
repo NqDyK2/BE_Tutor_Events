@@ -78,8 +78,7 @@ class UpdateLessonRequest extends FormRequest
             'type' => 'required|boolean',
             'teacher_email' => 'required|email',
             'tutor_email' => 'nullable|email',
-            'content' => 'nullable|max:200',
-            'note' => 'nullable',
+            'content' => 'nullable|max:2000',
         ];
     }
 

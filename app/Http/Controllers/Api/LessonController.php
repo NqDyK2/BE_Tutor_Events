@@ -68,20 +68,4 @@ class LessonController extends Controller
 
         return $response;
     }
-
-    public function studentSchedule()
-    {
-        $lesson = $this->lessonServices->studentSchedule();
-        return response([
-            'data' => $lesson,
-        ], 200);
-    }
-
-    public function teacherTutorSchedule()
-    {
-        $lesson = $this->lessonServices->teacherTutorSchedule();
-        return response([
-            'data' => $lesson,
-        ], 200);
-    }
 }

@@ -24,13 +24,14 @@ class UpdateClassroomRequest extends FormRequest
     public function rules()
     {
         return [
-            'default_teacher_email' => 'nullable|email',
+            'default_teacher_email' => 'required|email',
         ];
     }
 
     public function messages()
     {
         return [
+            'default_teacher_email.required' => 'Email giảng viên không được để trống',
             'default_teacher_email.email' => 'Email sai định dạng',
         ];
     }

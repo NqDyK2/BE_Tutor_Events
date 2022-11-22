@@ -50,10 +50,10 @@ class ClassroomController extends Controller
     {
         $classroom = $request->get('classroom');
 
-        $updated = $this->classroomServices->update($request->input(), $classroom);
+        $this->classroomServices->update($request->input(), $classroom);
 
         return response([
-            'message' => 'Cập nhật lớp học thành công'
+            'message' => 'Đã chuyển tất cả buổi học chưa diễn ra cho ' . $request->default_teacher_email
         ], 200);
     }
 
@@ -66,23 +66,5 @@ class ClassroomController extends Controller
         $response = $this->classroomServices->destroy($classroom->id);
 
         return $response;
-    }
-
-    public function missingClasses()
-    {
-        $classrooms = $this->classroomServices->studentMissingClasses();
-
-        return response([
-            'data' => $classrooms,
-        ], 200);
-    }
-
-    public function joinClass(Request $request)
-    {
-        $joined = $this->classroomServices->joinClass($request->classroom_id);
-
-        return response([
-            'message' => $joined ? 'Tham gia lớp học thành công' : 'Bạn không có trong danh sách lớp này',
-        ], 200);
     }
 }

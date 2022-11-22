@@ -24,7 +24,6 @@ class Lesson extends Model
         'teacher_email',
         'tutor_email',
         'content',
-        'note',
         'attended',
     ];
 

@@ -37,8 +37,10 @@ class SemesterObserver
     public function deleted(Semester $semester)
     {
         $classrooms = $semester->classrooms;
-        foreach ($classrooms as $classroom) {
-            $classroom->delete();
+        if ($classrooms) {
+            foreach ($classrooms as $classroom) {
+                $classroom->delete();
+            }
         }
     }
 

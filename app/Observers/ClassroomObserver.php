@@ -37,13 +37,17 @@ class ClassroomObserver
     public function deleted(Classroom $classroom)
     {
         $lessons = $classroom->lessons;
-        foreach ($lessons as $lesson) {
-            $lesson->delete();
+        if ($lessons) {
+            foreach ($lessons as $lesson) {
+                $lesson->delete();
+            }
         }
 
         $students = $classroom->students;
-        foreach ($students as $student) {
-            $student->delete();
+        if ($students) {
+            foreach ($students as $student) {
+                $student->delete();
+            }
         }
     }
 

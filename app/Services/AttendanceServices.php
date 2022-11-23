@@ -57,7 +57,7 @@ class AttendanceServices
 
         foreach ($students as $i => $student) {
             $checkAttended = $lesson && $lesson->attended && array_key_exists($student->student_email, $attendHistoryMap);
-            $student->status = $checkAttended ? $attendHistoryMap[$student->student_email]['status'] : false;
+            $student->status = $checkAttended ? $attendHistoryMap[$student->student_email]['status'] : 1;
             $student->note = $checkAttended ? $attendHistoryMap[$student->student_email]['note'] : '';
             $students[$i] = $student;
         }

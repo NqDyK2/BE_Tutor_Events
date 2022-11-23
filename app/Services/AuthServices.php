@@ -41,7 +41,7 @@ class AuthServices
             'avatar',
             'role_id'
         ]);
-        if ($auth['role_id'] == 1) return $auth;
+        $auth['is_teacher'] = false;
 
         $isTeacher = Classroom::join('semesters', 'semesters.id', 'classrooms.semester_id')
             ->where('semesters.end_time', '>=', now())
@@ -57,8 +57,14 @@ class AuthServices
             ->exists();
         }
 
+        if ($auth['role_id'] == 1) {
+            $auth['is_teacher'] = $isTeacher;
+            return $auth;
+        }
+
         if ($isTeacher) {
             $auth['role_id'] = 2;
+            $auth['is_teacher'] = true;
             Auth::user()->update([
                 'role_id' => 2
             ]);

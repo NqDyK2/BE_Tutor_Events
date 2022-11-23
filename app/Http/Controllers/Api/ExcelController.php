@@ -48,7 +48,7 @@ class ExcelController extends Controller
         }
 
         return response([
-            'message' => $userNotInClass
+            'message' => "Cập nhật thành công " . $count . " bản ghi"
         ], 200);
     }
 }

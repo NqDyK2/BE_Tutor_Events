@@ -96,7 +96,7 @@ class UpdateLessonRequest extends FormRequest
             'teacher_email.email' => 'Email giảng viên không đúng định dạng',
             'tutor_email.email' => 'Email tutor không đúng định dạng',
 
-            'content.max' => 'Nội dung không được quá 200 ký tự',
+            'content.max' => 'Nội dung không được quá 2000 ký tự',
         ];
     }
 }

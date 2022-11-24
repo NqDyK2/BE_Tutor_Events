@@ -20,9 +20,9 @@ class ClassroomPolicy
         }
     }
 
-    public function teacherOfClass($auth, $classroom)
+    public function teacherOfClass($auth, $classroom, $lesson = null)
     {
-        if ($auth->email == $classroom->default_teacher_email) {
+        if ($auth->email == $classroom->default_teacher_email || (!empty($lesson) && $lesson->teacher_email == $auth->email)) {
             return true;
         }
         return false;

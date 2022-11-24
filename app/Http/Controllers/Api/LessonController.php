@@ -50,7 +50,7 @@ class LessonController extends Controller
     {
         $lesson = $request->get('lesson');
         $classroom = Classroom::find($request->classroom_id);
-        $this->authorize('teacherOfClass', $classroom);
+        $this->authorize('teacherOfClass', $classroom, $lesson);
         $this->lessonServices->update($request->input(), $lesson);
         return response([
             'message' => 'Cập nhật buổi học thành công'
@@ -62,7 +62,7 @@ class LessonController extends Controller
         $lesson = $request->get('lesson');
         $classroom = Classroom::find($lesson->classroom_id);
 
-        $this->authorize('teacherOfClass', $classroom);
+        $this->authorize('teacherOfClass', $classroom, $lesson);
 
         $response = $this->lessonServices->destroy($lesson->id);
 

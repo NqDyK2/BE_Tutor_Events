@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\Lesson;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class ClassroomPolicy
@@ -22,9 +23,25 @@ class ClassroomPolicy
 
     public function teacherOfClass($auth, $classroom, $lesson = null)
     {
-        if ($auth->email == $classroom->default_teacher_email || (!empty($lesson) && $lesson->teacher_email == $auth->email)) {
+
+        if ($auth->email == $classroom->default_teacher_email) {
             return true;
         }
+
+        if (!empty($lesson)) {
+            if ($lesson->teacher_email == $auth->email) {
+                return true;
+            }
+
+            $isTeacherInclass = Lesson::where('classroom_id', $lesson->classroom_id)
+            ->where('teacher_email', $auth->email)
+            ->exists();
+
+            if ($isTeacherInclass) {
+                return true;
+            }
+        }
+
         return false;
     }
 }

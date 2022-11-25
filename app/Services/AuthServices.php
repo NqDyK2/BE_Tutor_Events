@@ -12,12 +12,24 @@ class AuthServices
 {
     public function loginGoogle($googleUser)
     {
+        $acceptMailDomains = [
+            "fpt.edu.vn",
+            "fe.edu.vn",
+        ];
+
+        if (!in_array(explode("@", $googleUser->email)[1], $acceptMailDomains)) {
+            return response([
+                'message' => 'Hãy đăng nhập với mail "fpt.edu.vn"',
+            ], 401);
+        }
+
+        if ($googleUser->email)
         $user = User::where('email', $googleUser->email)->first();
 
         if (!$user) {
             $user = User::create([
-                // 'code' => explode("@", $googleUser->email)[0],
-                'google_id' => $googleUser->id,
+                'code' => explode("@", $googleUser->email)[0],
+                'google_id' => $googleUser->email,
                 'avatar' => $googleUser->avatar,
                 'name' => $googleUser->name,
                 'email' => $googleUser->email,
@@ -28,7 +40,9 @@ class AuthServices
             ], 401);
         }
 
-        return $user->createToken('API TOKEN')->plainTextToken;
+        return response([
+            'token' => $user->createToken('API TOKEN')->plainTextToken
+        ], 200);
     }
 
     public function getAuthDetail()
@@ -65,9 +79,6 @@ class AuthServices
         if ($isTeacher) {
             $auth['role_id'] = 2;
             $auth['is_teacher'] = true;
-            Auth::user()->update([
-                'role_id' => 2
-            ]);
             return $auth;
         }
 
@@ -79,15 +90,10 @@ class AuthServices
 
         if ($isTutor) {
             $auth['role_id'] = 4;
-            Auth::user()->update([
-                'role_id' => 2
-            ]);
             return $auth;
         }
 
-        Auth::user()->update([
-            'role_id' => 3
-        ]);
+        $auth['role_id'] = 3;
 
         return $auth;
     }

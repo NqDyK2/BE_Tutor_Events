@@ -34,7 +34,7 @@ class RemoveAdmin extends Command
             $this->info($user->email);
         });
 
-        $email = $this->ask('Enter email address:');
+        $email = $this->ask('Enter email address to REVOKE admin permission:');
         $user = User::where('email', $email)->first();
 
         if (!$user) {
@@ -42,10 +42,10 @@ class RemoveAdmin extends Command
             return;
         }
 
-        $user->role_id = USER_ROLE_ADMIN;;
+        $user->role_id = USER_ROLE_STUDENT;
         $user->save();
 
-        $this->info('Removed admin permissions of ' . $email);
+        $this->info('Revoked admin permissions of ' . $email);
 
         return Command::SUCCESS;
     }

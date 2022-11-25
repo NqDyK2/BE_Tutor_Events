@@ -44,16 +44,14 @@ class AuthController extends Controller
         try {
             $googleUser = Socialite::driver('google')->user();
 
-            $token = $this->authServices->loginGoogle($googleUser);
+            $response = $this->authServices->loginGoogle($googleUser);
 
-            return response([
-                'token' => $token
-            ], 200);
+            return $response;
 
         } catch (\Exception $error) {
             return response([
                 'message' => 'Đăng nhập thất bại, thử lại sau ít phút',
-            ], 401);
+            ], 400);
         }
     }
 }

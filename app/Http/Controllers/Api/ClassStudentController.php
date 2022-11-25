@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ClassStudent\ClassStudentRequest;
+use App\Http\Requests\ClassStudent\UpdateClassStudentRequest;
 use App\Services\BreadcrumbServices;
 use App\Services\ClassroomServices;
 use App\Services\ClassStudentServices;
@@ -38,11 +39,15 @@ class ClassStudentController extends Controller
         ], 200);
     }
 
-    public function update(ClassStudentRequest $request)
+    public function update(UpdateClassStudentRequest $request)
     {
-        $classStudent = $this->classStudentServices->store($request->input());
+        $data = $request->input();
+        $data->classroom_id = $request->classroom_id;
+
+        $this->classStudentServices->update($data);
+
         return response([
-            'message' => 'Thêm sinh viên thành công',
+            'message' => 'Cập nhật sinh viên thành công',
         ], 201);
     }
 }

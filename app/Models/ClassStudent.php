@@ -18,6 +18,7 @@ class ClassStudent extends Model
         'student_email',
         'reason',
         'final_result',
+        'is_warning'
     ];
 
     public function classroom()

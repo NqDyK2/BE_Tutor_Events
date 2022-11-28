@@ -17,9 +17,11 @@ Class ClassStudentServices
             'class_students.reason',
             'class_students.final_result',
             'class_students.is_joined',
+            'class_students.is_warning',
         ])
         ->leftJoin('users', 'users.email', '=', 'class_students.student_email')
         ->where('class_students.classroom_id', $classroom_id)
+        ->orderBy('is_warning', 'DESC')
         ->get();
 
         return ClassStudent::where('classroom_id',$classroom_id)->get();

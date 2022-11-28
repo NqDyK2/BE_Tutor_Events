@@ -49,6 +49,7 @@ class InsertUserFromExcelJob implements ShouldQueue
             'classroom_id' => $this->classrooms[Str::slug($this->user['subject'])],
         ], [
             "reason" => $this->user['reason'],
+            "is_warning" => true,
         ]);
     }
 }

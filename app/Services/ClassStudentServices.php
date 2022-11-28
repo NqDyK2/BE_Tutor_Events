@@ -7,11 +7,6 @@ use Illuminate\Support\Facades\DB;
 
 Class ClassStudentServices
 {
-    private $mailService;
-    public function __construct(MailServices $mailService) {
-        $this->mailService = $mailService;
-    }
-
     public function classStudentsInClassroom($classroom_id)
     {
         return ClassStudent::select([
@@ -22,26 +17,21 @@ Class ClassStudentServices
             'class_students.reason',
             'class_students.final_result',
             'class_students.is_joined',
+            'class_students.is_warning',
         ])
         ->leftJoin('users', 'users.email', '=', 'class_students.student_email')
         ->where('class_students.classroom_id', $classroom_id)
+        ->orderBy('is_warning', 'DESC')
         ->get();
 
         return ClassStudent::where('classroom_id',$classroom_id)->get();
     }
 
-    public function store($data){
-        $classroom = Classroom::find($data['classroom_id']);
-        return ClassStudent::create($data);
-    }
-
-    public function show($id){
-        return ClassStudent::find($id);
-    }
-
-    public function destroy($id)
+    public function update($data)
     {
-        $classroom = ClassStudent::find($id);
-        return $classroom->delete();
+        $ClassStudent = ClassStudent::where('classroom_id', $data->classroom_id)
+        ->where('student_email', $data->student_email);
+
+        return $ClassStudent->update($data);
     }
 }

@@ -69,6 +69,7 @@ Route::prefix('classroom')->middleware('checkRoleTeacherOrAdmin')->group(functio
 
         Route::get('{classroom_id}/lessons', [LessonController::class, 'lessonsInClassroom']);
         Route::get('{classroom_id}/students', [ClassStudentController::class, 'studentsInClassroom']);
+        Route::put('{classroom_id}/update-student', [ClassStudentController::class, 'update']);
     });
 });
 

@@ -42,9 +42,11 @@ class AttendanceServices
             DB::raw('users.name as student_name'),
             DB::raw('users.code as student_code'),
             'class_students.student_email',
-            'class_students.is_joined'
+            'class_students.is_warning',
+            'class_students.is_joined',
         )
             ->where('classroom_id', $lesson->classroom_id)
+            ->where('is_warning', true)
             ->leftJoin('users', 'users.email', 'class_students.student_email')
             ->get();
 

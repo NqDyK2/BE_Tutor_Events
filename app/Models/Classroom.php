@@ -26,6 +26,10 @@ class Classroom extends Model
         return $this->hasMany(ClassStudent::class, 'classroom_id');
     }
 
+    public function joinedStudents() {
+        return $this->classStudents()->where('is_joined', true);
+    }
+
     public function lessons()
     {
         return $this->hasMany(Lesson::class, 'classroom_id');

@@ -17,7 +17,6 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('teacher_email')->nullable();
-            $table->string('slug');
             $table->timestamps();
             $table->softDeletes();
         });

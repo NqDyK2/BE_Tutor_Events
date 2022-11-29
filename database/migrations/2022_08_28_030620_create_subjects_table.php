@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('name');
             $table->string('code')->nullable();
             $table->unsignedBigInteger('major_id');
-            $table->string('slug');
             $table->timestamps();
             $table->softDeletes();
         });

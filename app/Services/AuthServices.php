@@ -17,11 +17,11 @@ class AuthServices
             "fe.edu.vn",
         ];
 
-        if (!in_array(explode("@", $googleUser->email)[1], $acceptMailDomains)) {
-            return response([
-                'message' => 'Hãy đăng nhập với mail "fpt.edu.vn"',
-            ], 401);
-        }
+        // if (!in_array(explode("@", $googleUser->email)[1], $acceptMailDomains)) {
+        //     return response([
+        //         'message' => 'Hãy đăng nhập với mail "fpt.edu.vn"',
+        //     ], 401);
+        // }
 
         if ($googleUser->email)
         $user = User::where('email', $googleUser->email)->first();

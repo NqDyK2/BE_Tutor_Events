@@ -7,36 +7,39 @@ use App\Models\Semester;
 
 class StatisticalServices
 {
-    public function getSemesterStatisticalById($semesterId)
+    public function getSemesterStatisticalById($semesterId = null)
     {
-        $semester = Semester::find($semesterId);
+        $classroomsStatistical = [];
+
+        $semester = Semester::where('id', $semesterId)
+            ->with('classrooms')
+            ->first();
 
         if (!$semester) {
             $semester = Semester::where('semesters.start_time', '<=', now())
                 ->where('semesters.end_time', '>=', now())
+                ->with('classrooms')
                 ->first();
         }
         if (!$semester) {
-            $semester = Semester::orderBy('end_time', 'DESC')->first();
+            $semester = Semester::orderBy('end_time', 'DESC')
+                ->with('classrooms')
+                ->first();
         }
-
         if (!$semester) {
             return response([
                 'data' => []
             ], 200);
         }
 
-        $classrooms = Classroom::where('semester_id', '=', $semester->id)
-            ->withCount([
-                'lessons',
-                'lessons as attended_lessons_count' => function ($q) {
-                    return $q->where('attended', true);
-                }
-            ])
-            ->get();
+        foreach ($semester->classrooms as $classroom) {
+            $classroomsStatistical[] = getClassroomStatistical($classroom->id);
+        }
+
+        $semester->classrooms_statistical = $classroomsStatistical;
 
         return response([
-            'data' => $classrooms
+            'data' => $semester
         ], 200);
     }
 }

@@ -28,6 +28,6 @@ class ClassStudent extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_email', 'email');
+        return $this->belongsTo(User::class, 'student_email', 'email');
     }
 }

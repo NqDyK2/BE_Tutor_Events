@@ -36,20 +36,23 @@ class InsertUserFromExcelJob implements ShouldQueue
      */
     public function handle()
     {
-        User::updateOrCreate([
-            'email' => $this->user['student_email'],
-        ], [
-            'code' => $this->user['student_code'],
-            'name' => $this->user['student_name'],
-            'phone_number' => $this->user['student_phone'],
-        ]);
+        try {
+            User::updateOrCreate([
+                'email' => $this->user['student_email'],
+            ], [
+                'code' => $this->user['student_code'],
+                'name' => $this->user['student_name'],
+                'phone_number' => $this->user['student_phone'],
+            ]);
 
-        ClassStudent::updateOrCreate([
-            'student_email' => $this->user['student_email'],
-            'classroom_id' => $this->classrooms[Str::slug($this->user['subject'])],
-        ], [
-            "reason" => $this->user['reason'],
-            "is_warning" => 1,
-        ]);
+            ClassStudent::updateOrCreate([
+                'student_email' => $this->user['student_email'],
+                'classroom_id' => $this->classrooms[Str::slug($this->user['subject'])],
+            ], [
+                "reason" => $this->user['reason'],
+                "is_warning" => true,
+            ]);
+        } catch (\Throwable $th) {
+        }
     }
 }

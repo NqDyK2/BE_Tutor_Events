@@ -23,6 +23,8 @@ class CreateSubjectRequest extends FormRequest
      */
     public function rules()
     {
+        $this->code = strtoupper($this->code);
+
         return [
             'name' => 'required|min:3|max:100|unique:subjects,name',
             'code' => 'required|min:3|max:100|unique:subjects,code',

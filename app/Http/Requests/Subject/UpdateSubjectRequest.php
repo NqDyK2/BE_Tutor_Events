@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Subject;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Str;
 
 class UpdateSubjectRequest extends FormRequest
 {
@@ -23,6 +24,8 @@ class UpdateSubjectRequest extends FormRequest
      */
     public function rules()
     {
+        $this->code = strtoupper(Str::slug($this->code));
+
         return [
             'name' => 'min:3|max:100|unique:subjects,name,' . $this->subject_id,
             'code' => 'min:3|max:100|unique:subjects,code,' . $this->subject_id,

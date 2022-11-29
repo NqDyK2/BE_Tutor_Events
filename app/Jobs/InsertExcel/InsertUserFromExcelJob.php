@@ -36,7 +36,7 @@ class InsertUserFromExcelJob implements ShouldQueue
      */
     public function handle()
     {
-        $user = User::updateOrCreate([
+        User::updateOrCreate([
             'email' => $this->user['student_email'],
         ], [
             'code' => $this->user['student_code'],
@@ -49,7 +49,7 @@ class InsertUserFromExcelJob implements ShouldQueue
             'classroom_id' => $this->classrooms[Str::slug($this->user['subject'])],
         ], [
             "reason" => $this->user['reason'],
-            "is_warning" => true,
+            "is_warning" => 1,
         ]);
     }
 }

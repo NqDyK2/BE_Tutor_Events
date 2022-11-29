@@ -29,8 +29,8 @@ Class ClassStudentServices
 
     public function update($data)
     {
-        $ClassStudent = ClassStudent::where('classroom_id', $data->classroom_id)
-        ->where('student_email', $data->student_email);
+        $ClassStudent = ClassStudent::where('classroom_id', $data['classroom_id'])
+        ->where('student_email', $data['student_email']);
 
         return $ClassStudent->update($data);
     }

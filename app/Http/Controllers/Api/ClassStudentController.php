@@ -39,10 +39,10 @@ class ClassStudentController extends Controller
         ], 200);
     }
 
-    public function update(UpdateClassStudentRequest $request)
+    public function update(UpdateClassStudentRequest $request, $classroomId)
     {
         $data = $request->input();
-        $data->classroom_id = $request->classroom_id;
+        $data['classroom_id'] = $classroomId;
 
         $this->classStudentServices->update($data);
 

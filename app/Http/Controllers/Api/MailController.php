@@ -4,13 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Mail\SendMailInviteRequest;
+use App\Http\Requests\Mail\SendMailInviteSemesterRequest;
 use App\Jobs\Mail\SendMailImportJob;
 use App\Jobs\Mail\SendMailInviteLesson;
-use App\Models\Classroom;
 use App\Models\ClassStudent;
 use App\Models\InvitedMail;
 use App\Models\Lesson;
-use Illuminate\Http\Request;
 
 class MailController extends Controller
 {
@@ -41,12 +40,12 @@ class MailController extends Controller
         ], 200);
     }
 
-    public function sendMailInviteAll(Request $request)
+    public function sendMailInviteAll(SendMailInviteSemesterRequest $request)
     {
-        $semester = $request->get('semester');
+        $semesterId = $request->semester_id;
 
-        $students = ClassStudent::whereHas('classroom', function ($q) use ($semester) {
-            $q->where('semester_id', $semester->id);
+        $students = ClassStudent::whereHas('classroom', function ($q) use ($semesterId) {
+            $q->where('semester_id', $semesterId);
         })
             ->where('is_warning', true)
             ->where('is_sent_mail', false)

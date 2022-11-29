@@ -11,7 +11,6 @@ use App\Http\Controllers\Api\MailController;
 use App\Http\Controllers\Api\SubjectController;
 use App\Http\Controllers\Api\MajorController;
 use App\Http\Controllers\Api\ScheduleController;
-use App\Models\Attendance;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -109,5 +108,5 @@ Route::prefix('teacher-tutor')->group(function () {
 // API MAIL
 Route::prefix('mail')->middleware('checkRoleTeacherOrAdmin')->group(function () {
     Route::post('invite-class', [MailController::class, 'sendMailInvite']);
-    Route::post('invite-all/{semester_id}', [MailController::class, 'sendMailInviteAll'])->middleware(['existSemester', 'admin']);
+    Route::post('invite-all', [MailController::class, 'sendMailInviteAll']);
 });

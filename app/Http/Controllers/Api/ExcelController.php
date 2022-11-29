@@ -31,20 +31,8 @@ class ExcelController extends Controller
         foreach ($request->data as $x) {
             if (array_key_exists(Str::slug($x['subject']), $classrooms)) {
                 $count++;
-                $classStudent = ClassStudent::where('student_email', $x['student_email'])
-                    ->where('classroom_id', $classrooms[Str::slug($x['subject'])])
-                    ->exists();
-
-                if (!$classStudent) {
-                    $userNotInClass[] = $x;
-                }
-
                 InsertUserFromExcelJob::dispatch($x, $classrooms);
             }
-        }
-
-        foreach ($userNotInClass as $x) {
-            MailSendMailImportJob::dispatch($x);
         }
 
         return response([

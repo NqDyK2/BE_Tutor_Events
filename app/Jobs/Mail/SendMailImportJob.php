@@ -2,6 +2,7 @@
 
 namespace App\Jobs\Mail;
 
+use App\Models\ClassStudent;
 use App\Models\Lesson;
 use App\Models\Major;
 use App\Models\Semester;
@@ -20,19 +21,20 @@ class SendMailImportJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    private $classStudent;
+
     /**
      *  Send mail to student when they have been added to classroom.
      *
      * @param String $mailTo
      *
-     * @param Array $dataImport
+     * @param ClassStudent $classStudent
      *
      * @return void
      */
-    private $dataImport;
-    public function __construct($dataImport)
+    public function __construct($classStudent)
     {
-        $this->dataImport = $dataImport;
+        $this->classStudent = $classStudent;
     }
 
     /**
@@ -43,15 +45,15 @@ class SendMailImportJob implements ShouldQueue
     public function handle()
     {
         try {
-            $student = User::where('email', $this->dataImport['student_email'])->first();
-            $subject = Subject::where('code', strtoupper($this->dataImport['subject']))->first();
+            $student = $this->classStudent->user;
+            $subject = $this->classStudent->classroom->subject;
             $mailData = [
                 'student' => $student->toArray(),
                 'subject' => $subject->toArray(),
             ];
 
             MailServices::sendEmail(
-                $this->dataImport['student_email'],
+                $this->classStudent->student_email,
                 'Bạn vừa được thêm vào lớp Tutor',
                 $mailData,
                 'mail.import_excel'

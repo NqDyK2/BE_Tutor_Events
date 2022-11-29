@@ -20,6 +20,7 @@ class Semester extends Model
         'name',
         'start_time',
         'end_time',
+        'is_sent_mails'
     ];
 
     public function classrooms()

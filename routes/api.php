@@ -107,4 +107,7 @@ Route::prefix('teacher-tutor')->group(function () {
 });
 
 // API MAIL
-Route::post('mail/invite-class', [MailController::class, 'sendMailInvite'])->middleware('checkRoleTeacherOrAdmin');
+Route::prefix('mail')->middleware('checkRoleTeacherOrAdmin')->group(function () {
+    Route::post('invite-class', [MailController::class, 'sendMailInvite']);
+    Route::post('invite-all/{semester_id}', [MailController::class, 'sendMailInviteAll'])->middleware(['existSemester', 'admin']);
+});

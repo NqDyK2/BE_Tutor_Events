@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\InsertExcel\InsertUserFromExcelJob;
+use App\Models\ClassStudent;
+use App\Models\User;
 use App\Services\ExcelServices;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;

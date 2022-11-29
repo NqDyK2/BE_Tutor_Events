@@ -48,6 +48,7 @@ class AttendanceServices
             ->where('classroom_id', $lesson->classroom_id)
             ->where('is_warning', true)
             ->leftJoin('users', 'users.email', 'class_students.student_email')
+            ->orderBy('class_students.student_email', 'ASC')
             ->get();
 
         if ($lesson && $lesson->attended) {

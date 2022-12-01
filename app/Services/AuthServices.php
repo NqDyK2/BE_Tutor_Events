@@ -34,7 +34,7 @@ class AuthServices
                 'name' => $googleUser->name,
                 'email' => $googleUser->email,
             ]);
-        } elseif ($user->status == USER_STATUS_DEACTIVATE) {
+        } elseif ($user->status == User::STATUS_DEACTIVATE) {
             return response([
                 'message' => 'This account has been blocked',
             ], 401);

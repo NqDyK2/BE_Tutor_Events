@@ -14,6 +14,7 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
     const ROLE_ADMIN = 1;
+    const ROLE_TEACHER = 2;
     const ROLE_STUDENT = 3;
 
     const STATUS_ACTIVATE = 1;

@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\MailController;
 use App\Http\Controllers\Api\SubjectController;
 use App\Http\Controllers\Api\MajorController;
 use App\Http\Controllers\Api\ScheduleController;
+use App\Http\Controllers\Api\StatisticalController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -109,4 +110,9 @@ Route::prefix('teacher-tutor')->group(function () {
 Route::prefix('mail')->middleware('checkRoleTeacherOrAdmin')->group(function () {
     Route::post('invite-class', [MailController::class, 'sendMailInvite']);
     Route::post('invite-all', [MailController::class, 'sendMailInviteAll']);
+});
+
+// API FOR STUDENT
+Route::prefix('statistics')->group(function () {
+    Route::get('{semester_id?}', [StatisticalController::class, 'index']);
 });

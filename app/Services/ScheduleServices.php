@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Attendance;
 use App\Models\Classroom;
 use App\Models\ClassStudent;
 use App\Models\Lesson;
@@ -74,7 +75,7 @@ class ScheduleServices
             )
                 ->withCount(['attendances' => function ($query) {
                     $query->where('student_email', Auth::user()->email)
-                        ->where('status', ATTENDANCE_STATUS_PRESENT);
+                        ->where('status', Attendance::STATUS_PRESENT);
                 }])
                 ->where('classroom_id', $classroom['id'])
                 ->get();

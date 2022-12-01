@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +18,7 @@ class TeacherOrAdmin
      */
     public function handle(Request $request, Closure $next)
     {
-        if(!(Auth::user()->role_id == USER_ROLE_ADMIN || Auth::user()->role_id == USER_ROLE_TEACHER)){
+        if(!(Auth::user()->role_id == User::ROLE || Auth::user()->role_id == USER_ROLE_TEACHER)){
             return response([
                 'message' => 'Bạn không có quyền thực hiện tác vụ này'
             ], 403);

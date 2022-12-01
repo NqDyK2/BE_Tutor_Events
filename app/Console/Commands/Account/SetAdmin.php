@@ -35,7 +35,7 @@ class SetAdmin extends Command
             return $this->error('User not found');
         }
 
-        $user->role_id = USER_ROLE_ADMIN;
+        $user->role_id = User::ROLE_ADMIN;
         $user->save();
 
         $this->info('Granted admin permissions for ' . $email);

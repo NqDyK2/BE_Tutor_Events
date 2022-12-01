@@ -28,7 +28,7 @@ class RemoveAdmin extends Command
      */
     public function handle()
     {
-        User::where('role_id', USER_ROLE_ADMIN)
+        User::where('role_id', User::ROLE_ADMIN)
         ->get()
         ->each(function (User $user) {
             $this->info($user->email);
@@ -42,7 +42,7 @@ class RemoveAdmin extends Command
             return;
         }
 
-        $user->role_id = USER_ROLE_STUDENT;
+        $user->role_id = User::ROLE_STUDENT;
         $user->save();
 
         $this->info('Revoked admin permissions of ' . $email);

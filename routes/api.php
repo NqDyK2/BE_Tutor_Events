@@ -43,8 +43,8 @@ Route::name('subject')->prefix('subject')->group(function () {
     Route::middleware('admin')->group(function () {
         Route::post('store', [SubjectController::class, 'store']);
         Route::middleware('existSubject')->group(function () {
-            Route::put('{subject_id}/update', [SubjectController::class, 'update']);
-            Route::delete('{subject_id}/delete', [SubjectController::class, 'destroy']);
+            Route::put('{subject_id}/update', [SubjectController::class, 'update'])->name('updateSubject');
+            Route::delete('{subject_id}/delete', [SubjectController::class, 'destroy'])->name('deleteSubject');
         });
     });
 });

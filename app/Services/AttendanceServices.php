@@ -79,8 +79,8 @@ class AttendanceServices
 
         $emails = array_map(fn ($x) => $x['student_email'], $data);
 
-        $presentEmails = array_filter(array_map(fn ($x) => $x['status'] == ATTENDANCE_STATUS_PRESENT && in_array($x['student_email'], $emails) ? $x['student_email'] : null, $data));
-        $absentEmails = array_filter(array_map(fn ($x) => $x['status'] == ATTENDANCE_STATUS_ABSENT && in_array($x['student_email'], $emails) ? $x['student_email'] : null, $data));
+        $presentEmails = array_filter(array_map(fn ($x) => $x['status'] == Attendance::STATUS_PRESENT && in_array($x['student_email'], $emails) ? $x['student_email'] : null, $data));
+        $absentEmails = array_filter(array_map(fn ($x) => $x['status'] == Attendance::STATUS_ABSENT && in_array($x['student_email'], $emails) ? $x['student_email'] : null, $data));
 
         if (!$lesson->attended) {
             $array_attendances = [];

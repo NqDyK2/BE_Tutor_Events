@@ -28,7 +28,7 @@ class ListAdmin extends Command
      */
     public function handle()
     {
-        User::where('role_id', USER_ROLE_ADMIN)
+        User::where('role_id', User::ROLE_ADMIN)
         ->get()
         ->each(function (User $user) {
             $this->info($user->email);

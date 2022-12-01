@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Lesson;
+use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class ClassroomPolicy
@@ -16,7 +17,7 @@ class ClassroomPolicy
      */
     public function before($auth, $user)
     {
-        if ($auth->role_id == USER_ROLE_ADMIN) {
+        if ($auth->role_id == User::ROLE_ADMIN) {
             return true;
         }
     }

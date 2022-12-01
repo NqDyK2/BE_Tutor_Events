@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class UserPolicy
@@ -10,14 +11,14 @@ class UserPolicy
 
     public function before($auth, $user)
     {
-        if ($auth->role_id == USER_ROLE_ADMIN) {
+        if ($auth->role_id == User::ROLE_ADMIN) {
             return true;
         }
     }
 
     public function updateUser($auth, $user)
     {
-        if ($auth->id == $user->id || $auth->role_id == USER_ROLE_TEACHER) {
+        if ($auth->id == $user->id) {
             return true;
         }
         return false;

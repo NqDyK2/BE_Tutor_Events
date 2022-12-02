@@ -8,14 +8,14 @@ use App\Http\Requests\Mail\SendMailInviteSemesterRequest;
 use App\Jobs\Mail\SendMailImportJob;
 use App\Jobs\Mail\SendMailInviteLesson;
 use App\Models\ClassStudent;
-use App\Models\InvitedMail;
+use App\Models\InviteLessonMail;
 use App\Models\Lesson;
 
 class MailController extends Controller
 {
     public function sendMailInvite(SendMailInviteRequest $request)
     {
-        $isSent = InvitedMail::where('student_email', $request->student_email)->where('lesson_id', $request->lesson_id)->exists();
+        $isSent = InviteLessonMail::where('student_email', $request->student_email)->where('lesson_id', $request->lesson_id)->exists();
 
         if ($isSent) {
             return response([
@@ -33,7 +33,7 @@ class MailController extends Controller
             ]
         );
 
-        InvitedMail::create($request->input());
+        InviteLessonMail::create($request->input());
 
         return response([
             "message" => "Đã gửi mail tới " . $request->student_email

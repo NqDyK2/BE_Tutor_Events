@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Attendance;
 use App\Models\Classroom;
 use App\Models\ClassStudent;
+use App\Models\InviteLessonMail;
 use App\Models\Lesson;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -37,6 +38,7 @@ class AttendanceServices
     public function getDataByLesson(Lesson $lesson)
     {
         $attendHistoryMap = [];
+        $sendMailHistoryMap = [];
 
         $students = ClassStudent::select(
             DB::raw('users.name as student_name'),
@@ -53,8 +55,13 @@ class AttendanceServices
 
         if ($lesson && $lesson->attended) {
             $attendHistory = Attendance::where('lesson_id', $lesson->id)->get();
-            foreach ($attendHistory as $i => $x) {
+            foreach ($attendHistory as $x) {
                 $attendHistoryMap[$x->student_email] = $x->toArray();
+            }
+            
+            $sendMailHistory = InviteLessonMail::where('lesson_id', $lesson->id)->get();
+            foreach ($sendMailHistory as $x) {
+                $sendMailHistoryMap[$x->student_email] = 1;
             }
         }
 
@@ -62,6 +69,10 @@ class AttendanceServices
             $checkAttended = $lesson && $lesson->attended && array_key_exists($student->student_email, $attendHistoryMap);
             $student->status = $checkAttended ? $attendHistoryMap[$student->student_email]['status'] : 1;
             $student->note = $checkAttended ? $attendHistoryMap[$student->student_email]['note'] : '';
+
+            $checkSentMail = $lesson && $lesson->attended && array_key_exists($student->student_email, $sendMailHistoryMap);
+            $student->is_sent_mail = $checkSentMail ? 1 : 0;
+
             $students[$i] = $student;
         }
 

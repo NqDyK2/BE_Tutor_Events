@@ -46,4 +46,9 @@ class Lesson extends Model
     {
         return $this->hasMany(Attendance::class, 'lesson_id');
     }
+
+    public function inviteLessonMails()
+    {
+        return $this->hasMany(inviteLessonMails::class, 'lesson_id');
+    }
 }

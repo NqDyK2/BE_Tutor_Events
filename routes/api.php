@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\SemesterController;
 use App\Http\Controllers\Api\ClassroomController;
 use App\Http\Controllers\Api\ClassStudentController;
 use App\Http\Controllers\Api\EventController;
+use App\Http\Controllers\Api\EventUserController;
 use App\Http\Controllers\Api\ExcelController;
 use App\Http\Controllers\Api\LessonController;
 use App\Http\Controllers\Api\MailController;
@@ -119,7 +120,13 @@ Route::prefix('statistics')->group(function () {
 });
 
 //API MANAGE EVENT
-Route::prefix('event')->middleware('admin')->group(function () {
-    Route::post('store', [EventController::class, 'store']);
-    Route::post('{event_id}/update', [EventController::class, 'update'])->middleware('existEvent');
+Route::prefix('event')->group(function () {
+    Route::middleware('existEvent')->group(function () {
+        Route::post('join', [EventUserController::class, 'create']);
+        Route::delete('cancel', [EventUserController::class, 'destroy']);
+    });
+    Route::middleware('admin')->group(function () {
+        Route::post('store', [EventController::class, 'store']);
+        Route::post('{event_id}/update', [EventController::class, 'update'])->middleware('existEvent');
+    });
 });

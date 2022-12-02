@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\SemesterController;
 use App\Http\Controllers\Api\ClassroomController;
 use App\Http\Controllers\Api\ClassStudentController;
+use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\ExcelController;
 use App\Http\Controllers\Api\LessonController;
 use App\Http\Controllers\Api\MailController;
@@ -115,4 +116,10 @@ Route::prefix('mail')->middleware('checkRoleTeacherOrAdmin')->group(function () 
 // API FOR STUDENT
 Route::prefix('statistics')->group(function () {
     Route::get('{semester_id?}', [StatisticalController::class, 'index']);
+});
+
+//API MANAGE EVENT
+Route::prefix('event')->middleware('admin')->group(function () {
+    Route::post('store', [EventController::class, 'store']);
+    Route::post('{event_id}/update', [EventController::class, 'update'])->middleware('existEvent');
 });

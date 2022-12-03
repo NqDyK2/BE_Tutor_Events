@@ -25,30 +25,13 @@ class EditEventRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'nullable|string',
-            'image' => 'mimes:jpeg,jpg,png,gif|nullable',
-            'status' => 'nullable|integer',
-            'location' => [
-                'nullable',
-                function ($attribute, $value, $fail) {
-                    $isExistsAnother = Event::where('location', $value)
-                        ->where(function ($q) {
-                            return $q->where('start_time', '<', $this->start_time)
-                                ->where('end_time', '>', $this->start_time)
-                                ->orWhere('start_time', '<', $this->end_time)
-                                ->where('end_time', '>', $this->end_time)
-                                ->orWhere('start_time', '>', $this->start_time)
-                                ->where('end_time', '<', $this->end_time);
-                        })->first();
-                    if ($isExistsAnother) {
-                        $fail('Địa điểm "' . $value . '" đã có sự kiện khác đăng ký từ ' . $isExistsAnother->start_time . ' đến ' .  $isExistsAnother->start_time);
-                    }
-                },
-            ],
+            'name' => 'string',
+            'image' => 'mimes:jpeg,jpg,png,gif|max:5120',
+            'type' => 'integer',
+            'location' => 'string',
             'start_time' => [
-                'nullable',
                 'date',
-                'after:now'.$this->start_time,
+                'after:now',
                 function ($attribute, $value, $fail) {
                     $end_time_event = Event::where('id', $this->event_id)->first();
                     if ($end_time_event->end_time < $this->start_time) {
@@ -57,9 +40,8 @@ class EditEventRequest extends FormRequest
                 },
             ],
             'end_time' => [
-                'nullable',
                 'date',
-                'after:start_time'.$this->end_time,
+                'after:start_time',
                 function ($attribute, $value, $fail) {
                     $end_time_event = Event::where('id', $this->event_id)->first();
                     if ($end_time_event->start_time > $this->end_time) {
@@ -67,7 +49,7 @@ class EditEventRequest extends FormRequest
                     }
                 },
             ],
-            'content' => 'nullable|max:2000',
+            'content' => 'max:2000',
         ];
     }
 
@@ -77,6 +59,9 @@ class EditEventRequest extends FormRequest
             'name.string' => 'Tên sự kiện không đúng định dạng',
 
             'image.mimes' => 'Ảnh không đúng định dạng',
+            'image.max' => 'Dung lượng ảnh không được vượt quá 5MB',
+
+            'location.string' => 'Địa điểm sự kiện không đúng định dạng',
 
             'start_time.date' => 'Thời gian bắt đầu không đúng định dạng',
             'start_time.after' => 'Thời gian bắt đầu phải lớn hơn thời gian hiện tại',
@@ -84,7 +69,7 @@ class EditEventRequest extends FormRequest
             'end_time.date' => 'Thời gian kết thúc không đúng định dạng',
             'end_time.after' => 'Thời gian kết thúc phải lớn hơn thời gian bắt đầu',
 
-            'status.integer' => 'Status không đúng định dạng',
+            'type.integer' => 'Type không đúng định dạng',
 
             'content.max' => 'Nội dung không được quá 2000 ký tự',
         ];

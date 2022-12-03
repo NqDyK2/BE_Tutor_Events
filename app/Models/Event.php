@@ -18,4 +18,8 @@ class Event extends Model
         'start_time',
         'end_time',
     ];
+    public function eventUsers()
+    {
+        return $this->hasMany(EventUser::class, 'event_id');
+    }
 }

@@ -121,12 +121,16 @@ Route::prefix('statistics')->group(function () {
 
 //API MANAGE EVENT
 Route::prefix('event')->group(function () {
+    Route::get('get-all', [EventController::class, 'index']);
     Route::middleware('existEvent')->group(function () {
         Route::post('join', [EventUserController::class, 'create']);
         Route::delete('cancel', [EventUserController::class, 'destroy']);
     });
     Route::middleware('admin')->group(function () {
         Route::post('store', [EventController::class, 'store']);
-        Route::post('{event_id}/update', [EventController::class, 'update'])->middleware('existEvent');
+        Route::middleware('existEvent')->group(function () {
+            Route::post('{event_id}/update', [EventController::class, 'update']);
+            Route::delete('{event_id}/delete', [EventController::class, 'destroy']);
+        });
     });
 });

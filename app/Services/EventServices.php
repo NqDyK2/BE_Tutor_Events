@@ -22,14 +22,14 @@ class EventServices
         )
         ->leftJoin('event_users', 'events.id', '=', 'event_users.event_id')
         ->groupBy(
-            'tutors.events.id',
-            'tutors.events.name', 
-            'tutors.events.content',
-            'tutors.events.image',
-            'tutors.events.type',
-            'tutors.events.location',
-            'tutors.events.start_time', 
-            'tutors.events.end_time'
+            'events.id',
+            'events.name', 
+            'events.content',
+            'events.image',
+            'events.type',
+            'events.location',
+            'events.start_time', 
+            'events.end_time'
         )
         ->withCount('eventUsers')
         ->orderBy('events.start_time', 'desc')

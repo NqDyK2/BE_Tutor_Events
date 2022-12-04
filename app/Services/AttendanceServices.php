@@ -112,8 +112,8 @@ class AttendanceServices
             Attendance::insert($array_attendances);
         }
 
-        Attendance::where('lesson_id', $lessonId)->whereIn('student_email', $presentEmails)->update(["status" => true]);
-        Attendance::where('lesson_id', $lessonId)->whereIn('student_email', $absentEmails)->update(["status" => false]);
+        Attendance::where('lesson_id', $lessonId)->whereIn('student_email', $presentEmails)->update(["status" => Attendance::STATUS_PRESENT]);
+        Attendance::where('lesson_id', $lessonId)->whereIn('student_email', $absentEmails)->update(["status" => Attendance::STATUS_ABSENT]);
         $lesson->attended = true;
         $lesson->save();
 

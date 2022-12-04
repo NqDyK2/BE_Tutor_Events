@@ -10,7 +10,7 @@ class Attendance extends Model
 {
 
     const STATUS_PRESENT = 1;
-    const STATUS_ABSENT = 1;
+    const STATUS_ABSENT = 0;
 
     use HasFactory;
 

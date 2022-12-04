@@ -109,7 +109,7 @@ Route::prefix('teacher-tutor')->group(function () {
 });
 
 // API MAIL
-Route::prefix('mail')->middleware('checkRoleTeacherOrAdmin')->group(function () {
+Route::prefix('mail')->group(function () {
     Route::post('invite-class', [MailController::class, 'sendMailInvite']);
     Route::post('invite-all', [MailController::class, 'sendMailInviteAll']);
 });

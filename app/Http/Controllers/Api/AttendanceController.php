@@ -36,16 +36,8 @@ class AttendanceController extends Controller
 
     public function update(Request $request)
     {
-        $updated = $this->attendanceServices->update($request->lesson_id, $request->data);
+        $response = $this->attendanceServices->update($request->lesson_id, $request->data);
 
-        if (!$updated) {
-            return response([
-                'message' => 'Chưa đến thời gian điểm danh'
-            ], 400);
-        }
-
-        return response([
-            'message' => 'Cập nhật điểm danh thành công'
-        ], 200);
+        return $response;
     }
 }

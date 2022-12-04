@@ -86,7 +86,11 @@ class AttendanceServices
             ->where('end_time', '>=', now())
             ->first();
 
-        if (!$lesson) return false;
+        if (!$lesson) {
+            return response([
+                'message' => 'Chưa đến thời gian điểm danh'
+            ], 400);
+        }
 
         $emails = array_map(fn ($x) => $x['student_email'], $data);
 
@@ -108,11 +112,13 @@ class AttendanceServices
             Attendance::insert($array_attendances);
         }
 
-        $cc = Attendance::where('lesson_id', $lessonId)->whereIn('student_email', $presentEmails)->update(["status" => true]);
+        Attendance::where('lesson_id', $lessonId)->whereIn('student_email', $presentEmails)->update(["status" => true]);
         Attendance::where('lesson_id', $lessonId)->whereIn('student_email', $absentEmails)->update(["status" => false]);
         $lesson->attended = true;
         $lesson->save();
 
-        return true;
+        return response([
+            'message' => 'Cập nhật điểm danh thành công'
+        ], 200);
     }
 }

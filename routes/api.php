@@ -124,8 +124,8 @@ Route::prefix('event')->group(function () {
     Route::get('get-all', [EventController::class, 'index']);
     Route::middleware('existEvent')->group(function () {
         Route::post('{event_id}/feedback', [EventUserController::class, 'storeFeedback']);
-        Route::post('join', [EventUserController::class, 'create']);
-        Route::delete('cancel', [EventUserController::class, 'destroy']);
+        Route::post('{event_id}/join', [EventUserController::class, 'create']);
+        Route::delete('{event_id}/cancel', [EventUserController::class, 'destroy']);
     });
     Route::middleware('admin')->group(function () {
         Route::post('store', [EventController::class, 'store']);

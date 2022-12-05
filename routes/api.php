@@ -123,6 +123,7 @@ Route::prefix('statistics')->group(function () {
 Route::prefix('event')->group(function () {
     Route::get('get-all', [EventController::class, 'index']);
     Route::middleware('existEvent')->group(function () {
+        Route::post('{event_id}/feedback', [EventUserController::class, 'storeFeedback']);
         Route::post('join', [EventUserController::class, 'create']);
         Route::delete('cancel', [EventUserController::class, 'destroy']);
     });

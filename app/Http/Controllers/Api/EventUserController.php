@@ -16,14 +16,18 @@ class EventUserController extends Controller
 
     public function create(Request $request)
     {
-        $response = $this->eventUserServices->create($request->input());
+        $event = $request->get('event');
+
+        $response = $this->eventUserServices->create($event);
 
         return $response;
     }
 
     public function destroy(Request $request)
     {
-        $response = $this->eventUserServices->destroy($request->input());
+        $event = $request->get('event');
+
+        $response = $this->eventUserServices->destroy($event);
 
         return $response;
     }

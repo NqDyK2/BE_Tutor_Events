@@ -17,7 +17,6 @@ class EventUserController extends Controller
     public function create(Request $request)
     {
         $event = $request->get('event');
-
         $response = $this->eventUserServices->create($event);
 
         return $response;
@@ -26,7 +25,6 @@ class EventUserController extends Controller
     public function destroy(Request $request)
     {
         $event = $request->get('event');
-
         $response = $this->eventUserServices->destroy($event);
 
         return $response;
@@ -35,7 +33,6 @@ class EventUserController extends Controller
     public function storeFeedback(StoreFeedbackEventRequest $request)
     {
         $event = $request->get('event');
-
         $response = $this->eventUserServices->storeFeedback($request->input(), $event);
 
         return $response;

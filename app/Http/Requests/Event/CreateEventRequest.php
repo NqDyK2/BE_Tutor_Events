@@ -26,8 +26,8 @@ class CreateEventRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'image' => 'mimes:jpeg,jpg,png,gif|required|max:5120',
-            'type' => 'required|integer',
+            'image' => 'required|image|mimes:jpeg,jpg,png,gif|max:5120',
+            'type' => 'integer',
             'location' => 'required|string',
             'start_time' => 'required|date|after:now',
             'end_time' => 'required|date|after:start_time',
@@ -44,8 +44,9 @@ class CreateEventRequest extends FormRequest
             'location.required' => 'Địa điểm sự kiện không được để trống',
             'location.string' => 'Địa điểm sự kiện không đúng định dạng',
 
-            'image.mimes' => 'Ảnh không đúng định dạng',
             'image.required' => 'Ảnh không được để trống',
+            'image.image' => 'Ảnh không đúng định dạng',
+            'image.mimes' => 'Ảnh không đúng định dạng',
             'image.max' => 'Dung lượng ảnh không được vượt quá 5MB',
 
             'start_time.required' => 'Thời gian bắt đầu không được để trống',

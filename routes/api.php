@@ -128,10 +128,12 @@ Route::prefix('event')->group(function () {
         Route::delete('{event_id}/cancel', [EventUserController::class, 'destroy']);
     });
     Route::middleware('admin')->group(function () {
+        Route::get('in-trash', [EventController::class, 'getTrashedEvents']);
         Route::post('store', [EventController::class, 'store']);
         Route::middleware('existEvent')->group(function () {
-            Route::post('{event_id}/update', [EventController::class, 'update']);
+            Route::put('{event_id}/update', [EventController::class, 'update']);
             Route::delete('{event_id}/delete', [EventController::class, 'destroy']);
+            Route::put('{event_id}/restore', [EventController::class, 'restore']);
         });
     });
 });

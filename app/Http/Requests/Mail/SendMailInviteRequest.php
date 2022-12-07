@@ -28,11 +28,10 @@ class SendMailInviteRequest extends FormRequest
             "student_email" => "required|email",
             "lesson_id" => [
                 'required',
-                function($attribute, $value, $fail)
-                {
-                    $check = Lesson::join('class_students','class_students.classroom_id','lessons.classroom_id')
-                    ->where('lessons.id',$value)
-                    ->where('class_students.student_email',$this->student_email)
+                function ($attribute, $value, $fail) {
+                    $check = Lesson::join('class_students', 'class_students.classroom_id', 'lessons.classroom_id')
+                    ->where('lessons.id', $value)
+                    ->where('class_students.student_email', $this->student_email)
                     ->exists();
 
                     if (!$check) {

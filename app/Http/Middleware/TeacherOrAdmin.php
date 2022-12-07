@@ -18,7 +18,7 @@ class TeacherOrAdmin
      */
     public function handle(Request $request, Closure $next)
     {
-        if(!(Auth::user()->role_id == User::ROLE_ADMIN || Auth::user()->role_id == User::ROLE_TEACHER)){
+        if (!(Auth::user()->role_id == User::ROLE_ADMIN || Auth::user()->role_id == User::ROLE_TEACHER)) {
             return response([
                 'message' => 'Bạn không có quyền thực hiện tác vụ này'
             ], 403);

@@ -19,7 +19,7 @@ class ExistMajor
     {
         $major = Major::find($request->major_id);
 
-        if($major === null) {
+        if ($major === null) {
             return response([
                 'message' => 'Chuyên ngành không tồn tại'
             ], 404);

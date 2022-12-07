@@ -10,7 +10,8 @@ use Illuminate\Http\Request;
 class EventUserController extends Controller
 {
     protected $eventUserServices;
-    public function __construct(EventUserServices $eventUserServices){
+    public function __construct(EventUserServices $eventUserServices)
+    {
         $this->eventUserServices = $eventUserServices;
     }
 

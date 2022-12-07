@@ -23,8 +23,9 @@ class AuthServices
         //     ], 401);
         // }
 
-        if ($googleUser->email)
-        $user = User::where('email', $googleUser->email)->first();
+        if ($googleUser->email) {
+            $user = User::where('email', $googleUser->email)->first();
+        }
 
         if (!$user) {
             $user = User::create([

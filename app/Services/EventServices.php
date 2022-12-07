@@ -9,84 +9,91 @@ use Illuminate\Support\Facades\Storage;
 
 class EventServices
 {
-    public function index(){
+    public $storePath = 'public/images/event_images/';
+    public $imagePath = 'storage/images/event_images/';
+
+    public function getAllActiveEvents(){
         return Event::select(
-            'events.id',
-            'events.name',
-            'events.content',
-            'events.image',
-            'events.type',
-            'events.location',
-            'events.start_time',
-            'events.end_time'
-        )
-        ->leftJoin('event_users', 'events.id', '=', 'event_users.event_id')
-        ->groupBy(
-            'events.id',
-            'events.name', 
-            'events.content',
-            'events.image',
-            'events.type',
-            'events.location',
-            'events.start_time', 
-            'events.end_time'
+            'id',
+            'name',
+            'content',
+            'image',
+            'type',
+            'location',
+            'start_time',
+            'end_time',
+            'trashed_at'
         )
         ->withCount('eventUsers')
-        ->orderBy('events.start_time', 'desc')
+        ->where('trashed_at', '=', null)
+        ->orderBy('start_time', 'desc')
         ->get();
     }
 
-    public function create($data)
+    public function getTrashedEvents(){
+        return Event::select(
+            'id',
+            'name',
+            'content',
+            'image',
+            'type',
+            'location',
+            'start_time',
+            'end_time',
+            'trashed_at'
+        )
+        ->withCount('eventUsers')
+        ->where('trashed_at', '!=', null)
+        ->orderBy('start_time', 'desc')
+        ->get();
+    }
+
+    public function create($request)
     {
-        $imageName = date('Ymd').'_'.date('His').'_'.$data->file('image')->getClientOriginalName();
-        $data->image->storeAs('images/event_images', $imageName);
-        $urlImage = 'images/event_images/'.$imageName;
-        $data = [
-            'name' => $data->name,
-            'content' => $data->content,
-            'type' => $data->type,
-            'start_time' => $data->start_time,
-            'end_time' => $data->end_time,
-            'image' => $urlImage,
-            'location' => $data->location
-        ];
+        $data = $request->input();
+
+        $imageName = $request->file('image')->hashName();
+        $data['image'] = $this->imagePath . $imageName;
+
+        $request->image->storeAs($this->storePath, $imageName);
+
         return Event::create($data);
     }
 
-    public function update($data, $event)
+    public function update($request, $event)
     {
-        if($data->hasFile('image')){
+        $data = $request->input();
+
+        if ($request->file('image')) {
+            $imageName = $request->file('image')->hashName();
+            $data['image'] = $this->imagePath . $imageName;
+
+            $request->image->storeAs($this->storePath, $imageName);
             Storage::delete($event->image);
-        };
-        $dataEdit = [];
-        foreach ($data->all() as $key => $value) {
-            if ($value != null) {
-                $dataEdit[$key] = $value;
-            }
         }
-        if (isset($dataEdit['image']) && $dataEdit['image'] != null) {
-            $imageName = date('Ymd').'_'.date('His').'_'.$dataEdit['image']->getClientOriginalName();
-            $data->image->storeAs('images/event_images', $imageName);
-            $urlImage = 'images/event_images/'.$imageName;
-            $dataEdit['image'] = $urlImage; 
-        }
-        return $event->update($dataEdit);
+
+        return $event->update($data);
     }
 
-    public function destroy($event)
+    public function trashingEvent($event)
     {
-        $eventUsers = EventUser::where('event_id', $event->id)->exists();
-        if ($eventUsers) {
-            return response([
-                'message' => 'Đã có tài khoản đăng ký tham gia sự kiện này, bạn không thể xóa sự kiện',
-            ], 400);
-        }
-        if ($event->image != null) {
-            Storage::delete($event->image);
-        }
-        $event->delete();
+        $event->update([
+            "trashed_at" => now()
+        ]);
+
         return response([
-            'message' => 'Xóa sự kiện thành công',
+            'message' => 'Sự kiện đã được chuyển vào thùng rác',
+        ], 200);
+    }
+
+    public function restoreEvent($event)
+    {
+        $event->update([
+            "trashed_at" => null
+        ]);
+
+        return response([
+            'message' => 'Khôi phục sự kiện thành công',
         ], 200);
     }
 }

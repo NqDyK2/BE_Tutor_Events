@@ -31,6 +31,8 @@ class StoreFeedbackEventRequest extends FormRequest
     public function messages()
     {
         return [
+            'message.max' => 'Message không được để trống',
+            'message.max' => 'Message không đúng dịnh dạng',
             'message.max' => 'Message không được quá 255 ký tự',
         ];
     }

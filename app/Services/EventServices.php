@@ -12,7 +12,8 @@ class EventServices
     public $storePath = 'public/images/event_images/';
     public $imagePath = 'storage/images/event_images/';
 
-    public function getAllActiveEvents(){
+    public function getAllActiveEvents()
+    {
         return Event::select(
             'id',
             'name',
@@ -30,7 +31,8 @@ class EventServices
         ->get();
     }
 
-    public function getTrashedEvents(){
+    public function getTrashedEvents()
+    {
         return Event::select(
             'id',
             'name',

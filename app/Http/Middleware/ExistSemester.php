@@ -19,7 +19,7 @@ class ExistSemester
     {
         $semester = Semester::find($request->semester_id);
 
-        if($semester === null) {
+        if ($semester === null) {
             return response([
                 'message' => 'Kỳ học không tồn tại'
             ], 404);

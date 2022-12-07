@@ -5,7 +5,7 @@ use App\Models\Classroom;
 use App\Models\ClassStudent;
 use Illuminate\Support\Facades\DB;
 
-Class ClassStudentServices
+class ClassStudentServices
 {
     public function classStudentsInClassroom($classroom_id)
     {
@@ -24,7 +24,7 @@ Class ClassStudentServices
         ->orderBy('is_warning', 'DESC')
         ->get();
 
-        return ClassStudent::where('classroom_id',$classroom_id)->get();
+        return ClassStudent::where('classroom_id', $classroom_id)->get();
     }
 
     public function update($data)

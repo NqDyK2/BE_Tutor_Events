@@ -11,7 +11,7 @@ class SubjectServices
         return Subject::create($data);
     }
 
-    public function update($data,$subject)
+    public function update($data, $subject)
     {
         return $subject->update($data);
     }

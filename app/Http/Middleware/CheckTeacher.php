@@ -24,7 +24,7 @@ class CheckTeacher
             ->where('lessons.teacher_email', Auth::user()->email)
             ->exists();
 
-        if(!$isTeacher){
+        if (!$isTeacher) {
             return response([
                 'message' => 'Bạn không phải giáo viên'
             ], 403);

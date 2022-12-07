@@ -23,7 +23,7 @@ class SemesterController extends Controller
         $semester = $this->semesterServices->getAll();
         return response([
             'data' => $semester
-        ],200);
+        ], 200);
     }
 
     public function store(CreateSemesterRequest $request)
@@ -31,17 +31,17 @@ class SemesterController extends Controller
         $semester = $this->semesterServices->create($request->input());
         return response([
             'message' => 'Tạo kỳ học thành công'
-        ],201);
+        ], 201);
     }
 
     public function update(UpdateSemesterRequest $request)
     {
         $semester = $request->get('semester');
-        $this->semesterServices->update($request->input(),$semester);
+        $this->semesterServices->update($request->input(), $semester);
 
         return response([
             'message' => 'Cập nhật kỳ học thành công',
-        ],200);
+        ], 200);
     }
 
     public function destroy(Request $request)

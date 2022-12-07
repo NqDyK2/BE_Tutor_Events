@@ -47,7 +47,6 @@ class AuthController extends Controller
             $response = $this->authServices->loginGoogle($googleUser);
 
             return $response;
-
         } catch (\Exception $error) {
             return response([
                 'message' => 'Đăng nhập thất bại, thử lại sau ít phút',

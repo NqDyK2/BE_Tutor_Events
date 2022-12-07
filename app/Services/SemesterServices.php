@@ -24,7 +24,7 @@ class SemesterServices
         return Semester::create($data);
     }
 
-    public function update($data,$Semester)
+    public function update($data, $Semester)
     {
         return $Semester->update($data);
     }

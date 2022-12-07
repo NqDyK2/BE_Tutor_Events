@@ -43,7 +43,9 @@ class ClassroomServices
             ->where('subject_id', $data['subject_id'])
             ->first();
 
-        if ($classroom) return false;
+        if ($classroom) {
+            return false;
+        }
 
         $classroom = Classroom::create($data);
         $subject = $classroom->subject;

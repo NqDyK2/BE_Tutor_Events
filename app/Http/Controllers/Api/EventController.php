@@ -12,7 +12,8 @@ class EventController extends Controller
 {
     private $eventServices;
 
-    public function __construct(EventServices $eventServices){
+    public function __construct(EventServices $eventServices)
+    {
         $this->eventServices = $eventServices;
     }
 

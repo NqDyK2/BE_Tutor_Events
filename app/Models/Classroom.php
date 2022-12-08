@@ -36,6 +36,11 @@ class Classroom extends Model
         return $this->hasMany(Lesson::class, 'classroom_id');
     }
 
+    public function feedback()
+    {
+        return $this->hasMany(Feedback::class, 'classroom_id');
+    }
+
     public function teacher()
     {
         return $this->belongsTo(User::class, 'default_teacher_email', 'email');

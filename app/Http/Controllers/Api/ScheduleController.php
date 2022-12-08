@@ -3,24 +3,31 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Services\ClassroomServices;
 use App\Services\ScheduleServices;
 use Illuminate\Http\Request;
 
 class ScheduleController extends Controller
 {
     private $scheduleServices;
+    private $classroomServices;
 
     public function __construct(
-        ScheduleServices $scheduleServices
+        ScheduleServices $scheduleServices,
+        ClassroomServices $classroomServices
     ) {
         $this->scheduleServices = $scheduleServices;
+        $this->classroomServices = $classroomServices;
     }
 
     public function studentSchedule()
     {
         $lesson = $this->scheduleServices->studentSchedule();
+        $classroomsNeedFeedback = $this->classroomServices->getListClassNeedFeedback();
+
         return response([
             'data' => $lesson,
+            'need_feedback' => $classroomsNeedFeedback
         ], 200);
     }
 
@@ -34,6 +41,7 @@ class ScheduleController extends Controller
     public function teacherTutorSchedule()
     {
         $lesson = $this->scheduleServices->teacherTutorSchedule();
+
         return response([
             'data' => $lesson,
         ], 200);

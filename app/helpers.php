@@ -2,7 +2,7 @@
 
 use App\Models\Classroom;
 use App\Models\ClassStudent;
-use App\Models\Lesson;
+use App\Models\Semester;
 
 if (!function_exists('getClassroomStatistical')) {
     function getClassroomStatistical($classroomId)
@@ -64,15 +64,25 @@ if (!function_exists('getClassroomStatistical')) {
                 $workingMinutes += strtotime($lesson->end_time) - strtotime($lesson->start_time);
             }
 
-            $teachersCount[] = (Object) [
+            $teachersCount[] = (object) [
                 'email' => $key,
                 'lessons_count' => $value,
-                'working_minutes' => $workingMinutes/60
+                'working_minutes' => $workingMinutes / 60
             ];
         }
 
         $classroom->teachers = collect($teachersCount);
 
         return $classroom;
+    }
+}
+
+if (!function_exists('getInprogressSemester')) {
+    function getInprogressSemester()
+    {
+        return Semester::where('semesters.start_time', '<=', now())
+            ->where('semesters.end_time', '>=', now())
+            ->with('classrooms')
+            ->first();
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Jobs\Mail\SendMailAddTeacherJob;
+use App\Models\Attendance;
 use App\Models\Classroom;
 use App\Models\ClassStudent;
 use App\Models\Feedback;
@@ -138,5 +139,51 @@ class ClassroomServices
         return response([
             'message' => 'Đánh giá lớp học thành công'
         ], 200);
+    }
+
+    public function getListClassNeedFeedback()
+    {
+        $currentSemester = getInprogressSemester();
+        $classNeedFeedback = [];
+
+        if (!$currentSemester) {
+            return [];
+        }
+
+        $classrooms = Classroom::where('semester_id', $currentSemester->id)
+            ->whereHas('classStudents', function ($q) {
+                return $q->where('student_email', Auth::user()->email);
+            })
+            ->with('subject')
+            ->with('lessons', function ($q) {
+                return $q->select('id', 'classroom_id', 'attended')
+                    ->with('attendances', function ($q) {
+                        return $q->where('student_email', Auth::user()->email)
+                            ->where('status', Attendance::STATUS_PRESENT);
+                    });
+            })
+            ->whereDoesntHave('feedback', function ($q) {
+                return $q->where('user_id', Auth::id());
+            })
+            ->get();
+
+        foreach ($classrooms as $classroom) {
+            $totalLesson = $classroom->lessons->count();
+            $attendedLesson = $classroom->lessons->where('attended', 1)->count();
+            $studentPresentLesson = $classroom->lessons->filter(function ($lesson) {
+                return $lesson->attendances->count();
+            })->count();
+
+            if (!$totalLesson) {
+                continue;
+            }
+
+            if ($studentPresentLesson >= 3 || ($attendedLesson && floor($totalLesson / $attendedLesson) == 2 && $studentPresentLesson > 0)) {
+                $classNeedFeedback = $classroom;
+            }
+        }
+
+        return $classNeedFeedback;
+        
     }
 }

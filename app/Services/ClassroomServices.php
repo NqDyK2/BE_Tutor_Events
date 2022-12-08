@@ -179,7 +179,7 @@ class ClassroomServices
             }
 
             if ($studentPresentLesson >= 3 || ($attendedLesson && floor($totalLesson / $attendedLesson) == 2 && $studentPresentLesson > 0)) {
-                $classNeedFeedback = $classroom;
+                $classNeedFeedback[] = $classroom;
             }
         }
 

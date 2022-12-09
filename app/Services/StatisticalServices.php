@@ -14,18 +14,30 @@ class StatisticalServices
         $classroomsStatistical = [];
 
         $semester = Semester::where('id', $semesterId)
-            ->with('classrooms')
+            ->with('classrooms', function ($q) {
+                return $q->whereHas('lessons', function ($q) {
+                    return $q->where('attended', 1);
+                });
+            })
             ->first();
 
         if (!$semester) {
             $semester = Semester::where('semesters.start_time', '<=', now())
                 ->where('semesters.end_time', '>=', now())
-                ->with('classrooms')
+                ->with('classrooms', function ($q) {
+                    return $q->whereHas('lessons', function ($q) {
+                        return $q->where('attended', 1);
+                    });
+                })
                 ->first();
         }
         if (!$semester) {
             $semester = Semester::orderBy('end_time', 'DESC')
-                ->with('classrooms')
+            ->with('classrooms', function ($q) {
+                return $q->whereHas('lessons', function ($q) {
+                    return $q->where('attended', 1);
+                });
+            })
                 ->first();
         }
         if (!$semester) {

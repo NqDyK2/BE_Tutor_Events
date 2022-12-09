@@ -17,7 +17,7 @@ class StatisticalController extends Controller
 
     public function index(Request $request)
     {
-        $response = $this->statisticalServices->getSemesterStatisticalById($request->semester_id);
+        $response = $this->statisticalServices->getSemesterStatistical($request->semester_id);
 
         return $response;
     }

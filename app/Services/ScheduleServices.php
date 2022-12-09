@@ -109,6 +109,7 @@ class ScheduleServices
             ->join('subjects', 'subjects.id', 'classrooms.subject_id')
             ->where('lessons.teacher_email', $user->email)
             ->orWhere('lessons.tutor_email', $user->email)
+            ->orWhere('classrooms.default_teacher_email', $user->email)
             ->where('lessons.end_time', '>=', date('Y-m-d'))
             ->orderBy('lessons.end_time', 'ASC')
             ->get();

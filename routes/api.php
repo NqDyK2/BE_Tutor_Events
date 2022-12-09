@@ -16,17 +16,7 @@ use App\Http\Controllers\Api\ScheduleController;
 use App\Http\Controllers\Api\StatisticalController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
-
+// AUTH API
 Route::get('auth/user', [AuthController::class, 'getAuthDetail']);
 
 // API FOR MANAGE
@@ -114,9 +104,12 @@ Route::prefix('mail')->group(function () {
     Route::post('invite-all', [MailController::class, 'sendMailInviteAll']);
 });
 
-// API FOR STUDENT
+// TUTOR STATISTICS API
 Route::prefix('statistics')->group(function () {
-    Route::get('{semester_id?}', [StatisticalController::class, 'index']);
+    Route::middleware('admin')->group(function () {
+        Route::get('{semester_id?}', [StatisticalController::class, 'getSemesterStatistical']);
+        Route::get('{semester_id}/user', [StatisticalController::class, 'getUserStatisticalInSemester'])->middleware('existSemester');
+    });
 });
 
 //API MANAGE EVENT

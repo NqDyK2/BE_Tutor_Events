@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Classroom;
 use App\Models\ClassStudent;
+use App\Models\Lesson;
 use App\Models\Semester;
 
 class StatisticalServices
@@ -183,5 +184,25 @@ class StatisticalServices
         $classroom->tutors = collect($tutorsWorkingTimeCount);
 
         return $classroom;
+    }
+
+    function getTeacherStatistical($semesterId, $email, $role)
+    {
+        $lesson = Lesson::with('attendances')
+            ->with('classroom', function ($q) {
+                return $q->with('subject');
+            })
+            ->whereHas('classroom', function ($q) use ($semesterId) {
+                $q->where('semester_id', $semesterId);
+            })
+            ->orderBy('classroom_id', 'DESC');
+
+        if ($role == 'teacher') {
+            $lesson = $lesson->where('teacher_email', $email);
+        } else {
+            $lesson = $lesson->where('tutor_email', $email);
+        }
+
+        return $lesson->get();
     }
 }

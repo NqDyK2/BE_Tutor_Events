@@ -152,30 +152,30 @@ class StatisticalServices
         $classroom->statted_lesons_count = count($classroom->lessons);
 
         foreach (array_count_values($teachers) as $key => $value) {
-            $workingMinutes = 0;
+            $workingSeconds = 0;
 
             foreach ($classroom->lessons->where('teacher_email', $key) as $lesson) {
-                $workingMinutes += strtotime($lesson->end_time) - strtotime($lesson->start_time);
+                $workingSeconds += strtotime($lesson->end_time) - strtotime($lesson->start_time);
             }
 
             $teachersWorkingTimeCount[] = (object) [
                 'email' => $key,
                 'lessons_count' => $value,
-                'working_minutes' => $workingMinutes / 60
+                'working_minutes' => $workingSeconds / 60
             ];
         }
 
         foreach (array_count_values($tutors) as $key => $value) {
-            $workingMinutes = 0;
+            $workingSeconds = 0;
 
             foreach ($classroom->lessons->where('tutor_email', $key) as $lesson) {
-                $workingMinutes += strtotime($lesson->end_time) - strtotime($lesson->start_time);
+                $workingSeconds += strtotime($lesson->end_time) - strtotime($lesson->start_time);
             }
 
             $tutorsWorkingTimeCount[] = (object) [
                 'email' => $key,
                 'lessons_count' => $value,
-                'working_minutes' => $workingMinutes / 60
+                'working_minutes' => $workingSeconds / 60
             ];
         }
 

@@ -8,6 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class ClassStudent extends Model
 {
     use HasFactory;
+
+    const FINAL_RESULT_PASSED = 1;
+    const FINAL_RESULT_NOT_PASSED = 1;
+    const FINAL_RESULT_BANNED = 1;
+
     /**
      * The attributes that are mass assignable.
      *

@@ -47,7 +47,8 @@ Route::prefix('semester')->group(function () {
     Route::middleware(['existSemester', 'admin'])->group(function () {
         Route::put('{semester_id}/update', [SemesterController::class, 'update']);
         Route::delete('{semester_id}/delete', [SemesterController::class, 'destroy']);
-        Route::post('{semester_id}/import', [ExcelController::class, 'import']);
+        Route::post('{semester_id}/import', [ExcelController::class, 'importWarningStudents']);
+        Route::post('{semester_id}/import-all-result', [ExcelController::class, 'importAllStudentAndResult']);
     });
 
     Route::get('{semester_id}/classrooms', [ClassroomController::class, 'classroomsInSemester'])->middleware(['existSemester']);

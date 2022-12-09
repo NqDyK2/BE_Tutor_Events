@@ -11,7 +11,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Str;
 
-class InsertUserFromExcelJob implements ShouldQueue
+class InsertWarningStudentFromExcelJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -19,8 +19,24 @@ class InsertUserFromExcelJob implements ShouldQueue
     private $classrooms;
 
     /**
-     * Create a new job instance.
+     * Thêm user vào lớp học từ file 1/3 block.
+     * Chỉ thêm user vào các lớp đang có trong $classrooms
+     * User đã có trong lớp học sẽ chỉ thực hiện update
+     * User được tạo mới từ api này sẽ có tag warning
      *
+     * @param Array $user [
+     *      "subject",
+     *      "student_code",
+     *      "student_email",
+     *      "student_name",
+     *      "student_phone",
+     *      "reason",
+     * ]
+     * 
+     * @param Array $classrooms [
+     *      "COM1234" => {classroom_id},
+     * ]
+     * 
      * @return void
      */
     public function __construct($user, $classrooms)

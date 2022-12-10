@@ -13,7 +13,8 @@ class ScheduleServices
 {
     public function studentSchedule()
     {
-        return ClassStudent::select(
+        $lessons = ClassStudent::select(
+            'lessons.id',
             'subjects.name as subject_name',
             'subjects.code as subject_code',
             'lessons.start_time',
@@ -28,10 +29,28 @@ class ScheduleServices
             ->join('subjects', 'subjects.id', 'classrooms.subject_id')
             ->leftJoin('lessons', 'classrooms.id', 'lessons.classroom_id')
             ->where('class_students.student_email', Auth::user()->email)
-            ->where('class_students.is_joined', true)
             ->where('lessons.end_time', '>=', date('Y-m-d'))
             ->orderBy('lessons.end_time', 'ASC')
             ->get();
+
+        if (!$lessons->count()) {
+            return [];
+        }
+
+        $listCheckedIn = Attendance::select(['lesson_id', 'student_email'])
+            ->where('student_email', Auth::user()->email)
+            ->whereIn('lesson_id', $lessons->pluck('id'))
+            ->get()
+            ->pluck('lesson_id');
+
+        foreach ($lessons as $lesson) {
+            $lesson->is_checked_in = 0;
+            if (in_array($lesson->id, $listCheckedIn->toArray())) {
+                $lesson->is_checked_in = 1;
+            }
+        }
+
+        return $lessons;
     }
 
 

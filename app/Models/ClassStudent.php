@@ -37,4 +37,9 @@ class ClassStudent extends Model
     {
         return $this->belongsTo(User::class, 'student_email', 'email');
     }
+
+    public function feedback()
+    {
+        return $this->belongsTo(User::class, 'student_email', 'student_email');
+    }
 }

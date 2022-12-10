@@ -92,6 +92,7 @@ Route::prefix('student')->group(function () {
     Route::get('missing-classes', [ScheduleController::class, 'missingClasses']);
     Route::post('feedback/{classroom_id}', [ClassroomController::class, 'storeFeedback'])->middleware('existClassroom');
     Route::put('join-class/{classroom_id}', [ScheduleController::class, 'joinClass'])->middleware('existClassroom');
+    Route::post('check-in/{lesson_id}', [AttendanceController::class, 'studentCheckin'])->middleware('existLesson');
 });
 
 // API FOR TEACHER

@@ -121,4 +121,48 @@ class AttendanceServices
             'message' => 'Cập nhật điểm danh thành công'
         ], 200);
     }
+    
+    public function studentCheckin($lesson)
+    {
+        if ($lesson->start_time > now()) {
+            return response([
+                'message' => 'Buổi học chưa diễn ra'
+            ], 400);
+
+        } elseif ($lesson->end_time < now()) {
+            return response([
+                'message' => 'Đã quá thời gian checkin'
+            ], 400);
+        }
+
+        $checkAttendance = Attendance::where('lesson_id', $lesson->id)
+            ->where('student_email', Auth::user()->email)
+            ->exists();
+
+        if ($checkAttendance) {
+            return response([
+                'message' => 'Bạn đã checkin trong buổi học này'
+            ], 400);
+        }
+
+        $checkUserInClass = ClassStudent::where('student_email', Auth::user()->email)
+            ->where('classroom_id', $lesson->classroom_id)
+            ->exists();
+
+        if (!$checkUserInClass) {
+            return response([
+                'message' => 'Bạn không có trong danh sách lớp này'
+            ], 400);
+        }
+
+        Attendance::create([
+            'student_email' => Auth::user()->email,
+            'lesson_id' => $lesson->id,
+            'status' => Attendance::STATUS_PRESENT
+        ]);
+
+        return response([
+            'message' => 'Checkin thành công'
+        ], 200);
+    }
 }

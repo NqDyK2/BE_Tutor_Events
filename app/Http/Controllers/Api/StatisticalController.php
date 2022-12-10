@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Statistical\getUserStatisticalRequest;
 use App\Services\StatisticalServices;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Cache;
 
 class StatisticalController extends Controller
 {
@@ -19,7 +19,14 @@ class StatisticalController extends Controller
 
     public function getSemesterStatistical(Request $request)
     {
-        $response = $this->statisticalServices->getSemesterStatistical($request->semester_id);
+        $response = [];
+
+        if (Cache::has('semesterStatistical')) {
+            $response = Cache::get('semesterStatistical');
+        } else {
+            $response = $this->statisticalServices->getSemesterStatistical($request->semester_id);
+            Cache::put('semesterStatistical', $response, 60*30);
+        }
 
         return $response;
     }

@@ -40,4 +40,12 @@ class AttendanceController extends Controller
 
         return $response;
     }
+
+    public function studentCheckin(Request $request)
+    {
+        $lesson = $request->get('lesson');
+        $response = $this->attendanceServices->studentCheckin($lesson);
+
+        return $response;
+    }
 }

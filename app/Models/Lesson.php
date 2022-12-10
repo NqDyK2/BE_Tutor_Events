@@ -51,4 +51,9 @@ class Lesson extends Model
     {
         return $this->hasMany(inviteLessonMails::class, 'lesson_id');
     }
+
+    public function subject()
+    {
+        return $this->hasOneThrough(Subject::class, Classroom::class, 'id', 'id', 'classroom_id', 'subject_id');
+    }
 }

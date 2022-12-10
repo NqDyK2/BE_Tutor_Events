@@ -97,6 +97,14 @@ class StatisticalServices
             }
         }
 
+        foreach ($semester->teachers as $teacher) {
+            $teacher->lesons = $this->getTeacherStatistical($semester->id, $teacher->email, 'teacher');
+        }
+
+        foreach ($semester->tutors as $tutor) {
+            $tutor->lesons = $this->getTeacherStatistical($semester->id, $tutor->email, 'tutor');
+        }
+
         $semester->classrooms_statistical = $classroomsStatistical;
 
         $semester = $semester->toArray();
@@ -116,13 +124,23 @@ class StatisticalServices
         $tutorsWorkingTimeCount = [];
 
         $classroom = Classroom::where('id', $classroomId)
-            ->with('subject')
+            ->with('subject', function ($q) {
+                return $q->select(['id', 'name', 'code']);
+            })
             ->with(
-                'lessons',
-                function ($q) {
-                    return $q->where('attended', 1)
+                'lessons', function ($q) {
+                    return $q->select([
+                        'id',
+                        'classroom_id',
+                        'teacher_email',
+                        'tutor_email',
+                        'start_time',
+                        'end_time',
+                        'attended'
+                    ])
+                        ->where('attended', 1)
                         ->with('attendances', function ($q) {
-                            $q->where('status', true);
+                            $q->select(['student_email', 'status', 'lesson_id'])->where('status', true);
                         });
                 }
             )
@@ -155,7 +173,15 @@ class StatisticalServices
 
         $joinedStudents = array_unique($joinedStudents);
 
-        $classroom->joined_students = ClassStudent::where('classroom_id', $classroomId)
+        $classroom->joined_students = ClassStudent::select([
+            'id',
+            'classroom_id',
+            'student_email',
+            'is_warning',
+            'final_result',
+            'final_score'
+        ])
+            ->where('classroom_id', $classroomId)
             ->whereIn('student_email', $joinedStudents)
             ->get();
 
@@ -198,11 +224,22 @@ class StatisticalServices
         return $classroom;
     }
 
-    function getTeacherStatistical($semesterId, $email, $role)
+    function getTeacherStatistical($semesterId, $email, $role = 'teacher')
     {
-        $lesson = Lesson::with('attendances')
-            ->with('classroom', function ($q) {
-                return $q->with('subject');
+        $lesson = Lesson::select([
+            'id',
+            'classroom_id',
+            'teacher_email',
+            'tutor_email',
+            'start_time',
+            'end_time'
+        ])
+            ->withCount([
+            'attendances as joinned_students_count' => function ($query) {
+                $query->where('status', 1);
+            }])
+            ->with('subject', function ($q) {
+                $q->select('name', 'code');
             })
             ->whereHas('classroom', function ($q) use ($semesterId) {
                 $q->where('semester_id', $semesterId);

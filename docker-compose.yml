@@ -29,8 +29,8 @@ services:
     build: ./docker/app/
     working_dir: /var/www/app
     volumes:
-    command: echo Theldph15731
       - .:/var/www/app
+    command: echo Theldph15731
     networks:
       - tutor-network
 

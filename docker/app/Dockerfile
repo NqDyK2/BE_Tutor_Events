@@ -9,7 +9,7 @@ RUN mkdir -p /usr/src/php/ext/redis
 RUN curl -L https://github.com/phpredis/phpredis/archive/$PHPREDIS_VERSION.tar.gz | tar xvz -C /usr/src/php/ext/redis --strip 1
 RUN echo 'redis' >> /usr/src/php-available-exts
 # RUN docker-php-ext-install redis
-RUN pecl install redis && docker-php-ext-enable redis
+# RUN pecl install redis && docker-php-ext-enable redis
 
 RUN apk add --no-cache openssl
 

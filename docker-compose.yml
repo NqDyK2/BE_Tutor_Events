@@ -1,0 +1,45 @@
+version: '3.6'
+
+services:
+  mysql:
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - mysql-vol:/var/lib/mysql
+    ports:
+      - ${DB_PORT}:3306
+    networks:
+      - tutor-network
+
+  redis:
+    image: redis:5.0.0-alpine
+    restart: always
+    volumes:
+      - redis-vol:/data
+    ports:
+      - ${REDIS_PORT}:6379
+    networks:
+      - tutor-network
+
+  app:
+    build: ./docker/app/
+    working_dir: /var/www/app
+    volumes:
+    command: echo Theldph15731
+      - .:/var/www/app
+    networks:
+      - tutor-network
+
+volumes:
+  mysql-vol:
+    driver: local
+  redis-vol:
+    driver: local
+
+networks:
+  tutor-network:
+    driver: bridge

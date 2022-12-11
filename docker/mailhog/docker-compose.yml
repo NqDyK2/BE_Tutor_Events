@@ -1,0 +1,17 @@
+version: "3.6"
+
+services:
+  mailhog:
+    image: mailhog/mailhog
+    logging:
+      driver: 'none' # disable saving logs
+    ports:
+      - 1025:1025 # smtp server
+      - 8025:8025 # web ui
+    networks:
+      - tutor-network
+
+networks:
+  tutor-network:
+    external: true
+    name: "tutor-network"

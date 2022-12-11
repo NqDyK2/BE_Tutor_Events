@@ -8,7 +8,8 @@ social_auth_file_path=./vendor/laravel/socialite/src/Two/AbstractProvider.php
 repl_sclite_str='s/$$this->hasInvalidState()/false/g'
 disable_socialite_stateless=sed -i 's/$$this->hasInvalidState()/false/g' $(social_auth_file_path) && echo 'fixed login'
 
-tutor_build=php artisan optimize && composer install && ${disable_socialite_stateless} && php artisan migrate && php artisan storage:link
+tutor_init=sudo chown -R www-data:www-data ./storage ./bootstrap/cache && docker-compose run --rm app composer install && ${disable_socialite_stateless}
+tutor_build=php artisan optimize && composer install && php artisan migrate && php artisan storage:link
 tutor_update=php artisan optimize && php artisan migrate && php artisan queue:restart && nohup php artisan queue:work --daemon </dev/null >/dev/null 2>&1 &
 
 fix_login:
@@ -16,6 +17,9 @@ fix_login:
 
 convention:
 	@${tutor_auto_phpcs}
+
+init:
+	@${tutor_init}
 
 tutor_build:
 	@${tutor_build}

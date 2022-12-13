@@ -30,7 +30,7 @@ class LessonServices
             ->leftJoin('subjects', 'subjects.id', 'classrooms.subject_id')
             ->where('classroom_id', $classroomId)
             ->withCount([
-                'attendances as total_student',
+                'classStudents as total_student',
                 'attendances as attended_count' => function ($query) {
                     $query->where('status', true);
                 }

@@ -37,44 +37,28 @@ class AttendanceServices
 
     public function getDataByLesson(Lesson $lesson)
     {
-        $attendHistoryMap = [];
-        $sendMailHistoryMap = [];
+        $attendmails = Attendance::where('lesson_id', $lesson->id)->get()->pluck('student_email')->toArray();
+        $sentMails = InviteLessonMail::where('lesson_id', $lesson->id)->get()->pluck('student_email')->toArray();
 
         $students = ClassStudent::select(
             DB::raw('users.name as student_name'),
-            DB::raw('users.code as student_code'),
             'class_students.student_email',
             'class_students.is_warning',
-            'class_students.is_joined',
         )
             ->where('classroom_id', $lesson->classroom_id)
-            ->where('is_warning', true)
             ->leftJoin('users', 'users.email', 'class_students.student_email')
             ->orderBy('class_students.student_email', 'ASC')
-            ->get();
-
-        if ($lesson && $lesson->attended) {
-            $attendHistory = Attendance::where('lesson_id', $lesson->id)->get();
-            foreach ($attendHistory as $x) {
-                $attendHistoryMap[$x->student_email] = $x->toArray();
-            }
-            
-            $sendMailHistory = InviteLessonMail::where('lesson_id', $lesson->id)->get();
-            foreach ($sendMailHistory as $x) {
-                $sendMailHistoryMap[$x->student_email] = 1;
-            }
-        }
-
-        foreach ($students as $i => $student) {
-            $checkAttended = $lesson && $lesson->attended && array_key_exists($student->student_email, $attendHistoryMap);
-            $student->status = $checkAttended ? $attendHistoryMap[$student->student_email]['status'] : 1;
-            $student->note = $checkAttended ? $attendHistoryMap[$student->student_email]['note'] : '';
-
-            $checkSentMail = $lesson && $lesson->attended && array_key_exists($student->student_email, $sendMailHistoryMap);
-            $student->is_sent_mail = $checkSentMail ? 1 : 0;
-
-            $students[$i] = $student;
-        }
+            ->get()
+            ->map(function ($item) use ($attendmails, $sentMails) {
+                // dd($item->student_email, $attendmails);
+                $item->status = in_array($item->student_email, $attendmails) ? 1 : 0;
+                $item->is_sent_mail = in_array($item->student_email, $sentMails) ? 1 : 0;
+                return $item;
+            })
+            ->filter(function ($item) {
+                return ($item->is_warning || $item->status);
+            })
+            ->sortByDesc('status');
 
         return $students;
     }

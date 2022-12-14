@@ -28,7 +28,7 @@ class EventServices
         )
         ->withCount('eventUsers')
         ->withCount([
-            'eventUsers as Registered' => function ($q) {
+            'eventUsers as registered' => function ($q) {
                 return $q->where('user_email', Auth::user()->email);
             }
         ])

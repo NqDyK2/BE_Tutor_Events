@@ -19,6 +19,7 @@ class Event extends Model
         'end_time',
         'trashed_at'
     ];
+    
     public function eventUsers()
     {
         return $this->hasMany(EventUser::class, 'event_id');

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Event;
 use App\Models\EventUser;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -26,6 +27,11 @@ class EventServices
             'trashed_at'
         )
         ->withCount('eventUsers')
+        ->withCount([
+            'eventUsers as Registered' => function ($q) {
+                return $q->where('user_email', Auth::user()->email);
+            }
+        ])
         ->where('trashed_at', '=', null)
         ->orderBy('start_time', 'desc')
         ->get();

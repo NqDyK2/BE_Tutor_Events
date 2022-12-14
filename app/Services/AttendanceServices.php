@@ -47,7 +47,6 @@ class AttendanceServices
         )
             ->where('classroom_id', $lesson->classroom_id)
             ->leftJoin('users', 'users.email', 'class_students.student_email')
-            ->orderBy('class_students.student_email', 'ASC')
             ->get()
             ->map(function ($item) use ($attendmails, $sentMails) {
                 // dd($item->student_email, $attendmails);
@@ -58,6 +57,8 @@ class AttendanceServices
             ->filter(function ($item) {
                 return ($item->is_warning || $item->status);
             })
+            ->sortBy('student_email')
+            ->sortByDesc('is_warning')
             ->sortByDesc('status');
 
         return $students;

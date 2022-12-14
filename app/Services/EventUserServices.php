@@ -34,7 +34,7 @@ class EventUserServices
         $user = Auth::user();
         $eventUser = EventUser::where('user_email', $user->email)->where('event_id', $event->id)->first();
 
-        if (isset($eventUser)) {
+        if (!$eventUser) {
             return response([
                 'message' => 'Bạn chưa tham gia sự kiện này'
             ], 400);

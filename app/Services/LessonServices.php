@@ -12,6 +12,9 @@ class LessonServices
 {
     public function lessonsInClassroom($classroomId)
     {
+
+        $totalStudent = ClassStudent::where('classroom_id', $classroomId)->count();
+
         $lesson = Lesson::select(
             'lessons.id',
             'lessons.classroom_id',
@@ -30,12 +33,17 @@ class LessonServices
             ->leftJoin('subjects', 'subjects.id', 'classrooms.subject_id')
             ->where('classroom_id', $classroomId)
             ->withCount([
-                'attendances as total_student',
                 'attendances as attended_count' => function ($query) {
                     $query->where('status', true);
                 }
             ])
-            ->orderBy('lessons.start_time', 'ASC', 'lessons.end_time', 'ASC')->get();
+            ->orderBy('lessons.start_time', 'ASC', 'lessons.end_time', 'ASC')
+            ->get()
+            ->map(function ($lesson) use ($totalStudent) {
+                $lesson->total_student = $totalStudent;
+                return $lesson;
+            });
+
         return $lesson;
     }
 

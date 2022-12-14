@@ -81,7 +81,6 @@ Route::prefix('attendance')->group(function () {
 
     Route::middleware('existLesson')->group(function () {
         Route::get('lesson/{lesson_id}', [AttendanceController::class, 'attendanceDetail']);
-        Route::put('lesson/{lesson_id}', [AttendanceController::class, 'update']);
     });
 });
 

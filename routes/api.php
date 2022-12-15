@@ -110,7 +110,6 @@ Route::prefix('statistics')->group(function () {
     Route::middleware('admin')->group(function () {
         Route::get('{semester_id?}', [StatisticalController::class, 'getSemesterStatistical']);
         Route::get('{semester_id}/user', [StatisticalController::class, 'getUserStatisticalInSemester'])->middleware('existSemester');
-        Route::post('{semester_id}/export', [StatisticalController::class, 'export'])->middleware('existSemester');
     });
 });
 

@@ -307,12 +307,15 @@ class StatisticalServices
             ->whereIn('classroom_id', $classrooms->pluck('id'))
             ->get()
             ->map(function ($student) use ($classrooms, $listAttendedCount) {
+                $classroom = $classrooms->where('id', $student->classroom_id)->first();
+                $student->subject_code = $classroom->code;
+                $student->subject_name = $classroom->name;
+
                 $checkIsset = isset($listAttendedCount[$student->classroom_id][$student->student_email]);
                 $student->attend_count = $checkIsset ? $listAttendedCount[$student->classroom_id][$student->student_email] : 0;
-                
-                $classroom = $classrooms->where('id', $student->classroom_id)->first();
-                $student->subject_name = $classroom->name;
-                $student->subject_code = $classroom->code;
+
+                is_null($student->final_result) ? ($student->final_result = "-") : '';
+                is_null($student->final_score) ? ($student->final_score = "-") : '';
 
                 return collect($student)->except(['classroom_id']);
             });

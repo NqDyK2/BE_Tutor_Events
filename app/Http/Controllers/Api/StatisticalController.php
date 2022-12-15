@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exports\SemesterStatisticExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Statistical\getUserStatisticalRequest;
 use App\Services\StatisticalServices;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Str;
 
 class StatisticalController extends Controller
 {
@@ -38,5 +41,10 @@ class StatisticalController extends Controller
         return response([
             "data" => $data
         ], 200);
+    }
+
+    public function export() 
+    {
+        return Excel::download(new SemesterStatisticExport, 'tutor.xlsx');
     }
 }

@@ -6,6 +6,7 @@ use App\Models\Classroom;
 use App\Models\ClassStudent;
 use App\Models\Lesson;
 use App\Models\Semester;
+use Illuminate\Support\Facades\DB;
 
 class StatisticalServices
 {
@@ -253,5 +254,73 @@ class StatisticalServices
         }
 
         return $lesson->get();
+    }
+
+    public function getSemesterExportData($semesterId)
+    {
+        $classrooms = Classroom::select([
+            'classrooms.id',
+            'subjects.name',
+            'subjects.code',
+            DB::raw('subjects.id as subject_id'),
+            DB::raw('classrooms.semester_id as semester_id')
+        ])
+            ->where('semester_id', $semesterId)
+            ->join('subjects', 'subjects.id', '=', 'classrooms.subject_id')
+            ->get();
+
+        $lessons = Lesson::select([
+            'id',
+            'classroom_id',
+            'start_time',
+            'end_time'
+        ])
+            ->whereIn('classroom_id', $classrooms->pluck('id'))
+            ->where('attended', 1)
+            ->with('attendances', function ($q) {
+                return $q->select([
+                    'student_email',
+                    'lesson_id'
+                ]);
+            })
+            ->get();
+
+        $listAttendedCount = [];
+
+        foreach ($classrooms as $classroom) {
+            $listAttended = $lessons->where('classroom_id', $classroom->id)
+                ->pluck('attendances');
+
+            $listAll = [];
+            foreach ($listAttended as $la) {
+                $listAll = array_merge($listAll, $la->pluck('student_email')->toArray());
+            }
+            $listAttendedCount[$classroom->id] = array_count_values($listAll);
+        }
+        
+        $students = ClassStudent::select([
+            'student_email',
+            'classroom_id',
+            'final_result',
+            'final_score',
+        ])
+            ->whereIn('classroom_id', $classrooms->pluck('id'))
+            ->get()
+            ->map(function ($student) use ($classrooms, $listAttendedCount) {
+                $checkIsset = isset($listAttendedCount[$student->classroom_id][$student->student_email]);
+                $student->attend_count = $checkIsset ? $listAttendedCount[$student->classroom_id][$student->student_email] : 0;
+                
+                $classroom = $classrooms->where('id', $student->classroom_id)->first();
+                $student->subject_name = $classroom->name;
+                $student->subject_code = $classroom->code;
+
+                return collect($student)->except(['classroom_id']);
+            });
+
+        return response([
+            // 'classrooms' => $listAttendedCount,
+            // 'lessons' => $lessons,
+            'students' => $students
+        ], 200);
     }
 }

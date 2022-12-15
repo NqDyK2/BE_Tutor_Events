@@ -109,6 +109,7 @@ Route::prefix('mail')->group(function () {
 Route::prefix('statistics')->group(function () {
     Route::middleware('admin')->group(function () {
         Route::get('{semester_id?}', [StatisticalController::class, 'getSemesterStatistical']);
+        Route::get('{semester_id}/export-data', [StatisticalController::class, 'getExportData'])->middleware('existSemester');
         Route::get('{semester_id}/user', [StatisticalController::class, 'getUserStatisticalInSemester'])->middleware('existSemester');
     });
 });

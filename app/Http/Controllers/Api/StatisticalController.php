@@ -39,4 +39,12 @@ class StatisticalController extends Controller
             "data" => $data
         ], 200);
     }
+
+    public function getExportData(Request $request)
+    {
+        $semester = $request->get('semester');
+        $response = $this->statisticalServices->getSemesterExportData($semester->id);
+
+        return $response;
+    }
 }

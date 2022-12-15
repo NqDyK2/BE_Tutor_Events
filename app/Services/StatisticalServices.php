@@ -320,7 +320,9 @@ class StatisticalServices
         return response([
             // 'classrooms' => $listAttendedCount,
             // 'lessons' => $lessons,
-            'students' => $students
+            'data' => [
+                'students' => $students
+            ]
         ], 200);
     }
 }

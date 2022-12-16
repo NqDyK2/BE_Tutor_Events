@@ -9,6 +9,8 @@ class Event extends Model
 {
     use HasFactory;
 
+    const TRASH_EXPIRED_DAYS = 30;
+
     protected $fillable = [
         'name',
         'content',

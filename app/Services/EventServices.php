@@ -77,7 +77,7 @@ class EventServices
             $data['image'] = $this->imagePath . $imageName;
 
             $request->image->storeAs($this->storePath, $imageName);
-            Storage::delete($event->image);
+            Storage::delete(str_replace("storage", "public", $event->image));
         }
 
         return $event->update($data);

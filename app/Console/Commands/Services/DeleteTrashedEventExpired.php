@@ -4,6 +4,7 @@ namespace App\Console\Commands\Services;
 
 use App\Models\Event;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Storage;
 
 class DeleteTrashedEventExpired extends Command
 {
@@ -29,7 +30,13 @@ class DeleteTrashedEventExpired extends Command
     public function handle()
     {
         $expiredDays = Event::TRASH_EXPIRED_DAYS;
-        Event::where('trashed_at', '<', now()->subDays($expiredDays))->delete();
+
+        Event::where('trashed_at', '<', now()->subDays($expiredDays))
+            ->get()
+            ->each(function ($event) {
+                Storage::delete(str_replace("storage", "public", $event->image));
+                $event->delete();
+            });
 
         return Command::SUCCESS;
     }

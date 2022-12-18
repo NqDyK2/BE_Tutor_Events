@@ -8,10 +8,3 @@ services:
     ports:
       - 1025:1025 # smtp server
       - 8025:8025 # web ui
-    networks:
-      - tutor-network
-
-networks:
-  tutor-network:
-    external: true
-    name: "tutor-network"

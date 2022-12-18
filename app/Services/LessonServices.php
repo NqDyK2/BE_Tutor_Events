@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Jobs\Mail\SendMailAddTeacherJob;
+use App\Jobs\Mail\SendMailAddTutorJob;
 use App\Jobs\Mail\SendMailChangeLessonJob;
 use App\Models\ClassStudent;
 use App\Models\Lesson;
@@ -10,9 +12,15 @@ use Illuminate\Support\Facades\DB;
 
 class LessonServices
 {
+    private $mailService;
+
+    public function __construct(MailServices $mailService)
+    {
+        $this->mailService = $mailService;
+    }
+
     public function lessonsInClassroom($classroomId)
     {
-
         $totalStudent = ClassStudent::where('classroom_id', $classroomId)->count();
 
         $lesson = Lesson::select(
@@ -49,7 +57,22 @@ class LessonServices
 
     public function store($data)
     {
-        return Lesson::create($data);
+        $leson = Lesson::create($data);
+
+        if (!empty($data['tutor_email'])) {
+            $hasTutorInClass = Lesson::where('classroom_id', $data['classroom_id'])
+                ->where('tutor_email', $data['tutor_email'])
+                ->exists();
+
+            if (!$hasTutorInClass) {
+                SendMailAddTutorJob::dispatch(
+                    $data['tutor_email'],
+                    [
+                        'subject' => $leson->subject,
+                    ]
+                );
+            }
+        }
     }
 
     public function update($data, $lesson)
@@ -70,23 +93,56 @@ class LessonServices
             }
         }
 
+        if (!empty($data['tutor_email']) && $data['tutor_email'] != $lesson->tutor_email) {
+            $hasTutorInClass = Lesson::where('classroom_id', $data['classroom_id'])
+                ->where('tutor_email', $data['tutor_email'])
+                ->exists();
 
-        $lesson->update($data);
-
-        if ($needSendMail) {
-            $students = $lesson->classroom->classStudents;
-            $subject = $lesson->classroom->subject;
-
-            foreach ($students as $student) {
-                SendMailChangeLessonJob::dispatch(
-                    $student['student_email'],
+            if (!$hasTutorInClass) {
+                SendMailAddTutorJob::dispatch(
+                    $data['tutor_email'],
                     [
-                        'lesson' => $lesson->toArray(),
-                        'subject' => $subject->toArray(),
+                        'subject' => $lesson->subject,
                     ]
                 );
             }
         }
+
+        if (
+            !empty($data['teacher_email'])
+            && $data['teacher_email'] != $lesson->teacher_email
+            && $data['teacher_email'] != $lesson->classroom->default_teacher_email
+        ) {
+            $hasTeacherInClass = Lesson::where('classroom_id', $data['classroom_id'])
+                ->where('teacher_email', $data['teacher_email'])
+                ->exists();
+
+            if (!$hasTeacherInClass) {
+                SendMailAddTeacherJob::dispatch(
+                    $data['teacher_email'],
+                    [
+                        'subject' => $lesson->subject,
+                    ]
+                );
+            }
+        }
+
+        $lesson->update($data);
+
+        // if ($needSendMail) {
+        //     $students = $lesson->classroom->classStudents;
+        //     $subject = $lesson->classroom->subject;
+
+        //     foreach ($students as $student) {
+        //         SendMailChangeLessonJob::dispatch(
+        //             $student['student_email'],
+        //             [
+        //                 'lesson' => $lesson->toArray(),
+        //                 'subject' => $subject->toArray(),
+        //             ]
+        //         );
+        //     }
+        // }
 
         return true;
     }

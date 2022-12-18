@@ -2,7 +2,7 @@
 
 namespace App\Jobs\Mail;
 
-use App\Services\MailServices;
+use App\Http\Services\MailServices;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -45,9 +45,9 @@ class SendMailInviteLesson implements ShouldQueue
         try {
             MailServices::sendEmail(
                 $this->mailTo,
-                'Bạn vừa được thêm làm giảng viên lớp Tutor',
+                'Buổi học lớp ' . $this->data['subject']['name'] . ' đang diễn ra',
                 $this->data,
-                'mail.add_teacher_class'
+                'mail.invite'
             );
         } catch (\Throwable $th) {
             Log::error($th);

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Services\ClassroomServices;
-use App\Services\ScheduleServices;
+use App\Http\Services\ClassroomServices;
+use App\Http\Services\ScheduleServices;
 use Illuminate\Http\Request;
 
 class ScheduleController extends Controller

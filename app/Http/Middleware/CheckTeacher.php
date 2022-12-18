@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Models\Lesson;
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,15 +19,9 @@ class CheckTeacher
      */
     public function handle(Request $request, Closure $next)
     {
-        $isTeacher = Lesson::join('classrooms', 'classrooms.id', 'lessons.classroom_id')
-            ->join('semesters', 'semesters.id', 'classrooms.semester_id')
-            ->where('semesters.start_time', '<=', now())->where('semesters.end_time', '>=', now())
-            ->where('lessons.teacher_email', Auth::user()->email)
-            ->exists();
-
-        if (!$isTeacher) {
+        if (Auth::user()->role_id != User::ROLE_TEACHER) {
             return response([
-                'message' => 'Bạn không phải giáo viên'
+                'message' => 'Bạn không có quyền thực hiện tác vụ này'
             ], 403);
         }
         return $next($request);

@@ -7,8 +7,8 @@ use App\Http\Requests\Classroom\CreateClassroomRequest;
 use App\Http\Requests\Classroom\UpdateClassroomRequest;
 use App\Http\Requests\Feedback\StoreFeedbackRequest;
 use App\Http\Requests\FeedbackClassroomRequest;
-use App\Services\BreadcrumbServices;
-use App\Services\ClassroomServices;
+use App\Http\Services\BreadcrumbServices;
+use App\Http\Services\ClassroomServices;
 use Illuminate\Http\Request;
 
 class ClassroomController extends Controller

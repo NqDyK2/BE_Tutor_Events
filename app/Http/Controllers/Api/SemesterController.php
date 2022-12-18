@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Semester\CreateSemesterRequest;
 use App\Http\Requests\Semester\UpdateSemesterRequest;
-use App\Services\SemesterServices;
+use App\Http\Services\SemesterServices;
 use Illuminate\Http\Request;
 
 

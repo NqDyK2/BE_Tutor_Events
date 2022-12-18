@@ -32,11 +32,11 @@ class InsertWarningStudentFromExcelJob implements ShouldQueue
      *      "student_phone",
      *      "reason",
      * ]
-     * 
+     *
      * @param Array $classrooms [
      *      "COM1234" => {classroom_id},
      * ]
-     * 
+     *
      * @return void
      */
     public function __construct($user, $classrooms)

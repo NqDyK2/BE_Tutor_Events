@@ -1,5 +1,5 @@
 <?php
-namespace App\Services;
+namespace App\Http\Services;
 
 use App\Models\Classroom;
 use App\Models\ClassStudent;

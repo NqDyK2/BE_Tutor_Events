@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Lesson\CreateLessonRequest;
 use App\Http\Requests\Lesson\UpdateLessonRequest;
 use App\Models\Classroom;
-use App\Services\BreadcrumbServices;
-use App\Services\LessonServices;
+use App\Http\Services\BreadcrumbServices;
+use App\Http\Services\LessonServices;
 use Illuminate\Http\Request;
 
 class LessonController extends Controller

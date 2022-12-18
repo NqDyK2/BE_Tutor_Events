@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Http\Services;
 
 use App\Models\Attendance;
 use App\Models\Classroom;
@@ -113,7 +113,6 @@ class AttendanceServices
             return response([
                 'message' => 'Buổi học chưa diễn ra'
             ], 400);
-
         } elseif ($lesson->end_time < now()) {
             return response([
                 'message' => 'Đã quá thời gian checkin'
@@ -140,6 +139,11 @@ class AttendanceServices
             ], 400);
         }
 
+        if (!$lesson->attended) {
+            $lesson->attended = 1;
+            $lesson->update();
+        }
+
         Attendance::create([
             'student_email' => Auth::user()->email,
             'lesson_id' => $lesson->id,
@@ -147,7 +151,7 @@ class AttendanceServices
         ]);
 
         return response([
-            'message' => 'Checkin thành công'
+            'message' => 'Check-in thành công'
         ], 200);
     }
 }

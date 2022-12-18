@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Feedback\StoreFeedbackEventRequest;
-use App\Services\EventUserServices;
+use App\Http\Services\EventUserServices;
 use Illuminate\Http\Request;
 
 class EventUserController extends Controller

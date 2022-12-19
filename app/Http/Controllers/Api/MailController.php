@@ -23,7 +23,15 @@ class MailController extends Controller
             ], 400);
         }
 
-        $lesson = Lesson::where('id', $request->lesson_id)->first();
+        $lesson = Lesson::where('id', $request->lesson_id)
+            ->first();
+
+        if (!($lesson->start_time < now() && $lesson->end_time > now())) {
+            return response([
+                "message" => "Buổi học chưa diễn ra"
+            ], 400);
+        }
+        
         $subject = $lesson->classroom->subject;
         SendMailInviteLesson::dispatch(
             $request->student_email,
@@ -57,7 +65,7 @@ class MailController extends Controller
             });
 
             return response([
-                "message" => "Đã gửi mail tới " .count($students). " sinh viên"
+                "message" => "Đã gửi mail tới " .count($students). " sinh viên Warning"
             ], 200);
     }
 }

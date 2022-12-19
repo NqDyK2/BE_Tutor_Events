@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Http\Services;
 
 use App\Mail\SendMail;
 use Illuminate\Support\Facades\Mail;

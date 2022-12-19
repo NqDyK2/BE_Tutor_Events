@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Subject\CreateSubjectRequest;
 use App\Http\Requests\Subject\UpdateSubjectRequest;
-use App\Services\SubjectServices;
+use App\Http\Services\SubjectServices;
 use Illuminate\Http\Request;
 
 class SubjectController extends Controller

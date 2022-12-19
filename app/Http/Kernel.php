@@ -72,6 +72,6 @@ class Kernel extends HttpKernel
         'existClassStudent' => \App\Http\Middleware\ExistClassStudent::class,
         'existLesson' => \App\Http\Middleware\ExistLesson::class,
         'existEvent' => \App\Http\Middleware\ExistEvent::class,
-        'checkRoleTeacherOrAdmin' => \App\Http\Middleware\TeacherOrAdmin::class,
+        'teacherOrAdmin' => \App\Http\Middleware\TeacherOrAdmin::class,
     ];
 }

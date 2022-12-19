@@ -19,72 +19,73 @@ use Illuminate\Support\Facades\Route;
 // AUTH API
 Route::get('auth/user', [AuthController::class, 'getAuthDetail']);
 
-// API FOR MANAGE
-Route::prefix('major')->group(function () {
+// MANAGE API
+Route::prefix('major')->middleware('admin')->group(function () {
     Route::get('get-all', [MajorController::class, 'index']);
-    Route::middleware('admin')->group(function () {
-        Route::post('store', [MajorController::class, 'store'])->middleware('admin');
-        Route::middleware('existMajor')->group(function () {
-            Route::put('{major_id}/update', [MajorController::class, 'update']);
-            Route::delete('{major_id}/delete', [MajorController::class, 'destroy']);
-        });
+    Route::post('store', [MajorController::class, 'store'])->middleware('admin');
+    Route::middleware('existMajor')->group(function () {
+        Route::put('{major_id}/update', [MajorController::class, 'update']);
+        Route::delete('{major_id}/delete', [MajorController::class, 'destroy']);
     });
 });
 
-Route::name('subject')->prefix('subject')->group(function () {
-    Route::middleware('admin')->group(function () {
-        Route::post('store', [SubjectController::class, 'store']);
-        Route::middleware('existSubject')->group(function () {
-            Route::put('{subject_id}/update', [SubjectController::class, 'update'])->name('updateSubject');
-            Route::delete('{subject_id}/delete', [SubjectController::class, 'destroy'])->name('deleteSubject');
-        });
+Route::name('subject')->middleware('admin')->group(function () {
+    Route::post('store', [SubjectController::class, 'store']);
+    Route::middleware('existSubject')->group(function () {
+        Route::put('{subject_id}/update', [SubjectController::class, 'update'])->name('updateSubject');
+        Route::delete('{subject_id}/delete', [SubjectController::class, 'destroy'])->name('deleteSubject');
     });
 });
 
 Route::prefix('semester')->group(function () {
     Route::get('get-all', [SemesterController::class, 'index']);
-    Route::post('store', [SemesterController::class, 'store'])->middleware('admin');
-    Route::middleware(['existSemester', 'admin'])->group(function () {
-        Route::put('{semester_id}/update', [SemesterController::class, 'update']);
-        Route::delete('{semester_id}/delete', [SemesterController::class, 'destroy']);
-        Route::post('{semester_id}/import', [ExcelController::class, 'importWarningStudents']);
-        Route::post('{semester_id}/import-all-result', [ExcelController::class, 'importAllStudentAndResult']);
+    Route::middleware('admin')->group(function () {
+        Route::post('store', [SemesterController::class, 'store']);
+        Route::middleware('existSemester')->group(function () {
+            Route::put('{semester_id}/update', [SemesterController::class, 'update']);
+            Route::delete('{semester_id}/delete', [SemesterController::class, 'destroy']);
+            Route::post('{semester_id}/import', [ExcelController::class, 'importWarningStudents']);
+            Route::post('{semester_id}/import-all-result', [ExcelController::class, 'importAllStudentAndResult']);
+        });
     });
-
     Route::get('{semester_id}/classrooms', [ClassroomController::class, 'classroomsInSemester'])->middleware(['existSemester']);
 });
 
-Route::prefix('classroom')->middleware('checkRoleTeacherOrAdmin')->group(function () {
+Route::prefix('classroom')->middleware('teacherOrAdmin')->group(function () {
     Route::post('store', [ClassroomController::class, 'store']);
     Route::middleware('existClassroom')->group(function () {
-        Route::put('{classroom_id}/update', [ClassroomController::class, 'update'])->middleware('admin');
-        Route::delete('{classroom_id}/delete', [ClassroomController::class, 'destroy']);
-
+        Route::middleware('admin')->group(function () {
+            Route::put('{classroom_id}/update', [ClassroomController::class, 'update']);
+            Route::delete('{classroom_id}/delete', [ClassroomController::class, 'destroy']);
+        });
         Route::get('{classroom_id}/lessons', [LessonController::class, 'lessonsInClassroom']);
         Route::get('{classroom_id}/students', [ClassStudentController::class, 'studentsInClassroom']);
         Route::put('{classroom_id}/update-student', [ClassStudentController::class, 'update']);
     });
 });
 
-Route::prefix('lesson')->middleware('checkRoleTeacherOrAdmin')->group(function () {
+Route::prefix('lesson')->middleware('teacherOrAdmin')->group(function () {
     Route::post('store', [LessonController::class, 'store']);
     Route::middleware('existLesson')->group(function () {
         Route::put('{lesson_id}/update', [LessonController::class, 'update']);
         Route::delete('{lesson_id}/delete', [LessonController::class, 'destroy']);
+        Route::get('{lesson_id}/students-checked-in', [AttendanceController::class, 'attendanceDetail']);
     });
 });
 
-// API FOR ATTENDANCE
-Route::prefix('attendance')->group(function () {
-    Route::get('classrooms', [AttendanceController::class, 'getListClass']);
-    Route::get('classroom/{classroom_id}/lessons', [LessonController::class, 'lessonsInClassroom']);
-
-    Route::middleware('existLesson')->group(function () {
-        Route::get('lesson/{lesson_id}', [AttendanceController::class, 'attendanceDetail']);
+// STATISTICAL API
+Route::prefix('statistics')->group(function () {
+    Route::middleware('admin')->group(function () {
+        Route::get('{semester_id?}', [StatisticalController::class, 'getSemesterStatistical']);
+        Route::get('{semester_id}/export-data', [StatisticalController::class, 'getExportData'])->middleware('existSemester');
+        Route::get('{semester_id}/user', [StatisticalController::class, 'getUserStatisticalInSemester'])->middleware('existSemester');
     });
 });
 
-// API FOR STUDENT
+// TEACHING SCHEDULE
+Route::get('teacher-tutor/schedule', [ScheduleController::class, 'teacherTutorSchedule']);
+
+// STUDENT API
 Route::prefix('student')->group(function () {
     Route::get('schedule', [ScheduleController::class, 'studentSchedule']);
     Route::get('history/{semester_id?}', [ScheduleController::class, 'studentScheduleHistory']);
@@ -94,24 +95,10 @@ Route::prefix('student')->group(function () {
     Route::post('check-in/{lesson_id}', [AttendanceController::class, 'studentCheckin'])->middleware('existLesson');
 });
 
-// API FOR TEACHER
-Route::prefix('teacher-tutor')->group(function () {
-    Route::get('schedule', [ScheduleController::class, 'teacherTutorSchedule']);
-});
-
-// API MAIL
+// MAIL API
 Route::prefix('mail')->group(function () {
-    Route::post('invite-class', [MailController::class, 'sendMailInvite']);
-    Route::post('invite-all', [MailController::class, 'sendMailInviteAll']);
-});
-
-// TUTOR STATISTICS API
-Route::prefix('statistics')->group(function () {
-    Route::middleware('admin')->group(function () {
-        Route::get('{semester_id?}', [StatisticalController::class, 'getSemesterStatistical']);
-        Route::get('{semester_id}/export-data', [StatisticalController::class, 'getExportData'])->middleware('existSemester');
-        Route::get('{semester_id}/user', [StatisticalController::class, 'getUserStatisticalInSemester'])->middleware('existSemester');
-    });
+    Route::post('invite-class', [MailController::class, 'sendMailInvite'])->middleware('teacherOrAdmin');
+    Route::post('invite-all', [MailController::class, 'sendMailInviteAll'])->middleware('admin');
 });
 
 //API MANAGE EVENT

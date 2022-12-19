@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UpdateUserRequest;
-use App\Services\UserServices;
+use App\Http\Services\UserServices;
 
 use function PHPUnit\Framework\isNull;
 

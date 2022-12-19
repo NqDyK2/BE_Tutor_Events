@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Jobs\InsertExcel\InsertAllStudentAndResultJob;
 use App\Jobs\InsertExcel\InsertWarningStudentFromExcelJob;
-use App\Services\ExcelServices;
+use App\Http\Services\ExcelServices;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 

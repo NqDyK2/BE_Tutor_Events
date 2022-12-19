@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Statistical\getUserStatisticalRequest;
-use App\Services\StatisticalServices;
+use App\Http\Services\StatisticalServices;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 

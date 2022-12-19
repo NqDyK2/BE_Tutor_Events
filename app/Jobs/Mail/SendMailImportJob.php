@@ -8,7 +8,7 @@ use App\Models\Major;
 use App\Models\Semester;
 use App\Models\Subject;
 use App\Models\User;
-use App\Services\MailServices;
+use App\Http\Services\MailServices;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

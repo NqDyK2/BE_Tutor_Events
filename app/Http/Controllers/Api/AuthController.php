@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Services\AuthServices;
+use App\Http\Services\AuthServices;
 use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller

@@ -32,11 +32,11 @@ class InsertAllStudentAndResultJob implements ShouldQueue
      *      "final_score"
      *      "final_result"
      * ]
-     * 
+     *
      * @param Array $classrooms [
      *      "{subject_code}" => {classroom_id},
      * ]
-     * 
+     *
      * @return void
      */
     public function __construct($user, $classrooms)
@@ -65,7 +65,7 @@ class InsertAllStudentAndResultJob implements ShouldQueue
 
             if (in_array($this->user['final_result'], $finalStatusList)) {
                 $dataUpdate['final_result'] = (int)$this->user['final_result'];
-                if ($this->user['final_result'] > ClassStudent::FINAL_RESULT_BANNED){
+                if ($this->user['final_result'] > ClassStudent::FINAL_RESULT_BANNED) {
                     $dataUpdate['final_score'] = (float)$this->user['final_score'];
                 }
             }
@@ -81,7 +81,6 @@ class InsertAllStudentAndResultJob implements ShouldQueue
                 'student_email' => $this->user['student_code'] . '@fpt.edu.vn',
                 'classroom_id' => $this->classrooms[Str::slug($this->user['subject'])],
             ], $dataUpdate);
-
         } catch (\Throwable $th) {
         }
     }

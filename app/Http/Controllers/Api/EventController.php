@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Event\CreateEventRequest;
 use App\Http\Requests\Event\EditEventRequest;
-use App\Services\EventServices;
+use App\Http\Services\EventServices;
 use Illuminate\Http\Request;
 
 class EventController extends Controller

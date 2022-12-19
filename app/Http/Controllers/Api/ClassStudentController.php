@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ClassStudent\ClassStudentRequest;
 use App\Http\Requests\ClassStudent\UpdateClassStudentRequest;
-use App\Services\BreadcrumbServices;
-use App\Services\ClassroomServices;
-use App\Services\ClassStudentServices;
+use App\Http\Services\BreadcrumbServices;
+use App\Http\Services\ClassroomServices;
+use App\Http\Services\ClassStudentServices;
 use Illuminate\Http\Request;
 
 class ClassStudentController extends Controller

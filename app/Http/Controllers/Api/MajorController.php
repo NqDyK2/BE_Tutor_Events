@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Major\CreateMajorRequest;
 use App\Http\Requests\Major\UpdateMajorRequests;
 use Illuminate\Http\Request;
-use App\Services\MajorServices;
+use App\Http\Services\MajorServices;
 
 class MajorController extends Controller
 {

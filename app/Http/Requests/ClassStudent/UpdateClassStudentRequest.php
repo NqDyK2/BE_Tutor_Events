@@ -39,7 +39,7 @@ class UpdateClassStudentRequest extends FormRequest
                 },
             ],
             'is_warning' => 'boolean',
-            'reason' => 'string|max:255',
+            'reason' => 'nullable|string|max:255',
         ];
     }
 

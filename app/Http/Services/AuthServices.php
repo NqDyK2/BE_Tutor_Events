@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Http\Services;
 
 use App\Models\Classroom;
 use App\Models\Lesson;
@@ -30,7 +30,7 @@ class AuthServices
         if (!$user) {
             $user = User::create([
                 'code' => explode("@", $googleUser->email)[0],
-                'google_id' => $googleUser->email,
+                'google_id' => $googleUser->id,
                 'avatar' => $googleUser->avatar,
                 'name' => $googleUser->name,
                 'email' => $googleUser->email,
@@ -48,14 +48,7 @@ class AuthServices
 
     public function getAuthDetail()
     {
-        $auth = Auth::user()->only([
-            'id',
-            'name',
-            'code',
-            'email',
-            'avatar',
-            'role_id'
-        ]);
+        $auth = Auth::user()->only(['id', 'name', 'code', 'email', 'avatar', 'role_id']);
         $auth['is_teacher'] = false;
 
         $isTeacher = Classroom::join('semesters', 'semesters.id', 'classrooms.semester_id')
@@ -72,15 +65,22 @@ class AuthServices
             ->exists();
         }
 
-        if ($auth['role_id'] == 1) {
+        if ($auth['role_id'] == User::ROLE_ADMIN) {
             $auth['is_teacher'] = $isTeacher;
             return $auth;
         }
 
         if ($isTeacher) {
-            $auth['role_id'] = 2;
+            if ($auth['role_id'] != User::ROLE_TEACHER) {
+                $auth['role_id'] = User::ROLE_TEACHER;
+                Auth::user()->update(['role_id' => User::ROLE_TEACHER]);
+            }
             $auth['is_teacher'] = true;
             return $auth;
+        }
+
+        if ($auth['role_id'] != User::ROLE_STUDENT) {
+            Auth::user()->update(['role_id' => User::ROLE_STUDENT]);
         }
 
         $isTutor = Lesson::join('classrooms', 'classrooms.id', 'lessons.classroom_id')
@@ -90,11 +90,11 @@ class AuthServices
             ->exists();
 
         if ($isTutor) {
-            $auth['role_id'] = 4;
+            $auth['role_id'] = User::ROLE_TUTOR;
             return $auth;
         }
 
-        $auth['role_id'] = 3;
+        $auth['role_id'] = User::ROLE_TUTOR;
 
         return $auth;
     }

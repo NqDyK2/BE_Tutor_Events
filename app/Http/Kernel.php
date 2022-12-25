@@ -39,7 +39,7 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
-            // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
@@ -63,5 +63,15 @@ class Kernel extends HttpKernel
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'admin' => \App\Http\Middleware\CheckAdmin::class,
+        'teacher' => \App\Http\Middleware\CheckTeacher::class,
+        'existClassroom' => \App\Http\Middleware\ExistClassroom::class,
+        'existMajor' => \App\Http\Middleware\ExistMajor::class,
+        'existSubject' => \App\Http\Middleware\ExistSubject::class,
+        'existSemester' => \App\Http\Middleware\ExistSemester::class,
+        'existClassStudent' => \App\Http\Middleware\ExistClassStudent::class,
+        'existLesson' => \App\Http\Middleware\ExistLesson::class,
+        'existEvent' => \App\Http\Middleware\ExistEvent::class,
+        'teacherOrAdmin' => \App\Http\Middleware\TeacherOrAdmin::class,
     ];
 }

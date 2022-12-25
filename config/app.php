@@ -54,7 +54,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'),
+    'url' => env('APP_URL'),
 
     'asset_url' => env('ASSET_URL'),
 
@@ -69,7 +69,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Ho_Chi_Minh',
 
     /*
     |--------------------------------------------------------------------------
@@ -121,7 +121,7 @@ return [
     |
     */
 
-    'key' => env('APP_KEY'),
+    'key' => env('APP_KEY', 'egzrdwqxxn8puhpvxpsnldodge3ulrb0'),
 
     'cipher' => 'AES-256-CBC',
 
@@ -185,6 +185,7 @@ return [
         /*
          * Package Service Providers...
          */
+
 
         /*
          * Application Service Providers...

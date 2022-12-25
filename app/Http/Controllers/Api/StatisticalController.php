@@ -19,14 +19,7 @@ class StatisticalController extends Controller
 
     public function getSemesterStatistical(Request $request)
     {
-        $response = [];
-
-        if (Cache::has('semesterStatistical')) {
-            $response = Cache::get('semesterStatistical');
-        } else {
-            $response = $this->statisticalServices->getSemesterStatistical($request->semester_id);
-            Cache::put('semesterStatistical', $response, 60*30);
-        }
+        $response = $this->statisticalServices->getSemesterStatistical($request->semester_id);
 
         return $response;
     }

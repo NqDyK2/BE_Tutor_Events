@@ -26,12 +26,12 @@ class ExcelController extends Controller
         foreach ($request->data as $x) {
             if (array_key_exists(Str::slug($x['subject']), $classrooms)) {
                 $count++;
-                InsertWarningStudentFromExcelJob::dispatch($x, $classrooms);
+                $this->excelServices->updateWarningStudentsFile($x, $classrooms);
             }
         }
 
         return response([
-            'message' => "Cập nhật thành công " . $count . " bản ghi"
+            'message' => "Cập nhật danh sách sinh viên thành công"
         ], 200);
     }
 
@@ -43,12 +43,12 @@ class ExcelController extends Controller
         foreach ($request->data as $x) {
             if (array_key_exists(Str::slug($x['subject']), $classrooms)) {
                 $count++;
-                InsertAllStudentAndResultJob::dispatch($x, $classrooms);
+                $this->excelServices->updateAllStudentsFile($x, $classrooms);
             }
         }
 
         return response([
-            'message' => "Cập nhật thành công " . $count . " bản ghi"
+            'message' => "Cập nhật danh sách sinh viên thành công"
         ], 200);
     }
 }

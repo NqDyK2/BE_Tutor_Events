@@ -22,6 +22,7 @@ class ClassStudentServices
         ->leftJoin('users', 'users.email', '=', 'class_students.student_email')
         ->where('class_students.classroom_id', $classroom_id)
         ->orderBy('is_warning', 'DESC')
+        ->orderBy('email', 'ASC')
         ->get();
 
         return ClassStudent::where('classroom_id', $classroom_id)->get();

@@ -38,33 +38,31 @@ class LessonController extends Controller
 
     public function store(CreateLessonRequest $request)
     {
-        $classroom = Classroom::find($request->classroom_id);
-        $this->authorize('teacherOfClass', $classroom);
-        $this->lessonServices->store($request->input());
-        return response([
-            'message' => 'Tạo buổi học thành công'
-        ], 201);
+        $response = $this->lessonServices->store($request->input());
+
+        return $response;
     }
 
     public function update(UpdateLessonRequest $request)
     {
         $lesson = $request->get('lesson');
-        $classroom = Classroom::find($request->classroom_id);
-        $this->authorize('teacherOfClass', $classroom, $lesson);
-        $this->lessonServices->update($request->input(), $lesson);
-        return response([
-            'message' => 'Cập nhật buổi học thành công'
-        ], 200);
+        $response = $this->lessonServices->update($request->input(), $lesson);
+
+        return $response;
+    }
+
+    public function start(Request $request)
+    {
+        $lesson = $request->get('lesson');
+        $response = $this->lessonServices->startLesson($lesson);
+
+        return $response;
     }
 
     public function destroy(Request $request)
     {
         $lesson = $request->get('lesson');
-        $classroom = Classroom::find($lesson->classroom_id);
-
-        $this->authorize('teacherOfClass', $classroom, $lesson);
-
-        $response = $this->lessonServices->destroy($lesson->id);
+        $response = $this->lessonServices->destroy($lesson);
 
         return $response;
     }

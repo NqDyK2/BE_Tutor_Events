@@ -5,8 +5,10 @@ namespace App\Http\Services;
 use App\Jobs\Mail\SendMailAddTeacherJob;
 use App\Jobs\Mail\SendMailAddTutorJob;
 use App\Jobs\Mail\SendMailChangeLessonJob;
+use App\Models\Classroom;
 use App\Models\ClassStudent;
 use App\Models\Lesson;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -57,6 +59,16 @@ class LessonServices
 
     public function store($data)
     {
+        if (!$this->checkPermissionCreateLesson($data['classroom_id'])) {
+            return response([
+                'message' => 'Bạn không phải người phụ trách môn',
+            ], 400);
+        }
+
+        if (!empty($data['attended']) && $data['attended'] == 1) {
+            $data['attended'] == 0;
+        }
+
         $leson = Lesson::create($data);
 
         if (!empty($data['tutor_email'])) {
@@ -73,11 +85,38 @@ class LessonServices
                 );
             }
         }
+
+        return response([
+            'message' => 'Tạo buổi học thành công'
+        ], 201);
+    }
+
+    private function checkPermissionCreateLesson($classroomId)
+    {
+        $auth = Auth::user();
+        if ($auth->role_id == User::ROLE_ADMIN) {
+            return true;
+        };
+        $check = Classroom::where('id', $classroomId)
+            ->where('default_teacher_email', Auth::user()->email)
+            ->exists();
+
+        if ($check) {
+            return true;
+        };
+
+        return false;
     }
 
     public function update($data, $lesson)
     {
         $needSendMail = false;
+
+        if (!$this->checkPermissionWithLesson($lesson)) {
+            return response([
+                'message' => 'Bạn không phải giảng viên của buổi học',
+            ], 400);
+        }
 
         if ($lesson->attended) {
             $data = array(
@@ -127,6 +166,10 @@ class LessonServices
             }
         }
 
+        if (!empty($data['attended']) && $data['attended'] == 1) {
+            $data['attended'] == 0;
+        }
+
         $lesson->update($data);
 
         // if ($needSendMail) {
@@ -144,22 +187,68 @@ class LessonServices
         //     }
         // }
 
-        return true;
+        return response([
+            'message' => 'Cập nhật buổi học thành công',
+        ], 200);
     }
 
-    public function destroy($lesson_id)
+    public function startLesson($lesson)
     {
-        $extended = Lesson::where('id', $lesson_id)
-            ->where('attended', true)
-            ->exists();
+        if ($lesson->start_time > now()) {
+            return response([
+                'message' => 'Buổi học chưa diễn ra'
+            ], 400);
+        } elseif ($lesson->end_time < now()) {
+            return response([
+                'message' => 'Buổi học đã quá thời gian'
+            ], 400);
+        }
 
-        if ($extended) {
+        if (!$this->checkPermissionWithLesson($lesson)) {
+            return response([
+                'message' => 'Bạn không phải giảng viên của buổi học',
+            ], 400);
+        }
+
+        $lesson->attended = true;
+        $lesson->save();
+
+        return response([
+            'message' => 'Cập nhật trạng thái buổi học thành công'
+        ], 200);
+    }
+
+    private function checkPermissionWithLesson($lesson)
+    {
+        $auth = Auth::user();
+        if ($auth->role_id == User::ROLE_ADMIN) {
+            return true;
+        };
+        if ($lesson->teacher_email == $auth->email) {
+            return true;
+        };
+        if ($lesson->classroom->default_teacher_email == $auth->email) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function destroy($lesson)
+    {
+        if (!$this->checkPermissionWithLesson($lesson)) {
+            return response([
+                'message' => 'Bạn không phải giảng viên của buổi học',
+            ], 400);
+        }
+
+        if ($lesson->attended) {
             return response([
                 'message' => 'Buổi học đã diễn ra, không thể xóa buổi học này'
             ], 400);
         }
 
-        Lesson::findOrFail($lesson_id)->delete();
+        $lesson->delete();
 
         return response([
             'message' => 'Xóa buổi học thành công'

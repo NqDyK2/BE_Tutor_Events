@@ -112,7 +112,7 @@ class ScheduleServices
 
     public function teacherTutorSchedule()
     {
-        $user = Auth::user();
+        $userEmail = Auth::user()->email;
         return Lesson::select(
             'subjects.name as subject_name',
             'subjects.code as subject_code',
@@ -126,11 +126,12 @@ class ScheduleServices
         )
             ->join('classrooms', 'classrooms.id', 'lessons.classroom_id')
             ->join('subjects', 'subjects.id', 'classrooms.subject_id')
-            ->where('lessons.teacher_email', $user->email)
-            ->orWhere('lessons.tutor_email', $user->email)
-            ->orWhere('classrooms.default_teacher_email', $user->email)
-            ->where('lessons.end_time', '>=', date('Y-m-d'))
-            ->orderBy('lessons.end_time', 'ASC')
+            ->where('lessons.end_time', '>=', now()->startOfDay())
+            ->where(function ($q) use ($userEmail) {
+                return $q->where('lessons.teacher_email', $userEmail)
+                ->orWhere('lessons.tutor_email', $userEmail);
+            })
+            ->orderBy('lessons.start_time', 'ASC')
             ->get();
     }
 

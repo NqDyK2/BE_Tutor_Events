@@ -23,7 +23,7 @@ class AttendanceController extends Controller
         ]);
     }
 
-    public function attendanceDetail(request $request)
+    public function attendanceDetail(Request $request)
     {
         $lesson = $request->get('lesson');
         $attendances = $this->attendanceServices->getDataByLesson($lesson);

@@ -26,12 +26,17 @@ class MailController extends Controller
         $lesson = Lesson::where('id', $request->lesson_id)
             ->first();
 
-        if (!($lesson->start_time < now() && $lesson->end_time > now())) {
+
+        if ($lesson->start_time > now()) {
             return response([
-                "message" => "Buổi học chưa diễn ra"
+                'message' => 'Buổi học chưa diễn ra'
+            ], 400);
+        } elseif ($lesson->end_time < now()) {
+            return response([
+                'message' => 'Buổi học đã qua, không thể gửi mail'
             ], 400);
         }
-        
+
         $subject = $lesson->classroom->subject;
         SendMailInviteLesson::dispatch(
             $request->student_email,

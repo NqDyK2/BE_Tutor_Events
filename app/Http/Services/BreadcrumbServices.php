@@ -17,6 +17,7 @@ class BreadcrumbServices
             ->first();
         $tree[] = Classroom::select(
             'classrooms.id',
+            'classrooms.default_teacher_email',
             DB::raw('subjects.name as name'),
             'subjects.code',
             DB::raw('subjects.id as subject_id'),

@@ -7,6 +7,7 @@ use App\Models\Classroom;
 use App\Models\ClassStudent;
 use App\Models\InviteLessonMail;
 use App\Models\Lesson;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -59,9 +60,10 @@ class AttendanceServices
             })
             ->sortBy('student_email')
             ->sortByDesc('is_warning')
-            ->sortByDesc('status');
+            ->sortByDesc('status')
+            ->toArray();
 
-        return $students;
+        return array_values($students);
     }
 
     public function update($lessonId, $data)
@@ -106,7 +108,7 @@ class AttendanceServices
             'message' => 'Cập nhật điểm danh thành công'
         ], 200);
     }
-    
+
     public function studentCheckin($lesson)
     {
         if ($lesson->start_time > now()) {
@@ -137,11 +139,6 @@ class AttendanceServices
             return response([
                 'message' => 'Bạn không có trong danh sách lớp này'
             ], 400);
-        }
-
-        if (!$lesson->attended) {
-            $lesson->attended = 1;
-            $lesson->update();
         }
 
         Attendance::create([

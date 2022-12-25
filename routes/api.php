@@ -20,16 +20,16 @@ use Illuminate\Support\Facades\Route;
 Route::get('auth/user', [AuthController::class, 'getAuthDetail']);
 
 // MANAGE API
-Route::prefix('major')->middleware('admin')->group(function () {
+Route::prefix('major')->group(function () {
     Route::get('get-all', [MajorController::class, 'index']);
     Route::post('store', [MajorController::class, 'store'])->middleware('admin');
-    Route::middleware('existMajor')->group(function () {
+    Route::middleware(['admin', 'existMajor'])->group(function () {
         Route::put('{major_id}/update', [MajorController::class, 'update']);
         Route::delete('{major_id}/delete', [MajorController::class, 'destroy']);
     });
 });
 
-Route::name('subject')->middleware('admin')->group(function () {
+Route::prefix('subject')->middleware('admin')->group(function () {
     Route::post('store', [SubjectController::class, 'store']);
     Route::middleware('existSubject')->group(function () {
         Route::put('{subject_id}/update', [SubjectController::class, 'update'])->name('updateSubject');
@@ -69,6 +69,7 @@ Route::prefix('lesson')->middleware('teacherOrAdmin')->group(function () {
     Route::middleware('existLesson')->group(function () {
         Route::put('{lesson_id}/update', [LessonController::class, 'update']);
         Route::delete('{lesson_id}/delete', [LessonController::class, 'destroy']);
+        Route::put('{lesson_id}/start', [LessonController::class, 'start']);
         Route::get('{lesson_id}/students-checked-in', [AttendanceController::class, 'attendanceDetail']);
     });
 });

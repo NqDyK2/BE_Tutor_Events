@@ -297,7 +297,7 @@ class StatisticalServices
             }
             $listAttendedCount[$classroom->id] = array_count_values($listAll);
         }
-        
+
         $students = ClassStudent::select([
             'student_email',
             'classroom_id',

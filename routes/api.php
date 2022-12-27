@@ -52,11 +52,12 @@ Route::prefix('semester')->group(function () {
 });
 
 Route::prefix('classroom')->middleware('teacherOrAdmin')->group(function () {
-    Route::post('store', [ClassroomController::class, 'store']);
+    Route::post('store', [ClassroomController::class, 'store'])->middleware('admin');
     Route::middleware('existClassroom')->group(function () {
         Route::middleware('admin')->group(function () {
             Route::put('{classroom_id}/update', [ClassroomController::class, 'update']);
             Route::delete('{classroom_id}/delete', [ClassroomController::class, 'destroy']);
+            Route::get('{classroom_id}/list-feedback', [ClassroomController::class, 'getListFeedback']);
         });
         Route::get('{classroom_id}/lessons', [LessonController::class, 'lessonsInClassroom']);
         Route::get('{classroom_id}/students', [ClassStudentController::class, 'studentsInClassroom']);

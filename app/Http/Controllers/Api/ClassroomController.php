@@ -6,15 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Classroom\CreateClassroomRequest;
 use App\Http\Requests\Classroom\UpdateClassroomRequest;
 use App\Http\Requests\Feedback\StoreFeedbackRequest;
-use App\Http\Requests\FeedbackClassroomRequest;
 use App\Http\Services\BreadcrumbServices;
 use App\Http\Services\ClassroomServices;
+use App\Models\Feedback;
 use Illuminate\Http\Request;
 
 class ClassroomController extends Controller
 {
     private $classroomServices;
-    private $breadcrumbServices;
 
     public function __construct(ClassroomServices $classroomServices, BreadcrumbServices $breadcrumbServices)
     {
@@ -76,5 +75,18 @@ class ClassroomController extends Controller
         $response = $this->classroomServices->storeFeedback($request->input(), $classroom);
 
         return $response;
+    }
+
+    public function getListFeedback(Request $request)
+    {
+        $classroom = $request->get('classroom');
+
+        $feedback = Feedback::where('classroom_id', $classroom->id)->orderBy('id', 'DESC')->get();
+
+
+
+        return response([
+            'data' => $feedback
+        ], 200);
     }
 }

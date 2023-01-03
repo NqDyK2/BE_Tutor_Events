@@ -21,7 +21,7 @@ class UserSetting extends Authenticatable
      */
     protected $fillable = [
         'user_id',
-        'next_lession_remind',
+        'next_lesson_remind',
     ];
 
     public function user()

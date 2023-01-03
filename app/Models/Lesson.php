@@ -56,9 +56,4 @@ class Lesson extends Model
     {
         return $this->hasOneThrough(Subject::class, Classroom::class, 'id', 'id', 'classroom_id', 'subject_id');
     }
-
-    public function classStudents()
-    {
-        return $this->hasManyThrough(ClassStudent::class, Classroom::class, 'id', 'id', 'classroom_id', 'classroom_id');
-    }
 }

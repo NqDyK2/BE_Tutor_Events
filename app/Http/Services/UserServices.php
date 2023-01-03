@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class UserServices
 {
@@ -21,5 +22,16 @@ class UserServices
     public function update($user, $data)
     {
         return $user->update($data);
+    }
+
+    public function updateSetting($data)
+    {
+        $user = Auth::user();
+
+        $result = $user->setting()->updateOrCreate([
+            'user_id' => $user->id
+        ], $data);
+        
+        return $result;
     }
 }

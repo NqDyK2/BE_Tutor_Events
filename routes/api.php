@@ -14,10 +14,17 @@ use App\Http\Controllers\Api\SubjectController;
 use App\Http\Controllers\Api\MajorController;
 use App\Http\Controllers\Api\ScheduleController;
 use App\Http\Controllers\Api\StatisticalController;
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
 
 // AUTH API
-Route::get('auth/user', [AuthController::class, 'getAuthDetail']);
+
+// USER SETTING API
+Route::prefix('auth')->group(function () {
+    Route::get('user', [AuthController::class, 'getAuthDetail']);
+    Route::get('setting', [UserController::class, 'getSetting']);
+    Route::put('setting', [UserController::class, 'updateSetting']);
+});
 
 // MANAGE API
 Route::prefix('major')->group(function () {

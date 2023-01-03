@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('user_settings', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->boolean('next_lession_remind')->default(false);
+            $table->boolean('next_lesson_remind')->default(false);
         });
     }
 

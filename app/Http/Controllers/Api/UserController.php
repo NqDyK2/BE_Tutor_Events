@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Http\Services\UserServices;
+use App\Models\UserSetting;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 use function PHPUnit\Framework\isNull;
 
@@ -20,7 +23,7 @@ class UserController extends Controller
     public function get()
     {
         $users = $this->userServices->getAll();
-        
+
         return response([
             'data' => $users
         ], 200);
@@ -29,7 +32,7 @@ class UserController extends Controller
     public function show($id)
     {
         $users = $this->userServices->getOne($id);
-        
+
         return response([
             'data' => $users
         ], 200);
@@ -44,7 +47,29 @@ class UserController extends Controller
 
         return response([
             'message' => $updated ? 'Cập nhật tài khoản thành công' : 'Cập nhật tài khoản thất bại'
-        ], $updated ? 200 : 409);
+        ], $updated ? 200 : 400);
+    }
 
+    public function getSetting()
+    {
+        $setting = Auth::user()->setting;
+
+        if (!$setting) {
+            UserSetting::create(['user_id' => Auth::id()]);
+            $setting = UserSetting::where('user_id', Auth::id())->first();
+        }
+
+        return response([
+            'data' => $setting
+        ], 200);
+    }
+
+    public function updateSetting(Request $request)
+    {
+        $this->userServices->updateSetting($request->input());
+
+        return response([
+            'message' => 'Cập nhật thành công'
+        ], 200);
     }
 }

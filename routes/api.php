@@ -113,6 +113,7 @@ Route::prefix('mail')->group(function () {
 //API MANAGE EVENT
 Route::prefix('event')->group(function () {
     Route::get('get-all', [EventController::class, 'index']);
+    Route::get('upcoming', [EventController::class, 'upcomingEvent']);
     Route::middleware('existEvent')->group(function () {
         Route::post('{event_id}/feedback', [EventUserController::class, 'storeFeedback']);
         Route::post('{event_id}/join', [EventUserController::class, 'create']);

@@ -61,6 +61,11 @@ class User extends Authenticatable
         return $this->hasMany(classStudent::class, 'student_email', 'email');
     }
 
+    public function eventUsers()
+    {
+        return $this->hasMany(EventUser::class, 'user_email', 'email');
+    }
+
     public function setting()
     {
         return $this->hasOne(UserSetting::class);

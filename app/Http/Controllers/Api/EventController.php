@@ -70,4 +70,13 @@ class EventController extends Controller
 
         return $response;
     }
+
+    public function upcomingEvent()
+    {
+        $events = $this->eventServices->getUpcomingEvent();
+
+        return response([
+            'data' => $events,
+        ], 200);
+    }
 }

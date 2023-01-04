@@ -38,4 +38,12 @@ class EventUserController extends Controller
 
         return $response;
     }
+
+    public function usersInEvent(Request $request)
+    {
+        $event = $request->get('event');
+        $response = $this->eventUserServices->usersInEvent($event);
+
+        return $response;
+    }
 }

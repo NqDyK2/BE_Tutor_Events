@@ -18,7 +18,7 @@ class EventUser extends Model
         return $this->belongsTo(Event::class);
     }
 
-    public function user()
+    public function eventUsers()
     {
         return $this->belongsTo(User::class, 'user_email');
     }

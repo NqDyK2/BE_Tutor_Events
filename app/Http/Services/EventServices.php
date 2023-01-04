@@ -4,6 +4,7 @@ namespace App\Http\Services;
 
 use App\Models\Event;
 use App\Models\EventUser;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -103,5 +104,16 @@ class EventServices
         return response([
             'message' => 'Khôi phục sự kiện thành công',
         ], 200);
+    }
+
+    public function getUpcomingEvent()
+    {
+        $user = Auth::user();
+        $eventUser = $user->eventUsers()->whereHas('event', function ($q)
+        {
+            return $q->where('start_time', '>', now())
+                ->where('start_time', '<', now()->addDays(2)->endOfDay());
+        })->first();
+        return $eventUser->event;
     }
 }

@@ -38,7 +38,7 @@ class CreateLessonRequest extends FormRequest
             'lesson_number' => 'required|integer|min:1|max:6',
             'date' => 'required|date',
             'type' => 'required|boolean',
-            'teacher_email' => 'nullable|email',
+            'teacher_email' => 'required|email',
             'tutor_email' => 'nullable|email',
             'content' => 'nullable|max:2000',
         ];
@@ -60,7 +60,8 @@ class CreateLessonRequest extends FormRequest
             'type.required' => 'Type không được để trống',
             'type.boolean' => 'Type không đúng định dạng',
 
-            'teacher_email.email' => 'Email giảng viên không được để trống',
+            'teacher_email.required' => 'Email giảng viên không được để trống',
+            'teacher_email.email' => 'Email giảng viên không đúng định dạng',
             'tutor_email.email' => 'Email tutor không đúng định dạng',
 
             'content.max' => 'Nội dung không được quá 2000 ký tự',

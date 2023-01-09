@@ -29,23 +29,13 @@ class EditEventRequest extends FormRequest
             'image' => 'mimes:jpeg,jpg,png,gif|max:5120',
             'type' => 'integer',
             'location' => 'string',
-            'start_time' => [
-                'date',
-                'after:now',
-                function ($attribute, $value, $fail) {
-                    $end_time_event = Event::where('id', $this->event_id)->first();
-                    if ($end_time_event->end_time < $this->start_time) {
-                        $fail('Thời gian bắt đầu của sự kiện không được lớn hơn thời gian kết thúc');
-                    }
-                },
-            ],
+            'start_time' => 'date|after:now|before:end_time',
             'end_time' => [
                 'date',
-                'after:start_time',
                 function ($attribute, $value, $fail) {
                     $end_time_event = Event::where('id', $this->event_id)->first();
-                    if ($end_time_event->start_time > $this->end_time) {
-                        $fail('Thời gian kết thúc của sự kiện không được nhỏ hơn thời gian bắt đầu');
+                    if ($end_time_event->start_time >= $this->end_time) {
+                        $fail('Thời gian kết thúc phải lớn hơn thời gian bắt đầu');
                     }
                 },
             ],
@@ -65,9 +55,9 @@ class EditEventRequest extends FormRequest
 
             'start_time.date' => 'Thời gian bắt đầu không đúng định dạng',
             'start_time.after' => 'Thời gian bắt đầu phải lớn hơn thời gian hiện tại',
+            'start_time.before' => 'Thời gian bắt đầu phải nhỏ hơn thời gian kết thúc',
 
             'end_time.date' => 'Thời gian kết thúc không đúng định dạng',
-            'end_time.after' => 'Thời gian kết thúc phải lớn hơn thời gian bắt đầu',
 
             'type.integer' => 'Type không đúng định dạng',
 

@@ -115,6 +115,7 @@ Route::prefix('event')->group(function () {
     Route::get('get-all', [EventController::class, 'index']);
     Route::get('upcoming', [EventController::class, 'upcomingEvent']);
     Route::middleware('existEvent')->group(function () {
+        Route::get('{event_id}/users', [EventUserController::class, 'usersInEvent'])->middleware('admin');
         Route::post('{event_id}/feedback', [EventUserController::class, 'storeFeedback']);
         Route::post('{event_id}/join', [EventUserController::class, 'create']);
         Route::delete('{event_id}/cancel', [EventUserController::class, 'destroy']);

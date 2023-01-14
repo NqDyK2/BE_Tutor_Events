@@ -29,7 +29,7 @@ class EditEventRequest extends FormRequest
             'image' => 'mimes:jpeg,jpg,png,gif|max:5120',
             'type' => 'integer',
             'location' => 'string',
-            'start_time' => 'date|after:now|before:end_time',
+            'start_time' => 'date|before:end_time',
             'end_time' => [
                 'date',
                 function ($attribute, $value, $fail) {

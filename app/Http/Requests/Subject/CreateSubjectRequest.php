@@ -26,7 +26,7 @@ class CreateSubjectRequest extends FormRequest
         $this->code = strtoupper($this->code);
 
         return [
-            // 'data' => 'required|array',
+            'data' => 'required|array',
             'data.*.name' => 'required|min:3|max:100',
             'data.*.code' => 'required|min:3|max:100|unique:subjects,code',
             'data.*.major_id' => 'required|integer|exists:majors,id',

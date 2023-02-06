@@ -62,17 +62,11 @@ class ScheduleServices
             $semester = Semester::where('semesters.start_time', '<=', now())
                 ->where('semesters.end_time', '>=', now())
                 ->first();
-        }
-        if (!$semester) {
-            $semester = Semester::orderBy('end_time', 'DESC')->first();
-        }
-        if (!$semester) {
-            return response([
-                "data" => [],
-                "semester" => []
-            ]);
-        }
 
+            if (!$semester) {
+                $semester = Semester::orderBy('end_time', 'DESC')->first();
+            }
+        }
 
         $result = [];
         $classrooms = Classroom::select(
@@ -135,7 +129,7 @@ class ScheduleServices
             ->where('lessons.end_time', '>=', now()->startOfDay())
             ->where(function ($q) use ($userEmail) {
                 return $q->where('lessons.teacher_email', $userEmail)
-                    ->orWhere('lessons.tutor_email', $userEmail);
+                ->orWhere('lessons.tutor_email', $userEmail);
             })
             ->orderBy('lessons.start_time', 'ASC')
             ->get();

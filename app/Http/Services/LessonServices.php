@@ -4,10 +4,10 @@ namespace App\Http\Services;
 
 use App\Jobs\Mail\SendMailAddTeacherJob;
 use App\Jobs\Mail\SendMailAddTutorJob;
-use App\Jobs\Mail\SendMailChangeLessonJob;
 use App\Models\Classroom;
 use App\Models\ClassStudent;
 use App\Models\Lesson;
+use App\Models\Semester;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -65,6 +65,27 @@ class LessonServices
             ], 400);
         }
 
+        $checkLessonExist = Lesson::where('class_location', $data['class_location'])
+            ->where('start_time', $data['start_time'])
+            ->where('end_time', $data['end_time'])
+            ->first();
+        if ($checkLessonExist) {
+            return response([
+                'message' => 'Lớp học "' . $checkLessonExist->class_location . '" đã có lớp khác đăng ký ca ' . $data['lesson_number'] . ' từ ' . $checkLessonExist->start_time . ' đến ' .  $checkLessonExist->end_time,
+            ], 400);
+        }
+
+        $checkLessonExistSemester = Semester::join('classrooms', 'classrooms.semester_id', '=', 'semesters.id')
+            ->where('classrooms.id', $data['classroom_id'])
+            ->where('semesters.start_time', '<=', $data['start_time'])
+            ->where('semesters.end_time', '>=', $data['end_time'])
+            ->first();
+        if (!$checkLessonExistSemester) {
+            return response([
+                'message' => 'Thời gian không nằm trong kỳ học',
+            ], 400);
+        }
+
         if (!empty($data['attended']) && $data['attended'] == 1) {
             $data['attended'] == 0;
         }
@@ -111,10 +132,31 @@ class LessonServices
     public function update($data, $lesson)
     {
         $needSendMail = false;
-
         if (!$this->checkPermissionWithLesson($lesson)) {
             return response([
                 'message' => 'Bạn không phải giảng viên của buổi học',
+            ], 400);
+        }
+
+        $checkLessonExist = Lesson::where('class_location', $data['class_location'])
+            ->where('start_time', $data['start_time'])
+            ->where('end_time', $data['end_time'])
+            ->where('id', '<>', $lesson->id)
+            ->first();
+        if ($checkLessonExist) {
+            return response([
+                'message' => 'Lớp học "' . $checkLessonExist->class_location . '" đã có lớp khác đăng ký ca ' . $data['lesson_number'] . ' từ ' . $checkLessonExist->start_time . ' đến ' .  $checkLessonExist->end_time,
+            ], 400);
+        }
+
+        $checkLessonExistSemester = Semester::join('classrooms', 'classrooms.semester_id', '=', 'semesters.id')
+            ->where('classrooms.id', $data['classroom_id'])
+            ->where('semesters.start_time', '<=', $data['start_time'])
+            ->where('semesters.end_time', '>=', $data['end_time'])
+            ->first();
+        if (!$checkLessonExistSemester) {
+            return response([
+                'message' => 'Thời gian không nằm trong kỳ học',
             ], 400);
         }
 

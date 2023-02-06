@@ -51,7 +51,7 @@ class ClassroomServices
         $classroom = Classroom::create($data);
         $subject = $classroom->subject;
 
-        if (!empty($data['default_teacher_email'])) {
+        if (isset($data['default_teacher_email']) && !is_null($data['default_teacher_email'])) {
             SendMailAddTeacherJob::dispatch(
                 $data['default_teacher_email'],
                 [
@@ -184,6 +184,6 @@ class ClassroomServices
         }
 
         return $classNeedFeedback;
-        
+
     }
 }

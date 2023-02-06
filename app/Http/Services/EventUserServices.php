@@ -81,4 +81,9 @@ class EventUserServices
             'message' => 'Đánh giá sự kiện thành công'
         ], 201);
     }
+
+    public function usersInEvent($event)
+    {
+        return $event->eventUsers;
+    }
 }

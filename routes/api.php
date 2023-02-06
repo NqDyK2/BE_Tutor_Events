@@ -14,10 +14,17 @@ use App\Http\Controllers\Api\SubjectController;
 use App\Http\Controllers\Api\MajorController;
 use App\Http\Controllers\Api\ScheduleController;
 use App\Http\Controllers\Api\StatisticalController;
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
 
 // AUTH API
-Route::get('auth/user', [AuthController::class, 'getAuthDetail']);
+
+// USER SETTING API
+Route::prefix('auth')->group(function () {
+    Route::get('user', [AuthController::class, 'getAuthDetail']);
+    Route::get('setting', [UserController::class, 'getSetting']);
+    Route::put('setting', [UserController::class, 'updateSetting']);
+});
 
 // MANAGE API
 Route::prefix('major')->group(function () {
@@ -52,11 +59,12 @@ Route::prefix('semester')->group(function () {
 });
 
 Route::prefix('classroom')->middleware('teacherOrAdmin')->group(function () {
-    Route::post('store', [ClassroomController::class, 'store']);
+    Route::post('store', [ClassroomController::class, 'store'])->middleware('admin');
     Route::middleware('existClassroom')->group(function () {
         Route::middleware('admin')->group(function () {
             Route::put('{classroom_id}/update', [ClassroomController::class, 'update']);
             Route::delete('{classroom_id}/delete', [ClassroomController::class, 'destroy']);
+            Route::get('{classroom_id}/list-feedback', [ClassroomController::class, 'getListFeedback']);
         });
         Route::get('{classroom_id}/lessons', [LessonController::class, 'lessonsInClassroom']);
         Route::get('{classroom_id}/students', [ClassStudentController::class, 'studentsInClassroom']);
@@ -105,7 +113,9 @@ Route::prefix('mail')->group(function () {
 //API MANAGE EVENT
 Route::prefix('event')->group(function () {
     Route::get('get-all', [EventController::class, 'index']);
+    Route::get('upcoming', [EventController::class, 'upcomingEvent']);
     Route::middleware('existEvent')->group(function () {
+        Route::get('{event_id}/users', [EventUserController::class, 'usersInEvent'])->middleware('admin');
         Route::post('{event_id}/feedback', [EventUserController::class, 'storeFeedback']);
         Route::post('{event_id}/join', [EventUserController::class, 'create']);
         Route::delete('{event_id}/cancel', [EventUserController::class, 'destroy']);
@@ -114,7 +124,7 @@ Route::prefix('event')->group(function () {
         Route::get('in-trash', [EventController::class, 'getTrashedEvents']);
         Route::post('store', [EventController::class, 'store']);
         Route::middleware('existEvent')->group(function () {
-            Route::put('{event_id}/update', [EventController::class, 'update']);
+            Route::post('{event_id}/update', [EventController::class, 'update']);
             Route::delete('{event_id}/delete', [EventController::class, 'destroy']);
             Route::put('{event_id}/restore', [EventController::class, 'restore']);
         });

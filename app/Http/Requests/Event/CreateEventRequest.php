@@ -29,7 +29,7 @@ class CreateEventRequest extends FormRequest
             'image' => 'required|image|mimes:jpeg,jpg,png,gif|max:5120',
             'type' => 'integer',
             'location' => 'required|string',
-            'start_time' => 'required|date|after:now',
+            'start_time' => 'required|date',
             'end_time' => 'required|date|after:start_time',
             'content' => 'required|max:2000',
         ];
@@ -51,7 +51,6 @@ class CreateEventRequest extends FormRequest
 
             'start_time.required' => 'Thời gian bắt đầu không được để trống',
             'start_time.date' => 'Thời gian bắt đầu không đúng định dạng',
-            'start_time.after' => 'Thời gian bắt đầu phải lớn hơn thời gian hiện tại',
 
             'end_time.required' => 'Thời gian kết thúc không được để trống',
             'end_time.date' => 'Thời gian kết thúc không đúng định dạng',

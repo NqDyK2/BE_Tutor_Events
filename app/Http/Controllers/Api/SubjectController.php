@@ -19,9 +19,7 @@ class SubjectController extends Controller
 
     public function store(CreateSubjectRequest $request)
     {
-        foreach ($request->data as $subject) {
-            $this->subjectServices->create($subject);
-        }
+        $this->subjectServices->create($request->input());
 
         return response([
             'message' => 'Tạo môn học thành công',

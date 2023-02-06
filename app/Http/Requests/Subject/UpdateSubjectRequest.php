@@ -27,7 +27,7 @@ class UpdateSubjectRequest extends FormRequest
         $this->code = strtoupper(Str::slug($this->code));
 
         return [
-            'name' => 'min:3|max:100',
+            'name' => 'min:3|max:100|unique:subjects,name,' . $this->subject_id,
             'code' => 'min:3|max:100|unique:subjects,code,' . $this->subject_id,
             'major_id' => 'integer|exists:majors,id',
         ];
@@ -38,9 +38,10 @@ class UpdateSubjectRequest extends FormRequest
         return [
             'name.min' => 'Tên môn học phải lớn hơn 3 ký tự',
             'name.max' => 'Tên môn học phải nhỏ hơn 100 ký tự',
+            'name.unique' => 'Tên môn học đã tồn tại',
 
-            'code.min' => 'Tên môn học phải lớn hơn 3 ký tự',
-            'code.max' => 'Tên môn học phải nhỏ hơn 100 ký tự',
+            'name.min' => 'Tên môn học phải lớn hơn 3 ký tự',
+            'name.max' => 'Tên môn học phải nhỏ hơn 100 ký tự',
             'code.unique' => 'Mã môn học đã tồn tại',
 
             'major_id.integer' => 'ID chuyên ngành phải là số',

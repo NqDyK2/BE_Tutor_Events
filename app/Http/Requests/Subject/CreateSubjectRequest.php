@@ -26,28 +26,28 @@ class CreateSubjectRequest extends FormRequest
         $this->code = strtoupper($this->code);
 
         return [
-            'data' => 'required|array',
-            'data.*.name' => 'required|min:3|max:100',
-            'data.*.code' => 'required|min:3|max:100|unique:subjects,code',
-            'data.*.major_id' => 'required|integer|exists:majors,id',
+            'name' => 'required|min:3|max:100|unique:subjects,name',
+            'code' => 'required|min:3|max:100|unique:subjects,code',
+            'major_id' => 'required|integer|exists:majors,id',
         ];
     }
 
     public function messages()
     {
         return [
-            'data.*.name.required' => 'Tên môn học không được để trống',
-            'data.*.name.min' => 'Tên môn học phải lớn hơn 3 ký tự',
-            'data.*.name.max' => 'Tên môn học phải nhỏ hơn 100 ký tự',
+            'name.required' => 'Tên môn học không được để trống',
+            'name.min' => 'Tên môn học phải lớn hơn 3 ký tự',
+            'name.max' => 'Tên môn học phải nhỏ hơn 100 ký tự',
+            'name.unique' => 'Tên môn học đã tồn tại',
 
-            'data.*.code.required' => 'Mã môn học không được để trống',
-            'data.*.code.min' => 'Tên môn học phải lớn hơn 3 ký tự',
-            'data.*.code.max' => 'Tên môn học phải nhỏ hơn 100 ký tự',
-            'data.*.code.unique' => 'Mã môn học đã tồn tại',
+            'code.required' => 'Mã môn học không được để trống',
+            'name.min' => 'Tên môn học phải lớn hơn 3 ký tự',
+            'name.max' => 'Tên môn học phải nhỏ hơn 100 ký tự',
+            'code.unique' => 'Mã môn học đã tồn tại',
 
-            'data.*.major_id.required' => 'không được để trống trường chuyên ngành',
-            'data.*.major_id.integer' => 'ID chuyên ngành phải là số',
-            'data.*.major_id.exists' => 'Chuyên ngành không tồn tại',
+            'major_id.required' => 'không được để trống trường chuyên ngành',
+            'major_id.integer' => 'ID chuyên ngành phải là số',
+            'major_id.exists' => 'Chuyên ngành không tồn tại',
         ];
     }
 }

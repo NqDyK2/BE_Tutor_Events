@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Lesson\CreateLessonRequest;
 use App\Http\Requests\Lesson\UpdateLessonRequest;
+use App\Models\Classroom;
 use App\Http\Services\BreadcrumbServices;
 use App\Http\Services\LessonServices;
 use Illuminate\Http\Request;
@@ -37,9 +38,7 @@ class LessonController extends Controller
 
     public function store(CreateLessonRequest $request)
     {
-        $convertLessonTime = convertLessonTime($request->date, $request->lesson_number);
-        $data = array_merge($request->input(), $convertLessonTime);
-        $response = $this->lessonServices->store( $data);
+        $response = $this->lessonServices->store($request->input());
 
         return $response;
     }
@@ -47,9 +46,7 @@ class LessonController extends Controller
     public function update(UpdateLessonRequest $request)
     {
         $lesson = $request->get('lesson');
-        $convertLessonTime = convertLessonTime($request->date, $request->lesson_number);
-        $data = array_merge($request->input(), $convertLessonTime);
-        $response = $this->lessonServices->update($data, $lesson);
+        $response = $this->lessonServices->update($request->input(), $lesson);
 
         return $response;
     }

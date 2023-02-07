@@ -132,6 +132,7 @@ class LessonServices
     public function update($data, $lesson)
     {
         $needSendMail = false;
+
         if (!$this->checkPermissionWithLesson($lesson)) {
             return response([
                 'message' => 'Bạn không phải giảng viên của buổi học',
@@ -141,7 +142,6 @@ class LessonServices
         $checkLessonExist = Lesson::where('class_location', $data['class_location'])
             ->where('start_time', $data['start_time'])
             ->where('end_time', $data['end_time'])
-            ->where('id', '<>', $lesson->id)
             ->first();
         if ($checkLessonExist) {
             return response([
